@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Cadastro - ServiçoFinal</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .card-header {
+            background: #1a1a2e;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1.8rem 1.5rem 1.4rem;
+        }
+
+        .card-header h4 {
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .card-header p {
+            color: #adb5bd;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #dde1e7;
+            padding: 0.55rem 0.85rem;
+            font-size: 14px;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            background: white;
+            border-color: #1a1a2e;
+            box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
+        }
+
+        .form-control.erro-campo {
+            border-color: #dc3545;
+        }
+
+        .btn-cadastrar {
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.65rem;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-cadastrar:hover {
+            background: #2d2d50;
+            color: white;
+        }
+
+        .alerta-erro {
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .msg-erro-campo {
+            font-size: 12px;
+            color: #dc3545;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .link-login {
+            color: #1a1a2e;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-login:hover {
+            text-decoration: underline;
+        }
+
+        .divisor {
+            font-size: 12px;
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center py-4">
+
+    <div class="card shadow-sm" style="width: 100%; max-width: 420px;">
+
+        <div class="card-header text-center">
+            <h4 class="mb-1">ServiçoFinal</h4>
+            <p>Crie sua conta gratuitamente</p>
+        </div>
+
+        <div class="card-body p-4">
+
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger alerta-erro d-flex align-items-center gap-2 py-2" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <form action="/registro" method="post" th:object="${registro}" onsubmit="return validarFormulario()">
+
+                <div class="mb-3">
+                    <label class="form-label">Nome completo</label>
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{nome}"
+                           placeholder="João Silva"
+                           required autofocus/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email"
+                           class="form-control"
+                           th:field="*{email}"
+                           placeholder="seu@email.com"
+                           required/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Telefone</label>
+                    <input type="tel"
+                           class="form-control"
+                           th:field="*{telefone}"
+                           placeholder="(11) 99999-9999"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Senha</label>
+                    <input type="password"
+                           class="form-control"
+                           th:field="*{senha}"
+                           id="senha"
+                           placeholder="Mínimo 6 caracteres"
+                           required/>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Confirmar senha</label>
+                    <input type="password"
+                           class="form-control"
+                           id="confirmarSenha"
+                           placeholder="Repita a senha"
+                           required/>
+                    <div class="msg-erro-campo" id="erroSenha">
+                        As senhas não coincidem
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-cadastrar w-100">
+                    Criar conta
+                </button>
+
+            </form>
+
+            <div class="text-center mt-3 divisor">
+                Já tem uma conta?
+                <a th:href="@{/logar}" class="link-login">Entrar</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function validarFormulario() {
+            const senha = document.getElementById("senha").value;
+            const confirmar = document.getElementById("confirmarSenha").value;
+            const erroCampo = document.getElementById("erroSenha");
+            const inputConfirmar = document.getElementById("confirmarSenha");
+
+            if (senha !== confirmar) {
+                erroCampo.style.display = "block";
+                inputConfirmar.classList.add("erro-campo");
+                inputConfirmar.focus();
+                return false;
+            }
+
+            erroCampo.style.display = "none";
+            inputConfirmar.classList.remove("erro-campo");
+            return true;
+        }
+
+        document.getElementById("confirmarSenha").addEventListener("input", function () {
+            const senha = document.getElementById("senha").value;
+            const erroCampo = document.getElementById("erroSenha");
+            const inputConfirmar = document.getElementById("confirmarSenha");
+
+            if (this.value === senha) {
+                erroCampo.style.display = "none";
+                inputConfirmar.classList.remove("erro-campo");
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Login - ServiçoFinal</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .card-header {
+            background: #1a1a2e;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1.8rem 1.5rem 1.4rem;
+        }
+
+        .card-header h4 {
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .card-header p {
+            color: #adb5bd;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #dde1e7;
+            padding: 0.55rem 0.85rem;
+            font-size: 14px;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            background: white;
+            border-color: #1a1a2e;
+            box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
+        }
+
+        .btn-entrar {
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.65rem;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-entrar:hover {
+            background: #2d2d50;
+            color: white;
+        }
+
+        .alerta-erro {
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .link-cadastro {
+            color: #1a1a2e;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-cadastro:hover {
+            text-decoration: underline;
+        }
+
+        .divisor {
+            font-size: 12px;
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center">
+
+    <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
+
+        <div class="card-header text-center">
+            <h4 class="mb-1">ServiçoFinal</h4>
+            <p>Entre na sua conta para continuar</p>
+        </div>
+
+        <div class="card-body p-4">
+
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger alerta-erro d-flex align-items-center gap-2 py-2" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <form action="/logar" method="post" th:object="${user}">
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email"
+                           class="form-control"
+                           th:field="*{email}"
+                           placeholder="seu@email.com"
+                           required autofocus/>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Senha</label>
+                    <input type="password"
+                           class="form-control"
+                           th:field="*{senha}"
+                           placeholder="••••••••"
+                           required/>
+                </div>
+
+                <button type="submit" class="btn btn-entrar w-100">
+                    Entrar
+                </button>
+
+            </form>
+
+            <div class="text-center mt-3 divisor">
+                Não tem uma conta?
+                <a th:href="@{/registro}" class="link-cadastro">Cadastre-se aqui</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
