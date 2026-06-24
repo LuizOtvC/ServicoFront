@@ -40,17 +40,17 @@ public class UserController {
         return "Ocorreu um erro inesperado na comunicação.";
     }
     
-     @GetMapping("/logar")
-    public String paginaLogin(Model model) {
-        model.addAttribute("user", new UserLogarDto());
-        return "logar";
+    @GetMapping("/logar")
+        public String paginaLogin(Model model) {
+            model.addAttribute("user", new UserLogarDto());
+            return "logar";
     }
     
     @GetMapping("/")
-    public String home(HttpSession session, Model model) {
-        Object token = (String) session.getAttribute("token");
-        if(token == null){            
-        return "redirect:/logar";
+        public String home(HttpSession session, Model model) {
+            Object token = (String) session.getAttribute("token");
+            if(token == null){            
+         return "redirect:/logar";
         }
        return "home";
     }  
@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @PostMapping("/registro")
-public String fazerRegistro(@ModelAttribute UserRegistroDto user, HttpSession session, Model model) {
+    public String fazerRegistro(@ModelAttribute UserRegistroDto user, HttpSession session, Model model) {
     try {
         String token = authService.Registrar(user);
         session.setAttribute("token", token);

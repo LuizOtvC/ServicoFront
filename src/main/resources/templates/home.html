@@ -1,15 +1,301 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Início - ServiçoFinal</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #1a1a2e;
+            padding: 0.8rem 1.5rem;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link {
+            color: #adb5bd !important;
+            font-size: 14px;
+            padding: 0.4rem 0.8rem !important;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-link.ativo {
+            color: white !important;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .btn-sair {
+            color: #adb5bd;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            padding: 0.35rem 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-sair:hover {
+            color: white;
+            border-color: white;
+        }
+
+        /* Conteúdo */
+        .container { max-width: 960px; }
+
+        /* Boas vindas */
+        .boas-vindas {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d50);
+            border-radius: 12px;
+            padding: 1.8rem 2rem;
+            color: white;
+        }
+
+        .boas-vindas h5 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .boas-vindas p {
+            color: #adb5bd;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Cards de ação */
+        .card-acao {
+            border: none;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: block;
+        }
+
+        .card-acao:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+            color: #333;
+        }
+
+        .card-acao .icone {
+            font-size: 28px;
+            margin-bottom: 0.6rem;
+        }
+
+        .card-acao h6 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .card-acao p {
+            font-size: 12px;
+            color: #888;
+            margin: 0;
+        }
+
+        /* Seção de propostas */
+        .secao-titulo {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .secao-subtitulo {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .card-proposta {
+            border: none;
+            border-radius: 10px;
+            transition: box-shadow 0.15s;
+        }
+
+        .card-proposta:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+        }
+
+        .proposta-titulo {
+            font-size: 15px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 4px;
+        }
+
+        .proposta-desc {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 0.6rem;
+        }
+
+        .badge-status {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .badge-pendente  { background: #fff3cd; color: #856404; }
+        .badge-aceita    { background: #d1e7dd; color: #0a5235; }
+        .badge-recusada  { background: #f8d7da; color: #842029; }
+
+        .proposta-info {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .vazio {
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            color: #adb5bd;
+        }
+
+        .vazio .icone-vazio { font-size: 36px; margin-bottom: 0.5rem; }
+        .vazio p { font-size: 14px; margin: 0; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">ServiçoFinal</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto ms-3 gap-1">
+                <li class="nav-item">
+                    <a class="nav-link ativo" href="/">🏠 Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/projetos/criar">➕ Criar Projeto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/projetos">🔍 Ver Projetos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/propostas">📨 Minhas Propostas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perfil">👤 Meu Perfil</a>
+                </li>
+            </ul>
+
+            <a href="/logout" class="btn-sair">Sair</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container pb-5">
+
+    <!-- Boas vindas -->
+    <div class="boas-vindas shadow-sm mb-4">
+        <h5>Olá, bem-vindo de volta! 👋</h5>
+        <p>Veja abaixo o status das suas propostas e acesse o que precisar.</p>
+    </div>
+
+    <!-- Cards de ação rápida -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <a href="/projetos/criar" class="card-acao card shadow-sm p-3 text-center h-100">
+                <div class="icone">➕</div>
+                <h6>Criar Projeto</h6>
+                <p>Poste um serviço e encontre profissionais</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="/projetos" class="card-acao card shadow-sm p-3 text-center h-100">
+                <div class="icone">🔍</div>
+                <h6>Ver Projetos</h6>
+                <p>Encontre oportunidades compatíveis</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="/propostas" class="card-acao card shadow-sm p-3 text-center h-100">
+                <div class="icone">📨</div>
+                <h6>Propostas</h6>
+                <p>Acompanhe suas candidaturas</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="/perfil" class="card-acao card shadow-sm p-3 text-center h-100">
+                <div class="icone">👤</div>
+                <h6>Meu Perfil</h6>
+                <p>Atualize seus dados e serviços</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Propostas recebidas nos meus projetos -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <span class="secao-titulo">Propostas nos seus projetos</span><br>
+            <span class="secao-subtitulo">Profissionais que se candidataram aos seus projetos</span>
+        </div>
+        <a href="/projetos" class="btn btn-sm btn-outline-dark" style="font-size: 13px; border-radius: 8px;">
+            Ver todos
+        </a>
+    </div>
+
+    <!-- Lista de propostas — preenchida pelo Thymeleaf -->
+    <div th:if="${propostas != null and !#lists.isEmpty(propostas)}">
+        <div class="card card-proposta shadow-sm mb-3 p-3"
+             th:each="proposta : ${propostas}">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="proposta-titulo" th:text="${proposta.nomeProjeto}">Nome do Projeto</div>
+                    <div class="proposta-desc" th:text="${proposta.nomeProfissional}">Nome do Profissional</div>
+                    <span class="badge-status badge-pendente"
+                          th:classappend="${proposta.status == 'ACEITA'} ? 'badge-aceita' : (${proposta.status == 'RECUSADA'} ? 'badge-recusada' : 'badge-pendente')"
+                          th:text="${proposta.status}">PENDENTE</span>
+                </div>
+                <div class="text-end">
+                    <div class="proposta-info" th:text="'R$ ' + ${proposta.valorProposto}">R$ 0,00</div>
+                    <a th:href="@{/propostas/{id}(id=${proposta.id})}"
+                       class="btn btn-sm btn-outline-dark mt-2"
+                       style="font-size: 12px; border-radius: 6px;">
+                        Ver detalhes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="vazio" th:if="${propostas == null or #lists.isEmpty(propostas)}">
+        <div class="icone-vazio">📭</div>
+        <p>Nenhuma proposta recebida ainda.<br>
+           <a href="/projetos/criar" style="color: #1a1a2e; font-weight: 500;">Crie um projeto</a>
+           para começar a receber candidaturas.
+        </p>
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
 </html>

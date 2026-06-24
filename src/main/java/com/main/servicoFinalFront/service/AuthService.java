@@ -6,10 +6,8 @@ package com.main.servicoFinalFront.service;
 
 import com.main.servicoFinalFront.model.UserLogarDto;
 import com.main.servicoFinalFront.model.UserRegistroDto;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
