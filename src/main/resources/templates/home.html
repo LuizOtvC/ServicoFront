@@ -178,74 +178,15 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="/">ServiçoFinal</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav me-auto ms-3 gap-1">
-                <li class="nav-item">
-                    <a class="nav-link ativo" href="/"> Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/projetos/criar"> Criar Projeto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/projetos"> Ver Projetos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/propostas"> Minhas Propostas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/perfil"> Meu Perfil</a>
-                </li>
-            </ul>
-
-            <a href="/logout" class="btn-sair">Sair</a>
-        </div>
+<div th:replace="~{fragment/navbar :: custom-header}">
     </div>
-</nav>
-
-<div class="container pb-5">
 
     <!-- Boas vindas -->
     <div class="boas-vindas shadow-sm mb-4">
-        <h5>Olá, bem-vindo de volta! </h5>
+        <h5>Olá </h5>
         <p>Veja abaixo o status das suas propostas e acesse o que precisar.</p>
     </div>
-
-    <!-- Cards de ação rápida -->
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-            <a href="/projetos/criar" class="card-acao card shadow-sm p-3 text-center h-100">
-                <h6>Criar Projeto</h6>
-                <p>Poste um serviço e encontre profissionais</p>
-            </a>
-        </div>
-        <div class="col-6 col-md-3">
-            <a href="/projetos" class="card-acao card shadow-sm p-3 text-center h-100">
-                <h6>Ver Projetos</h6>
-                <p>Encontre oportunidades compatíveis</p>
-            </a>
-        </div>
-        <div class="col-6 col-md-3">
-            <a href="/propostas" class="card-acao card shadow-sm p-3 text-center h-100">
-                <h6>Propostas</h6>
-                <p>Acompanhe suas candidaturas</p>
-            </a>
-        </div>
-        <div class="col-6 col-md-3">
-            <a href="/perfil" class="card-acao card shadow-sm p-3 text-center h-100">
-                <h6>Meu Perfil</h6>
-                <p>Atualize seus dados e serviços</p>
-            </a>
-        </div>
-    </div>
-
+    
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
