@@ -189,19 +189,19 @@
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav me-auto ms-3 gap-1">
                 <li class="nav-item">
-                    <a class="nav-link ativo" href="/">🏠 Início</a>
+                    <a class="nav-link ativo" href="/"> Início</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/projetos/criar">➕ Criar Projeto</a>
+                    <a class="nav-link" href="/projetos/criar"> Criar Projeto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/projetos">🔍 Ver Projetos</a>
+                    <a class="nav-link" href="/projetos"> Ver Projetos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/propostas">📨 Minhas Propostas</a>
+                    <a class="nav-link" href="/propostas"> Minhas Propostas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/perfil">👤 Meu Perfil</a>
+                    <a class="nav-link" href="/perfil"> Meu Perfil</a>
                 </li>
             </ul>
 
@@ -214,7 +214,7 @@
 
     <!-- Boas vindas -->
     <div class="boas-vindas shadow-sm mb-4">
-        <h5>Olá, bem-vindo de volta! 👋</h5>
+        <h5>Olá, bem-vindo de volta! </h5>
         <p>Veja abaixo o status das suas propostas e acesse o que precisar.</p>
     </div>
 
@@ -222,35 +222,31 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
             <a href="/projetos/criar" class="card-acao card shadow-sm p-3 text-center h-100">
-                <div class="icone">➕</div>
                 <h6>Criar Projeto</h6>
                 <p>Poste um serviço e encontre profissionais</p>
             </a>
         </div>
         <div class="col-6 col-md-3">
             <a href="/projetos" class="card-acao card shadow-sm p-3 text-center h-100">
-                <div class="icone">🔍</div>
                 <h6>Ver Projetos</h6>
                 <p>Encontre oportunidades compatíveis</p>
             </a>
         </div>
         <div class="col-6 col-md-3">
             <a href="/propostas" class="card-acao card shadow-sm p-3 text-center h-100">
-                <div class="icone">📨</div>
                 <h6>Propostas</h6>
                 <p>Acompanhe suas candidaturas</p>
             </a>
         </div>
         <div class="col-6 col-md-3">
             <a href="/perfil" class="card-acao card shadow-sm p-3 text-center h-100">
-                <div class="icone">👤</div>
                 <h6>Meu Perfil</h6>
                 <p>Atualize seus dados e serviços</p>
             </a>
         </div>
     </div>
 
-    <!-- Propostas recebidas nos meus projetos -->
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <span class="secao-titulo">Propostas nos seus projetos</span><br>
@@ -287,7 +283,6 @@
 
     <!-- Estado vazio -->
     <div class="vazio" th:if="${propostas == null or #lists.isEmpty(propostas)}">
-        <div class="icone-vazio">📭</div>
         <p>Nenhuma proposta recebida ainda.<br>
            <a href="/projetos/criar" style="color: #1a1a2e; font-weight: 500;">Crie um projeto</a>
            para começar a receber candidaturas.
