@@ -114,6 +114,7 @@
                     <label class="form-label">Email</label>
                     <input type="email"
                            class="form-control"
+                           id="email"
                            th:field="*{email}"
                            placeholder="seu@email.com"
                            required autofocus/>
@@ -123,12 +124,13 @@
                     <label class="form-label">Senha</label>
                     <input type="password"
                            class="form-control"
+                           id="senha"
                            th:field="*{senha}"
                            placeholder="••••••••"
                            required/>
                 </div>
 
-                <button type="submit" class="btn btn-entrar w-100">
+                <button type="submit" class="btn btn-entrar w-100" id="btn-logar">
                     Entrar
                 </button>
 
@@ -141,6 +143,6 @@
 
         </div>
     </div>
-
+    <script src="script.js"></script>
 </body>
 </html>
