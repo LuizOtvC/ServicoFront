@@ -88,6 +88,10 @@
     </style>
 </head>
 <body>
+    <div th:if="${errorMessage}"
+     class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
+    <span th:text="${errorMessage}"></span>
+</div>
     <div class="card">
         <div class="card-header">
             <div class="avatar" id="avatar-initials">?</div>
@@ -131,6 +135,34 @@
                     <p class="rep-value" th:text="${usuario.reputacao}">0</p>
                 </div>
             </div>
+            <div class="info-row" th:each="h : ${habilidades}">
+    <i class="ti ti-tool" aria-hidden="true"></i>
+    <div>
+        <span class="info-label" th:text="${h.nomeServico}">Serviço</span>
+        <span class="info-value" th:text="${h.nivel}">Nível</span>
+    </div>
+</div>
+
+            <form action="/habilidades" method="post" style="margin-top: 1rem;">
+    <div class="mb-2">
+        <label class="info-label">Serviço</label>
+        <select name="servicoId" class="form-select form-select-sm">
+    <option th:each="s : ${servicos}" 
+            th:value="${s.id}" 
+            th:text="${s.nome}">
+    </option>
+</select>
+    </div>
+    <div class="mb-2">
+        <label class="info-label">Nível</label>
+        <select name="nivel" class="form-select form-select-sm">
+            <option value="BASICO">Básico</option>
+            <option value="INTERMEDIARIO">Intermediário</option>
+            <option value="AVANCADO">Avançado</option>
+        </select>
+    </div>
+    <button type="submit" class="btn-editar">Adicionar habilidade</button>
+</form>
 
             <a th:href="@{/atualizar}" class="btn-editar">Editar perfil</a>
         </div>

@@ -4,6 +4,9 @@
  */
 package com.main.servicoFinalFront.controller;
 
+import com.main.servicoFinalFront.model.Servico;
+import com.main.servicoFinalFront.model.ServicoListar;
+import com.main.servicoFinalFront.model.UsuarioServico;
 import com.main.servicoFinalFront.model.UserDto;
 import com.main.servicoFinalFront.model.UserLogarDto;
 import com.main.servicoFinalFront.model.UserPerfilDto;
@@ -11,6 +14,7 @@ import com.main.servicoFinalFront.model.UserRegistroDto;
 import com.main.servicoFinalFront.model.UserUpdDto;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
@@ -132,25 +136,29 @@ public class UserController {
     
 }
     @GetMapping("/perfil")
-    public String perfil(HttpSession session, Model model) {
-        String token = (String) session.getAttribute("token");
-        if (token == null) {
+public String perfil(HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+
+    try {
+        UserPerfilDto usuario = authService.VerPerfil(token);
+        List<Servico> servicos = authService.listarServicos(token);
+        List<ServicoListar> habilidades = authService.listarServicosId(token);
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("servicos", servicos);
+        model.addAttribute("habilidades", habilidades);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
             return "redirect:/logar";
         }
-
-        try {
-            UserPerfilDto usuario = authService.VerPerfil(token);
-            model.addAttribute("usuario", usuario);
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
-            model.addAttribute("erro", "Erro ao carregar o perfil.");
-        } catch (Exception e) {
-            model.addAttribute("erro", "Erro ao carregar o perfil.");
-        }
-
-        return "perfil";
+        model.addAttribute("erro", "Erro ao carregar o perfil.");
+    } catch (Exception e) {
+        model.addAttribute("erro", "Erro ao carregar o perfil.");
     }
+
+    return "perfil";
+}
+         
 }
