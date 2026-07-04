@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Editar Habilidade</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            border: none;
+        }
+        .card-header {
+            background: #1a1a2e;
+            padding: 1.4rem 1.5rem;
+            text-align: center;
+        }
+        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
+        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
+        .card-body { padding: 1.25rem 1.5rem; }
+        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
+        .btn-editar {
+            display: block;
+            width: 100%;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-editar:hover { background: #2d2d50; color: white; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h4>Editar Habilidade</h4>
+            <p>Altere o serviço ou o nível</p>
+        </div>
+        <div class="card-body">
+
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <form action="/servico/atualizar" method="post" th:object="${atualizar}">
+                <input type="hidden" th:field="*{idAntigo}"/>
+
+                <div class="mb-3">
+                    <label class="info-label">Novo serviço</label>
+                    <select th:field="*{idNovo}" class="form-select form-select-sm">
+                        <option value="">Selecione um serviço</option>
+                        <option th:each="s : ${servicos}"
+                                th:value="${s.id}"
+                                th:text="${s.nome}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="info-label">Nível</label>
+                    <select th:field="*{nivel}" class="form-select form-select-sm">
+                        <option value="">Selecione um nível</option>
+                        <option value="BASICO">Básico</option>
+                        <option value="INTERMEDIARIO">Intermediário</option>
+                        <option value="AVANCADO">Avançado</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-editar">Salvar</button>
+            </form>
+
+            <a th:href="@{/perfil}" class="btn-editar">Voltar ao perfil</a>
+        </div>
+    </div>
+</body>
+</html>

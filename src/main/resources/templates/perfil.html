@@ -135,12 +135,22 @@
                     <p class="rep-value" th:text="${usuario.reputacao}">0</p>
                 </div>
             </div>
-            <div class="info-row" th:each="h : ${habilidades}">
-    <i class="ti ti-tool" aria-hidden="true"></i>
-    <div>
-        <span class="info-label" th:text="${h.nomeServico}">Serviço</span>
-        <span class="info-value" th:text="${h.nivel}">Nível</span>
+            <div th:each="h : ${habilidades}">
+    <div class="info-row">
+        <i class="ti ti-tool" aria-hidden="true"></i>
+        <div>
+            <span class="info-label" th:text="${h.nomeServico}">Serviço</span>
+            <span class="info-value" th:text="${h.nivel}">Nível</span>
+        </div>
     </div>
+    <form action="/servico/editar" method="post">
+        <input type="hidden" name="idAntigo" th:value="${h.servicoId}"/>
+        <button type="submit" class="btn-editar">Editar</button>
+    </form>
+                <form action="/servico/deletar" method="post">
+    <input type="hidden" name="idAntigo" th:value="${h.servicoId}"/>
+    <button type="submit" class="btn-editar">Remover</button>
+</form>
 </div>
 
             

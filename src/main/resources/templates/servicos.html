@@ -64,7 +64,7 @@
                 <span th:text="${errorMessage}"></span>
             </div>
 
-            <form action="/habilidades" method="post" th:object="${dto}">
+            <form action="/servicos" method="post" th:object="${dto}">
                 <div class="mb-3">
                     <label class="info-label">Serviço</label>
                     <select th:field="*{servicoId}" class="form-select form-select-sm">

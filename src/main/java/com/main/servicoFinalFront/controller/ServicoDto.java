@@ -5,6 +5,7 @@
 package com.main.servicoFinalFront.controller;
 
 import com.main.servicoFinalFront.model.Servico;
+import com.main.servicoFinalFront.model.ServicoAtualizar;
 import com.main.servicoFinalFront.model.ServicoListar;
 import com.main.servicoFinalFront.model.UsuarioServico;
 import com.main.servicoFinalFront.model.UserPerfilDto;
@@ -30,7 +31,7 @@ public class ServicoDto {
     private AuthService authService;
     
     @GetMapping("/habilidades")
-public String telaAdicionarHabilidade(Model model, HttpSession session) {
+public String telaAdicionarServico(Model model, HttpSession session) {
     String token = (String) session.getAttribute("token");
     if (token == null) return "redirect:/logar";
     try {
@@ -43,11 +44,11 @@ public String telaAdicionarHabilidade(Model model, HttpSession session) {
             return "redirect:/logar";
         }
     }
-    return "habilidades";
+    return "servicos";
 }
     
-    @PostMapping("/habilidades")
-    public String adicionarHabilidade(@ModelAttribute UsuarioServico dto, HttpSession session, Model model) {
+    @PostMapping("/servicos")
+    public String adicionarServico(@ModelAttribute UsuarioServico dto, HttpSession session, Model model) {
 
     String token = (String) session.getAttribute("token");
     if (token == null) return "redirect:/logar";
@@ -62,8 +63,34 @@ public String telaAdicionarHabilidade(Model model, HttpSession session) {
     }
     return "redirect:/perfil";
 }
-    
-}  
+
+@PostMapping("/servico/editar")
+public String telaEditarServico(@ModelAttribute ServicoAtualizar atualizar, HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    List<Servico> servicos = authService.listarServicos(token);
+    model.addAttribute("servicos", servicos);
+    model.addAttribute("atualizar", atualizar);
+    return "editarServico";
+}
+
+@PostMapping("/servico/atualizar")
+public String atualizarServico(@ModelAttribute ServicoAtualizar atualizar, HttpSession session) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    authService.atualizarServico(atualizar, token);
+    return "redirect:/perfil";
+}
+
+@PostMapping("/servico/deletar")
+public String deletarServico(@ModelAttribute ServicoAtualizar atualizar, HttpSession session){
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    authService.apagarServico(atualizar, token);
+    return "redirect:/perfil";
+}
+}
+
        
             
    

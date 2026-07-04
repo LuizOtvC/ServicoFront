@@ -71,7 +71,7 @@ public class UserController {
         } catch (HttpClientErrorException e) {
             String msg = extrairMensagemDeErro(e);
             model.addAttribute("errorMessage", msg);
-            model.addAttribute("credenciais", user);
+            model.addAttribute("user", user);
             return "logar";
         }
     }
