@@ -4,7 +4,9 @@
  */
 package com.main.servicoFinalFront.service;
 
-import com.main.servicoFinalFront.controller.ServicoDto;
+import com.main.servicoFinalFront.controller.ServicController;
+import com.main.servicoFinalFront.model.ProjetoListarDto;
+import com.main.servicoFinalFront.model.ProjetoUserDto;
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoAtualizar;
 import com.main.servicoFinalFront.model.ServicoListar;
@@ -109,6 +111,37 @@ public class AuthService {
             .retrieve()
             .body(Void.class);
 }
+    
+    public void adicionarProjeto(ProjetoUserDto projeto, String token) {
+        try{
+    restclient.post()
+            .uri("/projeto/criar")
+            .header("Authorization", "Bearer " + token)
+            .body(projeto)
+            .retrieve()
+            .body(Void.class);
+        }catch(HttpClientErrorException e){
+            throw e;
+        }
     }
+    public List<ProjetoListarDto> listarProjetos(String token) {
+    return restclient.get()
+            .uri("/projeto/listar")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
+}
+    
+    public List<ProjetoListarDto> listarProjetosFiltro(String token) {
+    return restclient.get()
+            .uri("/projeto/listarFiltro")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
+}
+    
+    
+    
+}
     
     

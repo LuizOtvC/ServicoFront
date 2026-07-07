@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Criar Projeto</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 480px;
+            border: none;
+        }
+        .card-header {
+            background: #1a1a2e;
+            padding: 1.4rem 1.5rem;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+        }
+        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
+        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
+        .card-body { padding: 1.25rem 1.5rem; }
+        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
+        .btn-editar {
+            display: block;
+            width: 100%;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-editar:hover { background: #2d2d50; color: white; }
+        .servico-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .servico-check:last-of-type { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h4>Criar Projeto</h4>
+            <p>Preencha os dados do seu projeto</p>
+        </div>
+        <div class="card-body">
+
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <form action="/projeto/criar" method="post" th:object="${projeto}">
+
+                <div class="mb-3">
+                    <label class="info-label">Título</label>
+                    <input type="text" class="form-control form-control-sm"
+                           th:field="*{titulo}" placeholder="Ex: Reforma elétrica"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="info-label">Descrição</label>
+                    <textarea class="form-control form-control-sm" rows="3"
+                              th:field="*{descricao}" placeholder="Descreva o que precisa ser feito..."></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="info-label">Orçamento (R$)</label>
+                    <input type="number" step="0.01" class="form-control form-control-sm"
+                           th:field="*{orcamento}" placeholder="Ex: 1500.00"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="info-label">Horas estimadas</label>
+                    <input type="number" class="form-control form-control-sm"
+                           th:field="*{horasEstimadas}" placeholder="Ex: 8"/>
+                </div>
+
+                <div class="mb-3">
+    <label class="info-label">Serviços necessários</label>
+    <select name="servicosId" multiple class="form-select form-select-sm" size="6">
+        <option th:each="s : ${servicos}"
+                th:value="${s.id}"
+                th:text="${s.nome}">
+        </option>
+    </select>
+    <small class="text-muted" style="font-size: 10px;">
+        Segure Ctrl (ou Cmd no Mac) para selecionar mais de um
+    </small>
+</div>
+
+                <button type="submit" class="btn-editar">Criar projeto</button>
+            </form>
+
+            <a th:href="@{/}" class="btn-editar">Cancelar</a>
+        </div>
+    </div>
+</body>
+</html>
