@@ -95,18 +95,24 @@
         </div>
 
         <div th:each="p : ${projetos}" class="projeto-card" th:onclick="|toggleDetalhes('detalhes-' + ${p.id})|">
-            <p class="projeto-titulo" th:text="${p.titulo}">Título</p>
-            <span class="projeto-status" th:text="${p.status}">ABERTO</span>
-            <p class="projeto-servicos">
-                <span th:each="s : ${p.servicos}" th:text="${s}">Serviço</span>
-            </p>
+    <p class="projeto-titulo" th:text="${p.titulo}">Título</p>
+    <span class="projeto-status" th:text="${p.status}">ABERTO</span>
+    <p class="projeto-servicos">
+        <span th:each="s : ${p.servicos}" th:text="${s}">Serviço</span>
+    </p>
 
-            <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
-                <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
-                <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
-                <p class="detalhe-row"><strong>Horas estimadas:</strong> <span th:text="${p.horasEstimadas}">—</span>h</p>
-            </div>
-        </div>
+    <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
+        <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
+        <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
+        <p class="detalhe-row"><strong>Horas estimadas:</strong> <span th:text="${p.horasEstimadas}">—</span>h</p>
+
+        <a th:href="@{/projetoporId/{id}(id=${p.id})}"
+           class="btn-ver-mais"
+           onclick="event.stopPropagation()">
+            Ver informações <i class="ti ti-arrow-right"></i>
+        </a>
+    </div>
+</div>
     </div>
 
     <script>

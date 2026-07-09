@@ -5,6 +5,7 @@
 package com.main.servicoFinalFront.controller;
 
 import com.main.servicoFinalFront.model.ProjetoListarDto;
+import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.ProjetoUserDto;
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.service.AuthService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -51,7 +53,7 @@ public class ProjetoController {
         return "redirect:/";
     }
     
-    @GetMapping("/projetosFiltro")
+    @GetMapping("/projetoFiltro")
 public String listarProjetos(HttpSession session, Model model) {
     String token = (String) session.getAttribute("token");
     if (token == null) return "redirect:/logar";
@@ -87,5 +89,24 @@ public String meusProjetos(HttpSession session, Model model) {
         model.addAttribute("erro", "Erro ao carregar projetos.");
     }
     return "projeto";
+}
+
+@GetMapping("/projetoporId/{id}")
+public String meusProjetosId(@PathVariable Long id, HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        ProjetoResposta projeto = service.listarprojetoPorId(id, token);
+        model.addAttribute("projeto", projeto);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+        model.addAttribute("erro", "Erro ao carregar projeto.");
+    } catch (Exception e) {
+        model.addAttribute("erro", "Erro ao carregar projeto.");
+    }
+    return "projetoId";
 }
 }

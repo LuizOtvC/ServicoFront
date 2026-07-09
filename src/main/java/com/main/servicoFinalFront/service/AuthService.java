@@ -6,6 +6,7 @@ package com.main.servicoFinalFront.service;
 
 import com.main.servicoFinalFront.controller.ServicController;
 import com.main.servicoFinalFront.model.ProjetoListarDto;
+import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.ProjetoUserDto;
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoAtualizar;
@@ -140,8 +141,15 @@ public class AuthService {
             .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
 }
     
-    
-    
+    public ProjetoResposta listarprojetoPorId(Long id, String token) {
+    return restclient.get()
+        .uri("/projeto/listarId/{id}", id)
+        .header("Authorization", "Bearer " + token)
+        .retrieve()
+        .body(ProjetoResposta.class);
 }
+    }
+    
+    
     
     

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Detalhes do Projeto</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .page-title {
+            color: #1a1a2e;
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .btn-voltar {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 1.5rem;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 1.2rem;
+            font-size: 13px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-voltar:hover { background: #2d2d50; color: white; }
+
+        .projeto-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            border: none;
+            padding: 1.5rem;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .projeto-titulo {
+            font-size: 19px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0 0 6px;
+        }
+        .projeto-status {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 20px;
+            padding: 3px 12px;
+            margin-bottom: 1rem;
+        }
+        .projeto-servicos {
+            font-size: 12px;
+            color: #666;
+            margin: 0 0 1rem;
+        }
+        .projeto-servicos span {
+            display: inline-block;
+            background: #f0f4ff;
+            border: 1px solid #d0d9f5;
+            border-radius: 20px;
+            padding: 2px 8px;
+            margin: 2px 4px 2px 0;
+            font-size: 11px;
+            color: #2E5395;
+        }
+
+        .projeto-detalhes {
+            border-top: 1px solid #f0f0f0;
+            padding-top: 12px;
+        }
+        .detalhe-row {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .detalhe-row strong {
+            color: #1a1a2e;
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+        }
+        .detalhe-row .valor {
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div style="max-width: 520px; margin: 0 auto;">
+
+        <a th:href="@{/projeto/filtrar}" class="btn-voltar">
+         <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+
+        <h2 class="page-title">Detalhes do projeto</h2>
+
+        <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+
+        <div th:if="${projeto}" class="projeto-card">
+            <p class="projeto-titulo" th:text="${projeto.titulo}">Título</p>
+            <span class="projeto-status" th:text="${projeto.status}">ABERTO</span>
+
+            <p class="projeto-servicos">
+                <span th:each="s : ${projeto.servicos}" th:text="${s}">Serviço</span>
+            </p>
+
+            <div class="projeto-detalhes">
+                <div class="detalhe-row">
+                    <strong>Descrição</strong>
+                    <span class="valor" th:text="${projeto.descricao}">—</span>
+                </div>
+                <div class="detalhe-row">
+                    <strong>Orçamento</strong>
+                    <span class="valor">R$ <span th:text="${projeto.orcamento}">—</span></span>
+                </div>
+                <div class="detalhe-row">
+                    <strong>Horas estimadas</strong>
+                    <span class="valor"><span th:text="${projeto.horasEstimadas}">—</span>h</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
