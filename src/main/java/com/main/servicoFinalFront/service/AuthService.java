@@ -148,6 +148,14 @@ public class AuthService {
         .retrieve()
         .body(ProjetoResposta.class);
 }
+    public UserPerfilDto VerPerfilId(String token, Long id){
+        return restclient.get()
+                .uri("/user/perfilId/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(UserPerfilDto.class);
+    }
+    
     }
     
     

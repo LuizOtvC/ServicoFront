@@ -1,17 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.main.servicoFinalFront.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- *
- * @author Mateus
- */
 public class ProjetoResposta {
-    
+
     private Long id;
     private String titulo;
     private String descricao;
@@ -19,24 +12,39 @@ public class ProjetoResposta {
     private Integer horasEstimadas;
     private String status;
     private List<String> servicos;
+    private Long usuarioId;
+    private Integer scoreRisco;
+    private LocalDateTime criadoEm;
 
-    public ProjetoResposta(Long id, String titulo, String descricao, Double orcamento,
-                           Integer horasEstimadas, String status, List<String> servicos) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.orcamento = orcamento;
-        this.horasEstimadas = horasEstimadas;
-        this.status = status;
-        this.servicos = servicos;
-    }
+    public ProjetoResposta() {}
 
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+
     public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+
     public Double getOrcamento() { return orcamento; }
+    public void setOrcamento(Double orcamento) { this.orcamento = orcamento; }
+
     public Integer getHorasEstimadas() { return horasEstimadas; }
+    public void setHorasEstimadas(Integer horasEstimadas) { this.horasEstimadas = horasEstimadas; }
+
     public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
     public List<String> getServicos() { return servicos; }
-    
+    public void setServicos(List<String> servicos) { this.servicos = servicos; }
+
+    public Long getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+
+    public Integer getScoreRisco() { return scoreRisco; }
+    public void setScoreRisco(Integer scoreRisco) { this.scoreRisco = scoreRisco; }
+
+    public LocalDateTime getCriadoEm() { return criadoEm; }
+    public void setCriadoEm(LocalDateTime criadoEm) { this.criadoEm = criadoEm; }
 }

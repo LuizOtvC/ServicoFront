@@ -8,6 +8,7 @@ import com.main.servicoFinalFront.model.ProjetoListarDto;
 import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.ProjetoUserDto;
 import com.main.servicoFinalFront.model.Servico;
+import com.main.servicoFinalFront.model.UserPerfilDto;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
@@ -97,7 +98,9 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
     if (token == null) return "redirect:/logar";
     try {
         ProjetoResposta projeto = service.listarprojetoPorId(id, token);
+        UserPerfilDto usuario = service.VerPerfilId(token, projeto.getUsuarioId());
         model.addAttribute("projeto", projeto);
+        model.addAttribute("usuario", usuario);
     } catch (HttpClientErrorException e) {
         if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
             session.invalidate();
