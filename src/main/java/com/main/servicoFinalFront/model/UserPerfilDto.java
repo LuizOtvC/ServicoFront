@@ -15,17 +15,21 @@ public class UserPerfilDto {
     private String telefone;
     private Double reputacao;
     private Integer horasSemana;
+    private Long id;
 
     public UserPerfilDto() {
     }
 
-    public UserPerfilDto(String nome, String email, String telefone, Double reputacao, Integer horasSemana) {
+    public UserPerfilDto(String nome, String email, String telefone, Double reputacao, Integer horasSemana, Long id) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
         this.reputacao = reputacao;
         this.horasSemana = horasSemana;
+        this.id = id;
     }
+
+    
 
     public String getNome() {
         return nome;
@@ -67,5 +71,14 @@ public class UserPerfilDto {
         this.horasSemana = horasSemana;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
    
+    
 }

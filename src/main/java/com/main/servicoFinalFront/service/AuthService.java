@@ -4,10 +4,11 @@
  */
 package com.main.servicoFinalFront.service;
 
-import com.main.servicoFinalFront.controller.ServicController;
+import com.main.servicoFinalFront.controller.ServicoController;
 import com.main.servicoFinalFront.model.ProjetoListarDto;
 import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.ProjetoUserDto;
+import com.main.servicoFinalFront.model.PropostaEnvioDto;
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoAtualizar;
 import com.main.servicoFinalFront.model.ServicoListar;
@@ -154,6 +155,19 @@ public class AuthService {
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .body(UserPerfilDto.class);
+    }
+    
+    public void adicionarProposta(String token, PropostaEnvioDto envio){
+        try{
+    restclient.post()
+            .uri("/proposta/criar")
+            .header("Authorization", "Bearer " + token)
+            .body(envio)
+            .retrieve()
+            .body(Void.class);
+        }catch(HttpClientErrorException e){
+            throw e;
+        }
     }
     
     }

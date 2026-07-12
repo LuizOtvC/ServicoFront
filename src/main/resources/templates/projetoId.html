@@ -142,7 +142,7 @@
 <body>
 
     <div class="topo">
-        <a th:href="@{/projetos}" class="btn-voltar">
+        <a th:href="@{/projetoFiltrar}" class="btn-voltar">
             <i class="ti ti-arrow-left"></i> Voltar
         </a>
 
@@ -202,6 +202,9 @@
                 <span class="valor" th:text="${#temporals.format(projeto.criadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
             </div>
         </div>
+        <div th:if="${usuarioLogadoId != projeto.usuarioId}" style="margin-top: 1rem;">
+    <a th:href="@{/proposta(projetoId=${projeto.id})}" class="btn-editar">Enviar proposta</a>
+</div>
     </div>
 
     <script>

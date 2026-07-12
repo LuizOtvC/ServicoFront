@@ -26,7 +26,7 @@ import org.springframework.web.client.HttpClientErrorException;
  * @author Mateus
  */
 @Controller
-public class ServicController {
+public class ServicoController {
     @Autowired
     private AuthService authService;
     

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Enviar Proposta</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 480px;
+            border: none;
+        }
+        .card-header {
+            background: #1a1a2e;
+            padding: 1.4rem 1.5rem;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+        }
+        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
+        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
+        .card-body { padding: 1.25rem 1.5rem; }
+        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
+        .projeto-info {
+            background: #f0f4ff;
+            border: 1px solid #d0d9f5;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 1rem;
+        }
+        .projeto-info .titulo { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 0 0 4px; }
+        .projeto-info .servicos span {
+            display: inline-block;
+            background: white;
+            border: 1px solid #d0d9f5;
+            border-radius: 20px;
+            padding: 2px 8px;
+            margin: 2px 4px 2px 0;
+            font-size: 11px;
+            color: #2E5395;
+        }
+        .projeto-info .orcamento { font-size: 12px; color: #555; margin: 6px 0 0; }
+        .btn-editar {
+            display: block;
+            width: 100%;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-editar:hover { background: #2d2d50; color: white; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h4>Enviar Proposta</h4>
+            <p>Preencha os dados da sua proposta</p>
+        </div>
+        <div class="card-body">
+
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <!-- resumo do projeto -->
+            <div th:if="${projeto}" class="projeto-info">
+                <p class="titulo" th:text="${projeto.titulo}">Título</p>
+                <div class="servicos">
+                    <span th:each="s : ${projeto.servicos}" th:text="${s}">Serviço</span>
+                </div>
+                <p class="orcamento">Orçamento: R$ <span th:text="${projeto.orcamento}">—</span></p>
+            </div>
+
+            <form action="/adicionarProposta" method="post" th:object="${dto}">
+               <input type="hidden" name="projetoId" th:value="${projeto.id}"/>
+
+                <div class="mb-3">
+                    <label class="info-label">Valor proposto (R$)</label>
+                    <input type="number" step="0.01" class="form-control form-control-sm"
+                           th:field="*{valorProposto}" placeholder="Ex: 1200.00"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="info-label">Descrição da proposta</label>
+                    <textarea class="form-control form-control-sm" rows="4"
+                              th:field="*{descricao}"
+                              placeholder="Descreva sua proposta, experiência, prazo..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-editar">Enviar proposta</button>
+            </form>
+
+            <a th:href="@{/projetoFiltro}" class="btn-editar">Cancelar</a>
+        </div>
+    </div>
+</body>
+</html>

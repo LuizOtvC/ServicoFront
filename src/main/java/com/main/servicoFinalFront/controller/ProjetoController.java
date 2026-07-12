@@ -99,8 +99,10 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
     try {
         ProjetoResposta projeto = service.listarprojetoPorId(id, token);
         UserPerfilDto usuario = service.VerPerfilId(token, projeto.getUsuarioId());
+        UserPerfilDto usuarioLogado = service.VerPerfil(token);
         model.addAttribute("projeto", projeto);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
     } catch (HttpClientErrorException e) {
         if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
             session.invalidate();
