@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Perfil</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            border: none;
+        }
+        .card-header {
+            background: #1a1a2e;
+            padding: 1.4rem 1.5rem;
+            text-align: center;
+        }
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #3a3a6e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin: 0 auto 10px;
+        }
+        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
+        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
+        .card-body { padding: 1.25rem 1.5rem; }
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .info-row:last-of-type { border-bottom: none; }
+        .info-row i { font-size: 17px; color: #888; width: 20px; flex-shrink: 0; }
+        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 1px; }
+        .info-value { font-size: 13px; color: #1a1a2e; font-weight: 500; }
+        .rep-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f4ff;
+            border: 1px solid #d0d9f5;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 1rem;
+        }
+        .rep-badge i  { font-size: 20px; color: #f5a623; }
+        .rep-label { font-size: 11px; color: #666; margin: 0; }
+        .rep-value { font-size: 16px; font-weight: 600; color: #1a1a2e; margin: 0; line-height: 1; }
+        .btn-voltar {
+            display: block;
+            width: 100%;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-voltar:hover { background: #2d2d50; color: white; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div th:if="${erro}" class="card-body">
+            <div class="alert alert-danger" th:text="${erro}"></div>
+        </div>
+
+        <div th:if="${usuario}">
+            <div class="card-header">
+                <div class="avatar" id="avatar-initials">?</div>
+                <h4 id="header-nome" th:text="${usuario.nome}">Nome do usuário</h4>
+                <p th:text="${usuario.email}">email@exemplo.com</p>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <i class="ti ti-user" aria-hidden="true"></i>
+                    <div>
+                        <span class="info-label">Nome</span>
+                        <span class="info-value" th:text="${usuario.nome}">—</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="ti ti-phone" aria-hidden="true"></i>
+                    <div>
+                        <span class="info-label">Telefone</span>
+                        <span class="info-value" th:text="${usuario.telefone}">—</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="ti ti-clock" aria-hidden="true"></i>
+                    <div>
+                        <span class="info-label">Horas semanais</span>
+                        <span class="info-value" th:text="${usuario.horasSemana}">—</span>
+                    </div>
+                </div>
+
+                <div class="rep-badge">
+                    <i class="ti ti-star" aria-hidden="true"></i>
+                    <div>
+                        <p class="rep-label">Reputação</p>
+                        <p class="rep-value" th:text="${usuario.reputacao}">0</p>
+                    </div>
+                </div>
+
+                <a th:href="@{/propostas}" class="btn-voltar">
+                    <i class="ti ti-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const nome = document.getElementById('header-nome')?.textContent?.trim() || '';
+        const initials = nome.split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
+        const av = document.getElementById('avatar-initials');
+        if (av && initials) av.textContent = initials;
+    </script>
+</body>
+</html>

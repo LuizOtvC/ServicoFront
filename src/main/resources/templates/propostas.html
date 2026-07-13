@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Propostas</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .page-title {
+            color: #1a1a2e;
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .btn-voltar {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 1.5rem;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 1.2rem;
+            font-size: 13px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-voltar:hover { background: #2d2d50; color: white; }
+
+        .proposta-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            border: none;
+            margin-bottom: 1rem;
+            padding: 1rem 1.25rem;
+            transition: box-shadow 0.2s;
+        }
+        .proposta-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+
+        .proposta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .proposta-projeto { font-size: 15px; font-weight: 600; color: #1a1a2e; margin: 0; }
+        .proposta-projeto a { color: #1a1a2e; text-decoration: none; }
+        .proposta-projeto a:hover { text-decoration: underline; }
+
+        .proposta-usuario { font-size: 12px; color: #888; margin: 0 0 8px; }
+        .proposta-usuario a { color: #888; text-decoration: none; }
+        .proposta-usuario a:hover { text-decoration: underline; color: #2E5395; }
+
+        .proposta-status {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 2px 10px;
+            white-space: nowrap;
+        }
+        .status-pendente { background: #fff3cd; color: #856404; }
+        .status-aceita   { background: #d4edda; color: #155724; }
+        .status-recusada { background: #f8d7da; color: #721c24; }
+        .status-default  { background: #e2e3e5; color: #383d41; }
+
+        .proposta-descricao {
+            font-size: 12px;
+            color: #666;
+            margin: 6px 0 10px;
+        }
+
+        .proposta-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 8px;
+        }
+        .proposta-valor { font-size: 14px; font-weight: 700; color: #2E5395; }
+        .proposta-data { font-size: 11px; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 520px; margin: 0 auto;">
+
+        <a th:href="@{/}" class="btn-voltar">
+            <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+
+        <h2 class="page-title">Minhas propostas</h2>
+
+        <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+
+        <div th:if="${#lists.isEmpty(propostas)}" class="text-center text-muted" style="margin-top: 3rem;">
+            <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
+            <p style="margin-top: 8px;">Nenhuma proposta encontrada.</p>
+        </div>
+
+        <div th:each="p : ${propostas}" class="proposta-card">
+            <div class="proposta-header">
+                <p class="proposta-projeto">
+                    Projeto:
+                    <a th:href="@{/projetoporId/{id}(id=${p.projetoId})}" th:text="${p.nomeProjeto}">
+                        Título do projeto
+                    </a>
+                </p>
+                <span class="proposta-status"
+                      th:text="${p.status}"
+                      th:classappend="${
+                          #strings.equalsIgnoreCase(p.status, 'PENDENTE')} ? 'status-pendente' :
+                          (${#strings.equalsIgnoreCase(p.status, 'ACEITA')} ? 'status-aceita' :
+                          (${#strings.equalsIgnoreCase(p.status, 'RECUSADA')} ? 'status-recusada' : 'status-default'))">
+                    PENDENTE
+                </span>
+            </div>
+
+            <p class="proposta-usuario">
+                <i class="ti ti-user" aria-hidden="true"></i>
+                <a th:href="@{/perfilId/{id}(id=${p.usuarioId})}" th:text="${p.nomeUsuario}">
+                    Nome do usuário
+                </a>
+            </p>
+
+            <p class="proposta-descricao" th:text="${p.descricao}">Descrição da proposta</p>
+
+            <div class="proposta-footer">
+                <span class="proposta-valor">R$ <span th:text="${p.valorProposto}">0,00</span></span>
+                <span class="proposta-data" th:text="${#temporals.format(p.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

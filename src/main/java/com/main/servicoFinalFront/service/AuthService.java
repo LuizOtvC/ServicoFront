@@ -9,6 +9,7 @@ import com.main.servicoFinalFront.model.ProjetoListarDto;
 import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.ProjetoUserDto;
 import com.main.servicoFinalFront.model.PropostaEnvioDto;
+import com.main.servicoFinalFront.model.PropostaRespostaDto;
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoAtualizar;
 import com.main.servicoFinalFront.model.ServicoListar;
@@ -150,12 +151,12 @@ public class AuthService {
         .body(ProjetoResposta.class);
 }
     public UserPerfilDto VerPerfilId(String token, Long id){
-        return restclient.get()
-                .uri("/user/perfilId/{id}", id)
-                .header("Authorization", "Bearer " + token)
-                .retrieve()
-                .body(UserPerfilDto.class);
-    }
+    return restclient.get()
+            .uri("/user/perfilId/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(UserPerfilDto.class);
+}
     
     public void adicionarProposta(String token, PropostaEnvioDto envio){
         try{
@@ -170,7 +171,15 @@ public class AuthService {
         }
     }
     
+    public List<PropostaRespostaDto> listarProjetoFiltro(String token){
+        return restclient.get()
+            .uri("/proposta/listarPendente")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<PropostaRespostaDto>>() {});
+}
     }
+   
     
     
     

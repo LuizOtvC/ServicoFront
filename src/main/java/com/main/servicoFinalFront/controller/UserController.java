@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import tools.jackson.databind.JsonNode;
@@ -159,6 +160,27 @@ public String perfil(HttpSession session, Model model) {
     }
 
     return "perfil";
+}
+
+@GetMapping("/perfilId/{id}")
+public String perfilPorId(@PathVariable Long id, HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        UserPerfilDto usuario = authService.VerPerfilId(token, id);
+        model.addAttribute("usuario", usuario);
+    } catch (HttpClientErrorException e) {
+        e.printStackTrace();
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+        model.addAttribute("erro", "Erro ao carregar perfil.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        model.addAttribute("erro", "Erro ao carregar perfil.");
+    }
+    return "perfilId";
 }
          
 }

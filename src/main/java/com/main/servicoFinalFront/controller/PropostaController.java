@@ -6,10 +6,13 @@ package com.main.servicoFinalFront.controller;
 
 import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.PropostaEnvioDto;
+import com.main.servicoFinalFront.model.PropostaRespostaDto;
 import com.main.servicoFinalFront.model.UsuarioServico;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +40,7 @@ public String paginaProposta(@RequestParam Long projetoId, HttpSession session, 
         model.addAttribute("projeto", projeto);
         model.addAttribute("dto", new PropostaEnvioDto());
     } catch (HttpClientErrorException e) {
-        return "redirect:/projetos";
+        return "redirect:/projetoFiltro";
     }
     return "proposta";
 }
@@ -54,7 +57,26 @@ public String paginaProposta(@RequestParam Long projetoId, HttpSession session, 
         model.addAttribute("errorMessage", "Erro ao enviar proposta");
         return "perfil";
     }
-    return "redirect:/projetos";
+    return "redirect:/projetoFiltro";
     }
+    
+    @GetMapping("/propostas")
+public String listarPropostas(HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        List<PropostaRespostaDto> propostas = service.listarProjetoFiltro(token);
+        model.addAttribute("propostas", propostas);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+        model.addAttribute("erro", "Erro ao carregar propostas.");
+    } catch (Exception e) {
+        model.addAttribute("erro", "Erro ao carregar propostas.");
+    }
+    return "propostas";
+}
     
 }
