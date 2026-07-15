@@ -114,4 +114,23 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
     }
     return "projetoId";
 }
+
+@GetMapping("/projetoFiltroUser")
+public String listarProjetosUser(HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        List<ProjetoListarDto> projetos = service.listarProjetosFiltroUsuario(token);
+        model.addAttribute("projetos", projetos);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+        model.addAttribute("erro", "Erro ao carregar projetos.");
+    } catch (Exception e) {
+        model.addAttribute("erro", "Erro ao carregar projetos.");
+    }
+    return "projetoFiltroUser";
+}
 }

@@ -178,6 +178,43 @@ public class AuthService {
             .retrieve()
             .body(new ParameterizedTypeReference<List<PropostaRespostaDto>>() {});
 }
+    public void aceitarProposta(Long id, String token) {
+    restclient.put()
+            .uri("/proposta/aceitar/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Void.class);
+}
+    
+    public List<PropostaRespostaDto> listarPropostas(String token){
+        return restclient.get()
+            .uri("/proposta/listarPropostas")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<PropostaRespostaDto>>() {});
+}
+    public void cancelarProposta(Long id, String token) {
+    restclient.put()
+            .uri("/proposta/cancelar/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Void.class);
+}
+    public void recusarProposta(Long id, String token) {
+    restclient.put()
+            .uri("/proposta/recusar/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Void.class);
+}
+    
+    public List<ProjetoListarDto> listarProjetosFiltroUsuario(String token) {
+    return restclient.get()
+            .uri("/projeto/listarFiltroUser")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
+}
     }
    
     

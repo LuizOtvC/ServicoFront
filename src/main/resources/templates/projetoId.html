@@ -124,7 +124,7 @@
 <body>
     <div style="max-width: 520px; margin: 0 auto;">
 
-        <a th:href="@{/projeto/filtrar}" class="btn-voltar">
+        <a th:href="@{/projetoFiltro}" class="btn-voltar">
             <i class="ti ti-arrow-left"></i> Voltar
         </a>
 
@@ -156,7 +156,7 @@
                 <div class="detalhe-row">
                     <strong>Publicado por</strong>
                     <span class="valor">
-                        <a th:href="@{/perfil/{id}(id=${projeto.usuarioId})}" th:text="${usuario.nome}">Nome do usuário</a>
+                        <a th:href="@{/perfilId/{id}(id=${projeto.usuarioId})}" th:text="${usuario.nome}">Nome do usuário</a>
                     </span>
                 </div>
                 <div class="detalhe-row">
@@ -170,10 +170,10 @@
             </div>
 
             <a th:if="${usuarioLogadoId != projeto.usuarioId}"
-               th:href="@{/proposta/criar/{id}(id=${projeto.id})}"
-               class="btn-proposta">
-                Enviar proposta
-            </a>
+   th:href="@{/proposta(projetoId=${projeto.id})}"
+   class="btn-proposta">
+    Enviar proposta
+</a>
         </div>
 
     </div>

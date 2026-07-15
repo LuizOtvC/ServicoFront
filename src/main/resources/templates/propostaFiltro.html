@@ -87,6 +87,22 @@
         }
         .proposta-valor { font-size: 14px; font-weight: 700; color: #2E5395; }
         .proposta-data { font-size: 11px; color: #aaa; }
+
+        .btn-aceitar {
+            display: block;
+            width: 100%;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn-aceitar:hover { background: #2d2d50; }
     </style>
 </head>
 <body>
@@ -136,6 +152,16 @@
                 <span class="proposta-valor">R$ <span th:text="${p.valorProposto}">0,00</span></span>
                 <span class="proposta-data" th:text="${#temporals.format(p.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
             </div>
+
+            <form th:if="${#strings.equalsIgnoreCase(p.status, 'PENDENTE')}"
+                  th:action="@{/aceitar/{id}(id=${p.id})}" method="post">
+                <button type="submit" class="btn-aceitar">Aceitar proposta</button>
+            </form>
+            <form th:if="${#strings.equalsIgnoreCase(p.status, 'PENDENTE')}"
+      th:action="@{/recusar/{id}(id=${p.id})}" method="post">
+    <button type="submit" class="btn-aceitar" 
+            style="background: #b00020; margin-top: 6px;">Recusar proposta</button>
+</form>
         </div>
 
     </div>
