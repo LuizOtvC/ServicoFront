@@ -133,4 +133,35 @@ public String listarProjetosUser(HttpSession session, Model model) {
     }
     return "projetoFiltroUser";
 }
+
+@PostMapping("/andamento/{id}")
+public String AndamentoProjeto(@PathVariable Long id, HttpSession session) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        service.ProjetoEmAndamento(id, token);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+    }
+    return "redirect:/projetoFiltroUser";
+    
+}
+@PostMapping("/concluido/{id}")
+public String ConcluidoProjeto(@PathVariable Long id, HttpSession session) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        service.ProjetoConcluido(id, token);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+    }
+    return "redirect:/projetoFiltroUser";
+    
+}
 }

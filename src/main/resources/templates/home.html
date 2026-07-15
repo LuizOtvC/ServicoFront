@@ -193,12 +193,12 @@
             <span class="secao-titulo">Propostas nos seus projetos</span><br>
             <span class="secao-subtitulo">Profissionais que se candidataram aos seus projetos</span>
         </div>
-        <a href="/projetos" class="btn btn-sm btn-outline-dark" style="font-size: 13px; border-radius: 8px;">
+        <a href="/projetoFiltroUser" class="btn btn-sm btn-outline-dark" style="font-size: 13px; border-radius: 8px;">
             Ver todos
         </a>
     </div>
 
-    <!-- Lista de propostas — preenchida pelo Thymeleaf -->
+    
     <div th:if="${propostas != null and !#lists.isEmpty(propostas)}">
         <div class="card card-proposta shadow-sm mb-3 p-3"
              th:each="proposta : ${propostas}">

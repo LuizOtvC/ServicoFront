@@ -168,16 +168,16 @@ public String perfilPorId(@PathVariable Long id, HttpSession session, Model mode
     if (token == null) return "redirect:/logar";
     try {
         UserPerfilDto usuario = authService.VerPerfilId(token, id);
+        List<ServicoListar> habilidades = authService.listarServicosIdPorUsuario(token, id);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("habilidades", habilidades);
     } catch (HttpClientErrorException e) {
-        e.printStackTrace();
         if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
             session.invalidate();
             return "redirect:/logar";
         }
         model.addAttribute("erro", "Erro ao carregar perfil.");
     } catch (Exception e) {
-        e.printStackTrace();
         model.addAttribute("erro", "Erro ao carregar perfil.");
     }
     return "perfilId";

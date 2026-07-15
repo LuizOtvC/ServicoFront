@@ -16,35 +16,95 @@ public class ProjetoResposta {
     private Integer scoreRisco;
     private LocalDateTime criadoEm;
 
-    public ProjetoResposta() {}
+    public ProjetoResposta() {
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public String getTitulo() {
+        return titulo;
+    }
 
-    public Double getOrcamento() { return orcamento; }
-    public void setOrcamento(Double orcamento) { this.orcamento = orcamento; }
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-    public Integer getHorasEstimadas() { return horasEstimadas; }
-    public void setHorasEstimadas(Integer horasEstimadas) { this.horasEstimadas = horasEstimadas; }
+    public String getDescricao() {
+        return descricao;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-    public List<String> getServicos() { return servicos; }
-    public void setServicos(List<String> servicos) { this.servicos = servicos; }
+    public Double getOrcamento() {
+        return orcamento;
+    }
 
-    public Long getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+    public void setOrcamento(Double orcamento) {
+        this.orcamento = orcamento;
+    }
 
-    public Integer getScoreRisco() { return scoreRisco; }
-    public void setScoreRisco(Integer scoreRisco) { this.scoreRisco = scoreRisco; }
+    public Integer getHorasEstimadas() {
+        return horasEstimadas;
+    }
 
-    public LocalDateTime getCriadoEm() { return criadoEm; }
-    public void setCriadoEm(LocalDateTime criadoEm) { this.criadoEm = criadoEm; }
+    public void setHorasEstimadas(Integer horasEstimadas) {
+        this.horasEstimadas = horasEstimadas;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<String> getServicos() {
+        return servicos;
+    }
+
+    public void setServicos(List<String> servicos) {
+        this.servicos = servicos;
+    }
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public Integer getScoreRisco() {
+        return scoreRisco;
+    }
+
+    public void setScoreRisco(Integer scoreRisco) {
+        this.scoreRisco = scoreRisco;
+    }
+
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+    
+    private PropostaRespostaDto propostaAceita;
+
+public PropostaRespostaDto getPropostaAceita() {
+    return propostaAceita;
+}
+public void setPropostaAceita(PropostaRespostaDto propostaAceita) {
+    this.propostaAceita = propostaAceita;
+}
 }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
+
 /**
  *
  * @author Mateus
@@ -214,6 +215,27 @@ public class AuthService {
             .header("Authorization", "Bearer " + token)
             .retrieve()
             .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
+}
+    public void ProjetoEmAndamento(Long id, String token) {
+    restclient.put()
+            .uri("/projeto/andamento/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Void.class);
+}
+    public void ProjetoConcluido(Long id, String token) {
+    restclient.put()
+            .uri("/projeto/concluido/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Void.class);
+}
+    public List<ServicoListar> listarServicosIdPorUsuario(String token, Long id) {
+    return restclient.get()
+            .uri("/servico/listarHabilidadesId/" + id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<ServicoListar>>() {});
 }
     }
    

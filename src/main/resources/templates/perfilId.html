@@ -123,16 +123,34 @@
                 </div>
 
                 <div class="rep-badge">
-                    <i class="ti ti-star" aria-hidden="true"></i>
-                    <div>
-                        <p class="rep-label">Reputação</p>
-                        <p class="rep-value" th:text="${usuario.reputacao}">0</p>
-                    </div>
-                </div>
+    <i class="ti ti-star" aria-hidden="true"></i>
+    <div>
+        <p class="rep-label">Reputação</p>
+        <p class="rep-value" th:text="${usuario.reputacao}">0</p>
+    </div>
+</div>
 
-                <a th:href="@{/propostas}" class="btn-voltar">
-                    <i class="ti ti-arrow-left"></i> Voltar
-                </a>
+<div th:if="${#lists.isEmpty(habilidades)}" class="info-row">
+    <i class="ti ti-info-circle" aria-hidden="true"></i>
+    <div>
+        <span class="info-value" style="color: #888; font-weight: 400;">
+            Este profissional ainda não cadastrou nenhuma habilidade.
+        </span>
+    </div>
+</div>
+<div th:each="h : ${habilidades}">
+    <div class="info-row">
+        <i class="ti ti-tool" aria-hidden="true"></i>
+        <div>
+            <span class="info-label" th:text="${h.nomeServico}">Serviço</span>
+            <span class="info-value" th:text="${h.nivel}">Nível</span>
+        </div>
+    </div>
+</div>
+
+<a href="#" onclick="history.back(); return false;" class="btn-voltar">
+    <i class="ti ti-arrow-left"></i> Voltar
+</a>
             </div>
         </div>
     </div>

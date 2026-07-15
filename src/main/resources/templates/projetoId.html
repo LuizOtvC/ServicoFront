@@ -119,14 +119,29 @@
             transition: background 0.2s;
         }
         .btn-proposta:hover { background: #2d2d50; color: white; }
+
+        .btn-remover {
+            display: block;
+            width: 100%;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+            border-radius: 8px;
+            padding: 0.55rem;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 0.75rem;
+            transition: background 0.2s;
+        }
+        .btn-remover:hover { background: #f1b0b7; }
     </style>
 </head>
 <body>
     <div style="max-width: 520px; margin: 0 auto;">
 
-        <a th:href="@{/projetoFiltro}" class="btn-voltar">
-            <i class="ti ti-arrow-left"></i> Voltar
-        </a>
+        <a href="#" onclick="history.back(); return false;" class="btn-voltar">  <i class="ti ti-arrow-left"></i> Voltar</a>
 
         <h2 class="page-title">Detalhes do projeto</h2>
 
@@ -167,13 +182,35 @@
                     <strong>Criado em</strong>
                     <span class="valor" th:text="${#temporals.format(projeto.criadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
                 </div>
+                <div class="detalhe-row" th:if="${projeto.propostaAceita != null}">
+                    <strong>Profissional selecionado</strong>
+                    <span class="valor">
+                        <a th:href="@{/perfilId/{id}(id=${projeto.propostaAceita.usuarioId})}" th:text="${projeto.propostaAceita.nomeUsuario}">
+                            Nome do usuário
+                        </a>
+                    </span>
+                </div>
             </div>
+
+            <form th:if="${projeto.propostaAceita != null and usuarioLogadoId == projeto.usuarioId}"
+                  th:action="@{/recusar/{id}(id=${projeto.propostaAceita.id})}" method="post">
+                <button type="submit" class="btn-remover">Remover profissional</button>
+            </form>
+            
 
             <a th:if="${usuarioLogadoId != projeto.usuarioId}"
    th:href="@{/proposta(projetoId=${projeto.id})}"
    class="btn-proposta">
     Enviar proposta
 </a>
+            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
+      th:action="@{/andamento/{id}(id=${projeto.id})}" method="post">
+    <button type="submit" class="btn-proposta">Marcar como Em andamento</button>
+</form>
+            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
+      th:action="@{/andamento/{id}(id=${projeto.id})}" method="post">
+    <button type="submit" class="btn-proposta">Marcar como Concluido</button>
+</form>
         </div>
 
     </div>
