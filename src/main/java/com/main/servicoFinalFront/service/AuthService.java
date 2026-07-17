@@ -259,6 +259,15 @@ public class AuthService {
             .retrieve()
             .body(Void.class);
 }
+    
+    public boolean existeProposta(Long id, String token) {
+    Boolean resultado = restclient.get()
+            .uri("/proposta/existe/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Boolean.class);
+    return Boolean.TRUE.equals(resultado);
+}
     }
    
     

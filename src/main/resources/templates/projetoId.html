@@ -208,9 +208,13 @@
    style="text-align:center; font-size:13px; color:#888; margin-top:1.25rem;">
     Você já enviou uma proposta para este projeto.
 </p>
-            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
+            <form th:if="${usuarioLogadoId == projeto.usuarioId
+              and projeto.status == 'ABERTO'
+              and projeto.propostaAceita != null}"
       th:action="@{/andamento/{id}(id=${projeto.id})}" method="post">
-    <button type="submit" class="btn-proposta">Marcar como Em andamento</button>
+    <button type="submit" class="btn-proposta">
+        Marcar como Em andamento
+    </button>
 </form>
             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
       th:action="@{/concluido/{id}(id=${projeto.id})}" method="post">

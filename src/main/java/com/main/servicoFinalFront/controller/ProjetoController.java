@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -33,6 +35,19 @@ public class ProjetoController {
     @Autowired
     private AuthService service;
 
+    
+    private String extrairMensagemDeErro(HttpClientErrorException e) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(e.getResponseBodyAsString());
+            if (root.has("message")) {
+                return root.get("message").asText();
+            }
+        } catch (Exception ex) {
+        }
+        return "Ocorreu um erro inesperado na comunicação.";
+    }
+    
     @GetMapping("/projeto/criar")
     public String telaCriarProjeto(HttpSession session, Model model) {
     String token = (String) session.getAttribute("token");
@@ -100,9 +115,12 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
         ProjetoResposta projeto = service.listarprojetoPorId(id, token);
         UserPerfilDto usuario = service.VerPerfilId(token, projeto.getUsuarioId());
         UserPerfilDto usuarioLogado = service.VerPerfil(token);
+        boolean jaEnviou = service.existeProposta(id, token);
+        
         model.addAttribute("projeto", projeto);
         model.addAttribute("usuario", usuario);
         model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
+        model.addAttribute("jaEnviouProposta", jaEnviou);
     } catch (HttpClientErrorException e) {
         if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
             session.invalidate();
