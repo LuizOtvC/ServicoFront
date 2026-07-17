@@ -198,18 +198,27 @@
             </form>
             
 
-            <a th:if="${usuarioLogadoId != projeto.usuarioId}"
+            <a th:if="${usuarioLogadoId != projeto.usuarioId and !jaEnviouProposta}"
    th:href="@{/proposta(projetoId=${projeto.id})}"
    class="btn-proposta">
     Enviar proposta
 </a>
+
+<p th:if="${usuarioLogadoId != projeto.usuarioId and jaEnviouProposta}"
+   style="text-align:center; font-size:13px; color:#888; margin-top:1.25rem;">
+    Você já enviou uma proposta para este projeto.
+</p>
             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
       th:action="@{/andamento/{id}(id=${projeto.id})}" method="post">
     <button type="submit" class="btn-proposta">Marcar como Em andamento</button>
 </form>
             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
-      th:action="@{/andamento/{id}(id=${projeto.id})}" method="post">
+      th:action="@{/concluido/{id}(id=${projeto.id})}" method="post">
     <button type="submit" class="btn-proposta">Marcar como Concluido</button>
+</form>
+            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
+      th:action="@{/cancelarr/{id}(id=${projeto.id})}" method="post">
+    <button type="submit" class="btn-proposta">Cancelar Projeto</button>
 </form>
         </div>
 

@@ -4,7 +4,7 @@
  */
 package com.main.servicoFinalFront.service;
 
-import com.main.servicoFinalFront.controller.ServicoController;
+import com.main.servicoFinalFront.model.MensagemRespostaDto;
 import com.main.servicoFinalFront.model.ProjetoListarDto;
 import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.ProjetoUserDto;
@@ -236,6 +236,28 @@ public class AuthService {
             .header("Authorization", "Bearer " + token)
             .retrieve()
             .body(new ParameterizedTypeReference<List<ServicoListar>>() {});
+}
+    
+    public List<MensagemRespostaDto> listarMensagens(String token) {
+    return restclient.get()
+            .uri("/mensagem/listar")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<MensagemRespostaDto>>() {});
+}
+    public void apagarMensagem(String token, Long id) {
+    restclient.method(HttpMethod.DELETE)
+            .uri("/mensagem/deletar/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Void.class);
+}
+    public void ProjetoCancelado(Long id, String token) {
+    restclient.put()
+            .uri("/projeto/cancelar/{id}", id)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Void.class);
 }
     }
    

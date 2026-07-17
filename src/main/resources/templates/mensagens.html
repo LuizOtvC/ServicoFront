@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Mensagens</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .page-title {
+            color: #1a1a2e;
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .btn-voltar {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 1.5rem;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 1.2rem;
+            font-size: 13px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-voltar:hover { background: #2d2d50; color: white; }
+
+        .mensagem-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            border: none;
+            margin-bottom: 1rem;
+            padding: 1rem 1.25rem;
+            transition: box-shadow 0.2s;
+        }
+        .mensagem-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+
+        .mensagem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .mensagem-projeto { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 0; }
+        .mensagem-projeto a { color: #1a1a2e; text-decoration: none; }
+        .mensagem-projeto a:hover { text-decoration: underline; }
+
+        .mensagem-status {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 2px 10px;
+            white-space: nowrap;
+        }
+        .status-aceita    { background: #d4edda; color: #155724; }
+        .status-recusada  { background: #f8d7da; color: #721c24; }
+        .status-cancelada,
+        .status-cancelado { background: #f8d7da; color: #721c24; }
+        .status-em_andamento { background: #cce5ff; color: #004085; }
+        .status-concluido { background: #d1ecf1; color: #0c5460; }
+        .status-criado,
+        .status-enviada,
+        .status-proposta { background: #fff3cd; color: #856404; }
+        .status-default   { background: #e2e3e5; color: #383d41; }
+
+        .mensagem-texto {
+            font-size: 13px;
+            color: #444;
+            margin: 6px 0 10px;
+        }
+
+        .mensagem-data {
+            font-size: 11px;
+            color: #aaa;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 8px;
+            display: block;
+        }
+        .btn-apagar {
+    background: #fff;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    border-radius: 6px;
+    padding: 4px 8px;
+    transition: 0.2s;
+}
+
+.btn-apagar:hover {
+    background: #dc3545;
+    color: #fff;
+}
+    </style>
+</head>
+<body>
+    <div style="max-width: 520px; margin: 0 auto;">
+
+        <a th:href="@{/}" class="btn-voltar">
+            <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+
+        <h2 class="page-title">Minhas mensagens</h2>
+
+        <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+
+        <div th:if="${#lists.isEmpty(mensagem)}" class="text-center text-muted" style="margin-top: 3rem;">
+            <i class="ti ti-mail-opened" style="font-size: 40px;"></i>
+            <p style="margin-top: 8px;">Nenhuma mensagem por enquanto.</p>
+        </div>
+
+        <div th:each="m : ${mensagem}" class="mensagem-card">
+            <div class="mensagem-header">
+                <p class="mensagem-projeto">
+                    <a th:href="@{/projetoporId/{id}(id=${m.projetoId})}" th:text="${m.nomeProjeto}">
+                        Título do projeto
+                    </a>
+                </p>
+                <span class="mensagem-status"
+                      th:text="${m.status}"
+                      th:classappend="'status-' + ${#strings.toLowerCase(m.status)}">
+                    ACEITA
+                </span>
+            </div>
+
+            <p class="mensagem-texto" th:text="${m.mensagem}">Texto da mensagem</p>
+
+            <span class="mensagem-data" th:text="${#temporals.format(m.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
+            <form th:action="@{/deletar/{id}(id=${m.id})}" method="post" style="margin:0;">
+    <button type="submit" class="btn-apagar" title="Apagar mensagem">
+        <i class="ti ti-trash"></i>
+    </button>
+</form>
+            
+        </div>
+
+    </div>
+</body>
+</html>

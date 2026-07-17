@@ -164,4 +164,19 @@ public String ConcluidoProjeto(@PathVariable Long id, HttpSession session) {
     return "redirect:/projetoFiltroUser";
     
 }
+@PostMapping("/cancelarr/{id}")
+public String CancelarProjeto(@PathVariable Long id, HttpSession session) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        service.ProjetoCancelado(id, token);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+    }
+    return "redirect:/projetoFiltroUser";
+    
+}
 }
