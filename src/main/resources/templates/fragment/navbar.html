@@ -1,58 +1,98 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Fragment Navbar</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <header  th:fragment="custom-header">
-            
-        <nav class="navbar navbar-expand-lg mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="/">ServiçoFinal</a>
+        <header th:fragment="custom-header">
+            <style>
+                .navbar {
+                    background: #f4f7fc;
+                    padding: 0.8rem 1.5rem;
+                    border-bottom: 3px solid #1957a6;
+                    box-shadow: 0 2px 10px rgba(13, 27, 62, 0.15);
+                }
+                .navbar-brand {
+                    color: #0d1b3e !important;
+                    font-weight: 700;
+                    font-size: 18px;
+                    letter-spacing: 0.5px;
+                }
+                .nav-link {
+                    color: #495057 !important;
+                    font-size: 14px;
+                    padding: 0.4rem 0.8rem !important;
+                    border-radius: 6px;
+                    transition: background 0.2s, color 0.2s;
+                    white-space: nowrap;
+                }
+                .nav-link:hover {
+                    color: #0d1b3e !important;
+                    background: rgba(13, 27, 62, 0.08);
+                }
+                .nav-link.ativo {
+                    color: #ffffff !important;
+                    background: #0d1b3e;
+                }
+                .btn-sair {
+                    color: #495057;
+                    font-size: 14px;
+                    border: 1px solid #dde1e7;
+                    border-radius: 6px;
+                    padding: 0.35rem 0.9rem;
+                    text-decoration: none;
+                    transition: all 0.2s;
+                    cursor: pointer;
+                    background: none;
+                }
+                .btn-sair:hover {
+                    color: #0d1b3e;
+                    border-color: #0d1b3e;
+                }
+                .navbar-nav { flex-wrap: nowrap; }
+                .navbar-toggler { border-color: rgba(13, 27, 62, 0.2); }
+            </style>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <nav class="navbar navbar-expand-lg mb-4">
+                <div class="container">
+                    <a class="navbar-brand" href="/">ServiçoFinal</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navMenu">
+                        <ul class="navbar-nav me-auto ms-3 gap-1">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/"> Início</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/projeto/criar"> Criar Projeto</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/projetoFiltro"> Ver Projetos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/propostasUsuario"> Minhas Propostas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/perfil"> Meu Perfil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/listarMensagens"> Notificações</a>
+                            </li>
+                        </ul>
+                        <button class="btn-sair" onclick="confirmarSaida()">Sair</button>
+                    </div>
+                </div>
+            </nav>
 
-        <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav me-auto ms-3 gap-1">
-                <li class="nav-item">
-                    <a class="nav-link ativo" href="/"> Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/projeto/criar"> Criar Projeto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/projetoFiltro"> Ver Projetos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/propostasUsuario"> Minhas Propostas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/perfil"> Meu Perfil</a>
-                </li>
-                <li class ="nav-item">
-                    <a class="nav-link" href="/propostaFiltro"> Ver propostas recebidas</a>
-                </li>
-                <li class ="nav-item">
-                    <a class="nav-link" href="/listarMensagens"> Notificações</a>
-                </li>
-           
-            </ul>
-
-            <a href="/logout" class="btn-sair">Sair</a>
-        </div>
-    </div>
-</nav>
-        
-
-<div class="container pb-5">
-    </header>
+            <script>
+                function confirmarSaida() {
+                    if (confirm("Tem certeza que deseja sair?")) {
+                        window.location.href = "/logout";
+                    }
+                }
+            </script>
+        </header>
     </body>
 </html>

@@ -10,6 +10,7 @@ import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.ProjetoUserDto;
 import com.main.servicoFinalFront.model.PropostaEnvioDto;
 import com.main.servicoFinalFront.model.PropostaRespostaDto;
+import com.main.servicoFinalFront.model.PropostaScoreDto;
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoAtualizar;
 import com.main.servicoFinalFront.model.ServicoListar;
@@ -267,6 +268,13 @@ public class AuthService {
             .retrieve()
             .body(Boolean.class);
     return Boolean.TRUE.equals(resultado);
+}
+     public List<PropostaScoreDto> listarPropostasComScore(String token, Long projetoId) {
+    return restclient.get()
+            .uri("/proposta/propostas/{id}", projetoId)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(new ParameterizedTypeReference<List<PropostaScoreDto>>() {});
 }
     }
    

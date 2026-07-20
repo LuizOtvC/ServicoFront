@@ -7,6 +7,7 @@ package com.main.servicoFinalFront.controller;
 import com.main.servicoFinalFront.model.ProjetoResposta;
 import com.main.servicoFinalFront.model.PropostaEnvioDto;
 import com.main.servicoFinalFront.model.PropostaRespostaDto;
+import com.main.servicoFinalFront.model.PropostaScoreDto;
 import com.main.servicoFinalFront.model.UsuarioServico;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
@@ -142,5 +143,23 @@ public String recusarProposta(@PathVariable Long id, HttpSession session) {
     }
     return "redirect:/propostaFiltro";
     
+}
+@GetMapping("/propostas/projeto/{id}")
+public String propostasDoProjetoComScore(@PathVariable Long id, HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        List<PropostaScoreDto> propostas = service.listarPropostasComScore(token, id);
+        model.addAttribute("propostas", propostas);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }else if (e.getStatusCode() == HttpStatusCode.valueOf(409)) {
+        model.addAttribute("errorMessage", "Este projeto já possui um candidato aceito!");
+        
+    }
+    }
+    return "propostaScore";
 }
 }

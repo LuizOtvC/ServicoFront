@@ -156,6 +156,7 @@ public String perfil(HttpSession session, Model model) {
         }
         model.addAttribute("erro", "Erro ao carregar o perfil.");
     } catch (Exception e) {
+        e.printStackTrace();
         model.addAttribute("erro", "Erro ao carregar o perfil.");
     }
 

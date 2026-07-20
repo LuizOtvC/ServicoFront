@@ -1,218 +1,364 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Cadastro - ServiçoFinal</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
-        }
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Cadastro - ServiçoFinal</title>
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
 
-        .card {
-            border: none;
-            border-radius: 12px;
-        }
+            body {
+                background: linear-gradient(135deg, #0d1b3e 0%, #12305e 45%, #1957a6 100%);
+                min-height: 100vh;
+                position: relative;
+                overflow-x: hidden;
+            }
 
-        .card-header {
-            background: #1a1a2e;
-            border-radius: 12px 12px 0 0 !important;
-            padding: 1.8rem 1.5rem 1.4rem;
-        }
+            /* Blobs desfocados de fundo, animados */
+            body::before,
+            body::after {
+                content: "";
+                position: fixed;
+                border-radius: 50%;
+                opacity: 0.16;
+                z-index: 0;
+                pointer-events: none;
+            }
 
-        .card-header h4 {
-            color: white;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
+            body::before {
+                width: 460px;
+                height: 460px;
+                background: #3b82f6;
+                top: -170px;
+                right: -150px;
+                animation: flutuar1 14s ease-in-out infinite;
+            }
 
-        .card-header p {
-            color: #adb5bd;
-            font-size: 13px;
-            margin: 0;
-        }
+            body::after {
+                width: 400px;
+                height: 400px;
+                background: #60a5fa;
+                bottom: -150px;
+                left: -130px;
+                animation: flutuar2 16s ease-in-out infinite;
+            }
 
-        .form-label {
-            font-size: 13px;
-            font-weight: 500;
-            color: #444;
-            margin-bottom: 4px;
-        }
+            @keyframes flutuar1 {
+                0%, 100% {
+                    transform: translate(0, 0) scale(1);
+                }
+                50% {
+                    transform: translate(-30px, 25px) scale(1.05);
+                }
+            }
 
-        .form-control {
-            border-radius: 8px;
-            border: 1px solid #dde1e7;
-            padding: 0.55rem 0.85rem;
-            font-size: 14px;
-            background: #f8f9fa;
-        }
+            @keyframes flutuar2 {
+                0%, 100% {
+                    transform: translate(0, 0) scale(1);
+                }
+                50% {
+                    transform: translate(25px, -20px) scale(1.05);
+                }
+            }
 
-        .form-control:focus {
-            background: white;
-            border-color: #1a1a2e;
-            box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
-        }
+            /* Formas onduladas SVG, animadas e espalhadas */
+            .forma-decorativa {
+                position: fixed;
+                z-index: 0;
+                opacity: 0.35;
+                pointer-events: none;
+            }
 
-        .form-control.erro-campo {
-            border-color: #dc3545;
-        }
+            .forma-1 {
+                top: 8%;
+                left: 5%;
+                animation: flutuarA 9s ease-in-out infinite;
+            }
 
-        .btn-cadastrar {
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.65rem;
-            font-size: 15px;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
+            .forma-2 {
+                top: 68%;
+                right: 5%;
+                animation: flutuarB 12s ease-in-out infinite;
+            }
 
-        .btn-cadastrar:hover {
-            background: #2d2d50;
-            color: white;
-        }
+            .forma-3 {
+                bottom: 6%;
+                left: 8%;
+                animation: flutuarA 10s ease-in-out infinite;
+            }
 
-        .alerta-erro {
-            font-size: 13px;
-            border-radius: 8px;
-        }
+            .forma-4 {
+                top: 30%;
+                right: 3%;
+                animation: flutuarB 13s ease-in-out infinite;
+            }
 
-        .msg-erro-campo {
-            font-size: 12px;
-            color: #dc3545;
-            margin-top: 4px;
-            display: none;
-        }
+            @keyframes flutuarA {
+                0%, 100% {
+                    transform: translate(0, 0) rotate(0deg);
+                }
+                50% {
+                    transform: translate(10px, -14px) rotate(4deg);
+                }
+            }
 
-        .link-login {
-            color: #1a1a2e;
-            font-size: 13px;
-            text-decoration: none;
-            font-weight: 500;
-        }
+            @keyframes flutuarB {
+                0%, 100% {
+                    transform: translate(0, 0) rotate(0deg);
+                }
+                50% {
+                    transform: translate(-12px, 10px) rotate(-4deg);
+                }
+            }
 
-        .link-login:hover {
-            text-decoration: underline;
-        }
+            /* Card glass */
+            .card {
+                border: none;
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                position: relative;
+                z-index: 1;
+            }
 
-        .divisor {
-            font-size: 12px;
-            color: #adb5bd;
-        }
-    </style>
-</head>
-<body class="d-flex align-items-center justify-content-center py-4">
+            .card-header {
+                background: transparent;
+                border: none;
+                padding: 1.8rem 1.5rem 0.4rem;
+            }
 
-    <div class="card shadow-sm" style="width: 100%; max-width: 420px;">
+            .card-header h4 {
+                color: white;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+            }
 
-        <div class="card-header text-center">
-            <h4 class="mb-1">ServiçoFinal</h4>
-            <p>Crie sua conta gratuitamente</p>
+            .card-header p {
+                color: #cbd5e1;
+                font-size: 13px;
+                margin: 0;
+            }
+
+            .form-label {
+                font-size: 13px;
+                font-weight: 500;
+                color: #e2e8f0;
+                margin-bottom: 4px;
+            }
+
+            .form-control {
+                border-radius: 8px;
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                padding: 0.6rem 0.9rem;
+                font-size: 14px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #222;
+            }
+
+            .form-control::placeholder {
+                color: #9aa5b1;
+            }
+
+            .form-control:focus {
+                background: #ffffff;
+                border-color: #60a5fa;
+                box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+            }
+
+            .form-control.erro-campo {
+                border-color: #dc3545;
+            }
+
+            .btn-cadastrar {
+                background: #0d1b3e;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0.7rem;
+                font-size: 15px;
+                font-weight: 600;
+                transition: background 0.2s;
+            }
+
+            .btn-cadastrar:hover {
+                background: #16264f;
+                color: white;
+            }
+
+            .alerta-erro {
+                font-size: 13px;
+                border-radius: 8px;
+            }
+
+            .msg-erro-campo {
+                font-size: 12px;
+                color: #ff8fa3;
+                margin-top: 4px;
+                display: none;
+            }
+
+            .link-login {
+                color: #93c5fd;
+                font-size: 13px;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .link-login:hover {
+                text-decoration: underline;
+                color: #bfdbfe;
+            }
+
+            .divisor {
+                font-size: 12px;
+                color: #cbd5e1;
+            }
+        </style>
+    </head>
+    <body class="d-flex align-items-center justify-content-center py-4">
+
+        <!-- Formas onduladas decorativas -->
+        <svg width="0" height="0" style="position:absolute">
+        <defs>
+        <linearGradient id="degradeAzul" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#60a5fa"/>
+        <stop offset="100%" stop-color="#1957a6"/>
+        </linearGradient>
+        </defs>
+        </svg>
+        <div class="forma-decorativa forma-1">
+            <svg width="150" height="95" viewBox="0 0 150 95" fill="none">
+            <path d="M10 75 L48 38 L75 63 L118 22" stroke="url(#degradeAzul)" stroke-width="24" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+        <div class="forma-decorativa forma-2">
+            <svg width="170" height="75" viewBox="0 0 170 75" fill="none">
+            <path d="M5 38 Q32 6, 60 38 T112 38 T165 38" stroke="url(#degradeAzul)" stroke-width="22" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+        <div class="forma-decorativa forma-3">
+            <svg width="120" height="80" viewBox="0 0 120 80" fill="none">
+            <path d="M8 60 L38 30 L60 50 L100 15" stroke="url(#degradeAzul)" stroke-width="18" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+        <div class="forma-decorativa forma-4">
+            <svg width="130" height="60" viewBox="0 0 130 60" fill="none">
+            <path d="M5 30 Q25 5, 45 30 T85 30 T125 30" stroke="url(#degradeAzul)" stroke-width="16" stroke-linecap="round" fill="none"/>
+            </svg>
         </div>
 
-        <div class="card-body p-4">
+        <div class="card shadow-sm" style="width: 100%; max-width: 420px;">
 
-            <div th:if="${errorMessage}"
-                 class="alert alert-danger alerta-erro d-flex align-items-center gap-2 py-2" role="alert">
-                <span th:text="${errorMessage}"></span>
+            <div class="card-header text-center">
+                <h4 class="mb-1">ServiçoFinal</h4>
+                <p>Crie sua conta gratuitamente</p>
             </div>
 
-            <form action="/registro" method="post" th:object="${registro}" onsubmit="return validarFormulario()">
+            <div class="card-body p-4">
 
-                <div class="mb-3">
-                    <label class="form-label">Nome completo</label>
-                    <input type="text"
-                           class="form-control"
-                           th:field="*{nome}"
-                           placeholder="João Silva"
-                           required autofocus/>
+                <div th:if="${errorMessage}"
+                     class="alert alert-danger alerta-erro d-flex align-items-center gap-2 py-2" role="alert">
+                    <span th:text="${errorMessage}"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email"
-                           class="form-control"
-                           th:field="*{email}"
-                           placeholder="seu@email.com"
-                           required/>
-                </div>
+                <form action="/registro" method="post" th:object="${registro}" onsubmit="return validarFormulario()">
 
-                <div class="mb-3">
-                    <label class="form-label">Telefone</label>
-                    <input type="tel"
-                           class="form-control"
-                           th:field="*{telefone}"
-                           placeholder="(11) 99999-9999"/>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Senha</label>
-                    <input type="password"
-                           class="form-control"
-                           th:field="*{senha}"
-                           id="senha"
-                           placeholder="Mínimo 6 caracteres"
-                           required/>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label">Confirmar senha</label>
-                    <input type="password"
-                           class="form-control"
-                           id="confirmarSenha"
-                           placeholder="Repita a senha"
-                           required/>
-                    <div class="msg-erro-campo" id="erroSenha">
-                        As senhas não coincidem
+                    <div class="mb-3">
+                        <label class="form-label">Nome completo</label>
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{nome}"
+                               placeholder="João Silva"
+                               required autofocus/>
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email"
+                               class="form-control"
+                               th:field="*{email}"
+                               placeholder="seu@email.com"
+                               required/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Telefone</label>
+                        <input type="tel"
+                               class="form-control"
+                               th:field="*{telefone}"
+                               placeholder="(11) 99999-9999"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Senha</label>
+                        <input type="password"
+                               class="form-control"
+                               th:field="*{senha}"
+                               id="senha"
+                               placeholder="Mínimo 6 caracteres"
+                               required/>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Confirmar senha</label>
+                        <input type="password"
+                               class="form-control"
+                               id="confirmarSenha"
+                               placeholder="Repita a senha"
+                               required/>
+                        <div class="msg-erro-campo" id="erroSenha">
+                            As senhas não coincidem
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-cadastrar w-100">
+                        Criar conta
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-3 divisor">
+                    Já tem uma conta?
+                    <a th:href="@{/logar}" class="link-login">Entrar</a>
                 </div>
 
-                <button type="submit" class="btn btn-cadastrar w-100">
-                    Criar conta
-                </button>
-
-            </form>
-
-            <div class="text-center mt-3 divisor">
-                Já tem uma conta?
-                <a th:href="@{/logar}" class="link-login">Entrar</a>
             </div>
-
         </div>
-    </div>
 
-    <script>
-        function validarFormulario() {
+        <script>
+            function validarFormulario() {
             const senha = document.getElementById("senha").value;
             const confirmar = document.getElementById("confirmarSenha").value;
             const erroCampo = document.getElementById("erroSenha");
             const inputConfirmar = document.getElementById("confirmarSenha");
 
             if (senha !== confirmar) {
-                erroCampo.style.display = "block";
-                inputConfirmar.classList.add("erro-campo");
-                inputConfirmar.focus();
-                return false;
+            erroCampo.style.display = "block";
+            inputConfirmar.classList.add("erro-campo");
+            inputConfirmar.focus();
+            return false;
             }
 
             erroCampo.style.display = "none";
             inputConfirmar.classList.remove("erro-campo");
             return true;
-        }
+            }
 
-        document.getElementById("confirmarSenha").addEventListener("input", function () {
+            document.getElementById("confirmarSenha").addEventListener("input", function () {
             const senha = document.getElementById("senha").value;
             const erroCampo = document.getElementById("erroSenha");
             const inputConfirmar = document.getElementById("confirmarSenha");
 
             if (this.value === senha) {
-                erroCampo.style.display = "none";
-                inputConfirmar.classList.remove("erro-campo");
+            erroCampo.style.display = "none";
+            inputConfirmar.classList.remove("erro-campo");
             }
-        });
-    </script>
+            });
+        </script>
 
-</body>
+    </body>
 </html>
