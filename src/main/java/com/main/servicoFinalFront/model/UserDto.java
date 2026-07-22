@@ -4,46 +4,40 @@
  */
 package com.main.servicoFinalFront.model;
 
+import java.util.List;
+
 /**
  *
  * @author Mateus
  */
 public class UserDto {
- 
 
     private Long id;
 
-
     private String nome;
 
-
     private String email;
-    
 
     private String telefone;
 
- 
     private String senha;
-
 
     private Double reputacao = 5.0;
 
-
     private Integer horasSemana;
-
 
     private Double pesoServicos;
 
-
     private Double pesoOrcamento;
 
-
     private Double pesoHistorico;
+
+    private List<String> diasTrabalho;
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String nome, String email, String telefone, String senha, Integer horasSemana, Double pesoServicos, Double pesoOrcamento, Double pesoHistorico) {
+    public UserDto(Long id, String nome, String email, String telefone, String senha, Integer horasSemana, Double pesoServicos, Double pesoOrcamento, Double pesoHistorico, List<String> diasTrabalho) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -53,10 +47,8 @@ public class UserDto {
         this.pesoServicos = pesoServicos;
         this.pesoOrcamento = pesoOrcamento;
         this.pesoHistorico = pesoHistorico;
+        this.diasTrabalho = diasTrabalho;
     }
-
-    
-    
 
     public Long getId() {
         return id;
@@ -65,7 +57,6 @@ public class UserDto {
     public void setId(Long id) {
         this.id = id;
     }
-    
 
     public String getNome() {
         return nome;
@@ -138,7 +129,13 @@ public class UserDto {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
-    
+
+    public List<String> getDiasTrabalho() {
+        return diasTrabalho;
+    }
+
+    public void setDiasTrabalho(List<String> diasTrabalho) {
+        this.diasTrabalho = diasTrabalho;
+    }
+
 }
-    

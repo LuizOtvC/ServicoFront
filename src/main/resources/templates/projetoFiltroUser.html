@@ -119,7 +119,12 @@
             <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
                 <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
                 <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
-                <p class="detalhe-row"><strong>Horas estimadas:</strong> <span th:text="${p.horasEstimadas}">—</span>h</p>
+                <p class="detalhe-row">
+    <strong>Dias de trabalho:</strong>
+    <span th:each="dia, iter : ${p.diasTrabalho}">
+        <span th:text="${dia}"></span><span th:if="${!iter.last}">, </span>
+    </span>
+</p>
 
                 <a th:href="@{/projetoporId/{id}(id=${p.id})}"
                    class="btn-ver-mais"

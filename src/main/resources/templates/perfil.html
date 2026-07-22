@@ -122,10 +122,52 @@
                 </div>
             </div>
             <div class="info-row">
+    <i class="ti ti-file-description" aria-hidden="true"></i>
+    <div>
+        <span class="info-label">Descrição</span>
+
+        <span class="info-value"
+              th:if="${usuario.descricao != null and !#strings.isEmpty(usuario.descricao)}"
+              th:text="${usuario.descricao}">
+        </span>
+
+        <span class="info-value"
+              th:if="${usuario.descricao == null or #strings.isEmpty(usuario.descricao)}">
+            Nenhuma descrição informada
+        </span>
+    </div>
+</div>
+            <div class="info-row">
                 <i class="ti ti-clock" aria-hidden="true"></i>
-                <div>
-                    <span class="info-label">Horas semanais</span>
-                    <span class="info-value" th:text="${usuario.horasSemana}">—</span>
+                <div class="info-row">
+    <i class="ti ti-calendar-week" aria-hidden="true"></i>
+    <div>
+    <span class="info-label">Dias de trabalho</span>
+
+    <span class="info-value"
+          th:if="${usuario.diasTrabalho != null and !#lists.isEmpty(usuario.diasTrabalho)}">
+
+        <span th:each="dia, stat : ${usuario.diasTrabalho}">
+            <span th:switch="${dia}">
+                <span th:case="'SEGUNDA'">SEGUNDA</span>
+                <span th:case="'TERÇA'">TERÇA</span>
+                <span th:case="'QUARTA'">QUARTA</span>
+                <span th:case="'QUINTA'">QUINTA</span>
+                <span th:case="'SEXTA'">SEXTA</span>
+                <span th:case="'SÁBADO'">SÁBADO</span>
+                <span th:case="'DOMINGO'">DOMINGO</span>
+            </span>
+
+            <span th:if="${!stat.last}">, </span>
+        </span>
+
+    </span>
+
+    <span class="info-value"
+          th:if="${usuario.diasTrabalho == null or #lists.isEmpty(usuario.diasTrabalho)}">
+        Nenhum dia informado
+    </span>
+</div>
                 </div>
             </div>
 

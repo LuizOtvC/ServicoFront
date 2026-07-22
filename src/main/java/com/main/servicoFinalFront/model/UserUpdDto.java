@@ -4,6 +4,8 @@
  */
 package com.main.servicoFinalFront.model;
 
+import java.util.List;
+
 /**
  *
  * @author Mateus
@@ -11,14 +13,20 @@ package com.main.servicoFinalFront.model;
 public class UserUpdDto {
     
     private String nome;
+    private String descricao;
     private String telefone;
-    private Integer horasSemana;
+     private List<String> diasTrabalho;
 
-    public UserUpdDto(String nome, String telefone, Integer horasSemana) {
+    public UserUpdDto(String nome, String descricao, String telefone, List<String> diasTrabalho) {
         this.nome = nome;
+        this.descricao = descricao;
         this.telefone = telefone;
-        this.horasSemana = horasSemana;
+        this.diasTrabalho = diasTrabalho;
     }
+
+    
+
+    
 
     
 
@@ -41,13 +49,23 @@ public class UserUpdDto {
         this.telefone = telefone;
     }
 
-    public Integer getHorasSemana() {
-        return horasSemana;
+    public List<String> getDiasTrabalho() {
+        return diasTrabalho;
     }
 
-    public void setHorasSemana(Integer horasSemana) {
-        this.horasSemana = horasSemana;
+    public void setDiasTrabalho(List<String> diasTrabalho) {
+        this.diasTrabalho = diasTrabalho;
     }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    
 
   
 

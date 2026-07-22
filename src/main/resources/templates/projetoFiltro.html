@@ -104,7 +104,28 @@
     <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
         <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
         <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
-        <p class="detalhe-row"><strong>Horas estimadas:</strong> <span th:text="${p.horasEstimadas}">—</span>h</p>
+        <p class="detalhe-row">
+    <strong>Dias de trabalho:</strong>
+
+    <span th:if="${p.diasTrabalho != null and !#lists.isEmpty(p.diasTrabalho)}">
+        <span th:each="dia, stat : ${p.diasTrabalho}">
+            <span th:switch="${dia}">
+                <span th:case="'SEGUNDA'">SEGUNDA</span>
+                <span th:case="'TERCA'">TERÇA</span>
+                <span th:case="'QUARTA'">QUARTA</span>
+                <span th:case="'QUINTA'">QUINTA</span>
+                <span th:case="'SEXTA'">SEXTA</span>
+                <span th:case="'SABADO'">SÁBADO</span>
+                <span th:case="'DOMINGO'">DOMINGO</span>
+            </span>
+            <span th:if="${!stat.last}">, </span>
+        </span>
+    </span>
+
+    <span th:if="${p.diasTrabalho == null or #lists.isEmpty(p.diasTrabalho)}">
+        Nenhum dia informado
+    </span>
+</p>
 
         <a th:href="@{/projetoporId/{id}(id=${p.id})}"
            class="btn-ver-mais"

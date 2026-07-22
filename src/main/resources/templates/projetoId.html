@@ -165,9 +165,14 @@
                     <span class="valor">R$ <span th:text="${projeto.orcamento}">—</span></span>
                 </div>
                 <div class="detalhe-row">
-                    <strong>Horas estimadas</strong>
-                    <span class="valor"><span th:text="${projeto.horasEstimadas}">—</span>h</span>
-                </div>
+    <strong>Dias de trabalho</strong>
+
+    <div class="projeto-servicos">
+        <span th:each="dia : ${projeto.diasTrabalho}"
+              th:text="${dia}">
+        </span>
+    </div>
+</div>
                 <div class="detalhe-row">
                     <strong>Publicado por</strong>
                     <span class="valor">
@@ -203,6 +208,14 @@
    class="btn-proposta">
     Enviar proposta
 </a>
+            
+            <form th:if="${usuarioLogadoId == projeto.usuarioId}"
+      th:action="@{/propostas/projeto/{id}(id=${projeto.id})}"
+      method="get">
+    <button type="submit" class="btn-proposta">
+        Ver propostas recebidas
+    </button>
+</form>
 
 <p th:if="${usuarioLogadoId != projeto.usuarioId and jaEnviouProposta}"
    style="text-align:center; font-size:13px; color:#888; margin-top:1.25rem;">

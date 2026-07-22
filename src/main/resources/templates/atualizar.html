@@ -103,46 +103,65 @@
                 <span th:text="${errorMessage}"></span>
             </div>
 
-            <form action="/atualizar" method="post" th:object="${atualizar}" onsubmit="return validarFormulario()">
+            <form action="/atualizar" method="post" th:object="${atualizar}">
 
-                <div class="mb-3">
-                    <label class="form-label">Nome completo</label>
-                    <input type="text"
-                           class="form-control"
-                           th:field="*{nome}"
-                           placeholder="João Silva"
-                           required autofocus/>
-                </div>
+    <div class="mb-3">
+        <label class="form-label">Nome completo</label>
+        <input type="text"
+               class="form-control"
+               th:field="*{nome}"
+               placeholder="João Silva"
+               required autofocus/>
+    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Horas semanais</label>
-                    <input type="text"
-                           class="form-control"
-                           th:field="*{horasSemana}"
-                           placeholder="4323232"
-                           required/>
-                </div>
+    <div class="mb-3">
+        <label class="form-label">Telefone</label>
+        <input type="tel"
+               class="form-control"
+               th:field="*{telefone}"
+               placeholder="(11) 99999-9999"/>
+    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Telefone</label>
-                    <input type="tel"
-                           class="form-control"
-                           th:field="*{telefone}"
-                           placeholder="(11) 99999-9999"/>
-                </div>
+    <div class="mb-3">
+        <label class="form-label">Descrição</label>
+        <textarea class="form-control"
+                  rows="3"
+                  th:field="*{descricao}"
+                  placeholder="Fale um pouco sobre você..."></textarea>
+    </div>
 
-                
+    <div class="mb-3">
+        <label class="form-label">Dias de trabalho</label>
 
-                <button type="submit" class="btn btn-editar w-100">
-                    Atualizar
-                </button>
+        <select th:field="*{diasTrabalho}"
+                multiple
+                class="form-select"
+                size="7">
 
-            </form>
+            <option value="SEGUNDA">SEGUNDA</option>
+            <option value="TERCA">TERCA</option>
+            <option value="QUARTA">QUARTA</option>
+            <option value="QUINTA">QUINTA</option>
+            <option value="SEXTA">SEXTA</option>
+            <option value="SABADO">SABADO</option>
+            <option value="DOMINGO">DOMINGO</option>
 
-            <div class="text-center mt-3 divisor">
-                Cancelar
-                <a th:href="@{/}" class="link-login">Cancelar atualização de perfil</a>
-            </div>
+        </select>
+
+        <small class="text-muted" style="font-size:10px;">
+            Segure Ctrl (ou Cmd no Mac) para selecionar mais de um dia.
+        </small>
+    </div>
+
+    <button type="submit" class="btn btn-editar w-100">
+        Atualizar
+    </button>
+
+</form>
+
+<div class="text-center mt-3">
+    <a th:href="@{/perfil}" class="link-login">Cancelar atualização de perfil</a>
+</div>
 
         </div>
     </div>

@@ -4,6 +4,8 @@
  */
 package com.main.servicoFinalFront.model;
 
+import java.util.List;
+
 /**
  *
  * @author Mateus
@@ -18,6 +20,7 @@ public class PropostaScoreDto {
     private Double scoreServicos;
     private Double scoreOrcamento;
     private Double scoreHistorico;
+    private List<String> diasTrabalho;
 
     public Long getPropostaId() {
         return propostaId;
@@ -94,5 +97,15 @@ public class PropostaScoreDto {
     private Long usuarioId;
  public Long getUsuarioId() { return usuarioId; }
 public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+
+    public List<String> getDiasTrabalho() {
+        return diasTrabalho;
+    }
+
+    public void setDiasTrabalho(List<String> diasTrabalho) {
+        this.diasTrabalho = diasTrabalho;
+    }
+
+
 }
     

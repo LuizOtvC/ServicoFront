@@ -142,6 +142,13 @@
             </div>
 
             <p class="proposta-descricao" th:text="${p.descricao}">Descrição</p>
+            
+            <p class="score-detalhe">
+    Dias disponíveis:
+    <span th:each="dia, stat : ${p.diasTrabalho}">
+        <span th:text="${dia}"></span><span th:if="${!stat.last}">, </span>
+    </span>
+</p>
 
             <div class="proposta-footer">
                 <span class="proposta-valor">R$ <span th:text="${p.valorProposto}">0,00</span></span>
