@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -70,43 +71,33 @@ public class ProjetoController {
     }
     
     @GetMapping("/projetoFiltro")
-public String listarProjetos(HttpSession session, Model model) {
+public String projetoFiltro(
+        @RequestParam(required = false) Double orcamentoMin,
+        @RequestParam(required = false) List<Long> servicosIds,
+        @RequestParam(required = false) List<String> diasSemana,
+        HttpSession session, Model model) {
     String token = (String) session.getAttribute("token");
     if (token == null) return "redirect:/logar";
     try {
-        List<ProjetoListarDto> projetos = service.listarProjetosFiltro(token);
+        UserPerfilDto usuario = service.VerPerfil(token);
+        List<Servico> todosServicos = service.listarServicos(token);
+
+        List<ProjetoResposta> projetos = service
+            .listarProjetosComFiltro(token, orcamentoMin, servicosIds, diasSemana);
+
         model.addAttribute("projetos", projetos);
+        model.addAttribute("todosServicos", todosServicos);
+        model.addAttribute("orcamentoMin", orcamentoMin);
+        model.addAttribute("servicosSelecionados", servicosIds);
+        model.addAttribute("diasSelecionados", diasSemana);
     } catch (HttpClientErrorException e) {
         if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
             session.invalidate();
             return "redirect:/logar";
         }
-        model.addAttribute("erro", "Erro ao carregar projetos.");
-    } catch (Exception e) {
-        model.addAttribute("erro", "Erro ao carregar projetos.");
     }
     return "projetoFiltro";
 }
-
-@GetMapping("/projeto")
-public String meusProjetos(HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        List<ProjetoListarDto> projetos = service.listarProjetos(token);
-        model.addAttribute("projetos", projetos);
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
-            return "redirect:/logar";
-        }
-        model.addAttribute("erro", "Erro ao carregar projetos.");
-    } catch (Exception e) {
-        model.addAttribute("erro", "Erro ao carregar projetos.");
-    }
-    return "projeto";
-}
-
 @GetMapping("/projetoporId/{id}")
 public String meusProjetosId(@PathVariable Long id, HttpSession session, Model model) {
     String token = (String) session.getAttribute("token");

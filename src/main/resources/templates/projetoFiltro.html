@@ -66,7 +66,6 @@
         }
         .btn-voltar:hover { background: #2d2d50; color: white; }
 
-        /* detalhes expandidos */
         .projeto-detalhes {
             display: none;
             margin-top: 10px;
@@ -76,6 +75,109 @@
         .projeto-detalhes.aberto { display: block; }
         .detalhe-row { font-size: 12px; color: #555; margin-bottom: 4px; }
         .detalhe-row strong { color: #1a1a2e; }
+
+        .btn-ver-mais {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #2E5395;
+            text-decoration: none;
+        }
+        .btn-ver-mais:hover { text-decoration: underline; }
+
+        /* filtro compacto */
+        .filtro-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 0.85rem 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .filtro-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+        .filtro-input {
+            width: 100%;
+            border: 1px solid #d9dde3;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 13px;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .filtro-details {
+            border: 1px solid #d9dde3;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .filtro-details summary {
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1a2e;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filtro-details summary::-webkit-details-marker { display: none; }
+        .filtro-count { color: #2E5395; font-weight: 600; }
+        .filtro-details-body {
+            padding: 6px 10px 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .filtro-checkboxes { display: flex; flex-wrap: wrap; }
+        .filtro-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #f0f4ff;
+            border: 1px solid #d0d9f5;
+            border-radius: 20px;
+            padding: 4px 10px;
+            margin: 3px 4px 3px 0;
+            font-size: 12px;
+            color: #2E5395;
+            cursor: pointer;
+        }
+        .filtro-check input[type="checkbox"] { accent-color: #1a1a2e; cursor: pointer; }
+        .filtro-actions { display: flex; gap: 8px; margin-top: 4px; }
+        .btn-filtrar {
+            flex: 1;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-filtrar:hover { background: #2d2d50; }
+        .btn-limpar {
+            flex: 1;
+            background: #f0f0f0;
+            color: #555;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-limpar:hover { background: #e2e2e2; }
     </style>
 </head>
 <body>
@@ -87,53 +189,133 @@
 
         <h2 class="page-title">Projetos disponíveis</h2>
 
+        <form method="get" th:action="@{/projetoFiltro}" class="filtro-card">
+
+            <label class="filtro-label">Orçamento mínimo (R$)</label>
+            <input type="number" step="0.01" min="0" name="orcamentoMin"
+                   th:value="${orcamentoMin}" placeholder="Sem mínimo" class="filtro-input"/>
+
+            <details class="filtro-details" th:if="${not #lists.isEmpty(todosServicos)}"
+                      th:open="${servicosSelecionados != null and not #lists.isEmpty(servicosSelecionados)}">
+                <summary>
+                    <span>Serviços</span>
+                    <span class="filtro-count" th:if="${servicosSelecionados != null and not #lists.isEmpty(servicosSelecionados)}"
+                          th:text="${#lists.size(servicosSelecionados)} + ' selecionado(s)'"></span>
+                    <i class="ti ti-chevron-down"></i>
+                </summary>
+                <div class="filtro-details-body">
+                    <div class="filtro-checkboxes">
+                        <label class="filtro-check" th:each="s : ${todosServicos}">
+                            <input type="checkbox" name="servicosIds" th:value="${s.id}"
+                                   th:checked="${servicosSelecionados != null and servicosSelecionados.contains(s.id)}"/>
+                            <span th:text="${s.nome}">Serviço</span>
+                        </label>
+                    </div>
+                </div>
+            </details>
+
+            <details class="filtro-details"
+                      th:open="${diasSelecionados != null and not #lists.isEmpty(diasSelecionados)}">
+                <summary>
+                    <span>Dias de trabalho</span>
+                    <span class="filtro-count" th:if="${diasSelecionados != null and not #lists.isEmpty(diasSelecionados)}"
+                          th:text="${#lists.size(diasSelecionados)} + ' selecionado(s)'"></span>
+                    <i class="ti ti-chevron-down"></i>
+                </summary>
+                <div class="filtro-details-body">
+                    <div class="filtro-checkboxes">
+                        <label class="filtro-check">
+                            <input type="checkbox" name="diasSemana" value="SEGUNDA"
+                                   th:checked="${diasSelecionados != null and diasSelecionados.contains('SEGUNDA')}"/>
+                            <span>Segunda</span>
+                        </label>
+                        <label class="filtro-check">
+                            <input type="checkbox" name="diasSemana" value="TERCA"
+                                   th:checked="${diasSelecionados != null and diasSelecionados.contains('TERCA')}"/>
+                            <span>Terça</span>
+                        </label>
+                        <label class="filtro-check">
+                            <input type="checkbox" name="diasSemana" value="QUARTA"
+                                   th:checked="${diasSelecionados != null and diasSelecionados.contains('QUARTA')}"/>
+                            <span>Quarta</span>
+                        </label>
+                        <label class="filtro-check">
+                            <input type="checkbox" name="diasSemana" value="QUINTA"
+                                   th:checked="${diasSelecionados != null and diasSelecionados.contains('QUINTA')}"/>
+                            <span>Quinta</span>
+                        </label>
+                        <label class="filtro-check">
+                            <input type="checkbox" name="diasSemana" value="SEXTA"
+                                   th:checked="${diasSelecionados != null and diasSelecionados.contains('SEXTA')}"/>
+                            <span>Sexta</span>
+                        </label>
+                        <label class="filtro-check">
+                            <input type="checkbox" name="diasSemana" value="SABADO"
+                                   th:checked="${diasSelecionados != null and diasSelecionados.contains('SABADO')}"/>
+                            <span>Sábado</span>
+                        </label>
+                        <label class="filtro-check">
+                            <input type="checkbox" name="diasSemana" value="DOMINGO"
+                                   th:checked="${diasSelecionados != null and diasSelecionados.contains('DOMINGO')}"/>
+                            <span>Domingo</span>
+                        </label>
+                    </div>
+                </div>
+            </details>
+
+            <div class="filtro-actions">
+                <button type="submit" class="btn-filtrar">Filtrar</button>
+                <a th:href="@{/projetoFiltro}" class="btn-limpar">Limpar filtros</a>
+            </div>
+        </form>
+
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
         <div th:if="${#lists.isEmpty(projetos)}" class="text-center text-muted" style="margin-top: 3rem;">
             <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
-            <p style="margin-top: 8px;">Nenhum projeto aberto no momento.</p>
+            <p style="margin-top: 8px;">Nenhum projeto encontrado com esses filtros.</p>
         </div>
 
         <div th:each="p : ${projetos}" class="projeto-card" th:onclick="|toggleDetalhes('detalhes-' + ${p.id})|">
-    <p class="projeto-titulo" th:text="${p.titulo}">Título</p>
-    <span class="projeto-status" th:text="${p.status}">ABERTO</span>
-    <p class="projeto-servicos">
-        <span th:each="s : ${p.servicos}" th:text="${s}">Serviço</span>
-    </p>
+            <p class="projeto-titulo" th:text="${p.titulo}">Título</p>
+            <span class="projeto-status" th:text="${p.status}">ABERTO</span>
+            <p class="projeto-servicos">
+                <span th:each="s : ${p.servicos}" th:text="${s}">Serviço</span>
+            </p>
 
-    <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
-        <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
-        <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
-        <p class="detalhe-row">
-    <strong>Dias de trabalho:</strong>
+            <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
+                <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
+                <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
+                <p class="detalhe-row">
+                    <strong>Dias de trabalho:</strong>
 
-    <span th:if="${p.diasTrabalho != null and !#lists.isEmpty(p.diasTrabalho)}">
-        <span th:each="dia, stat : ${p.diasTrabalho}">
-            <span th:switch="${dia}">
-                <span th:case="'SEGUNDA'">SEGUNDA</span>
-                <span th:case="'TERCA'">TERÇA</span>
-                <span th:case="'QUARTA'">QUARTA</span>
-                <span th:case="'QUINTA'">QUINTA</span>
-                <span th:case="'SEXTA'">SEXTA</span>
-                <span th:case="'SABADO'">SÁBADO</span>
-                <span th:case="'DOMINGO'">DOMINGO</span>
-            </span>
-            <span th:if="${!stat.last}">, </span>
-        </span>
-    </span>
+                    <span th:if="${p.diasTrabalho != null and !#lists.isEmpty(p.diasTrabalho)}">
+                        <span th:each="dia, stat : ${p.diasTrabalho}">
+                            <span th:switch="${dia}">
+                                <span th:case="'SEGUNDA'">SEGUNDA</span>
+                                <span th:case="'TERCA'">TERÇA</span>
+                                <span th:case="'QUARTA'">QUARTA</span>
+                                <span th:case="'QUINTA'">QUINTA</span>
+                                <span th:case="'SEXTA'">SEXTA</span>
+                                <span th:case="'SABADO'">SÁBADO</span>
+                                <span th:case="'DOMINGO'">DOMINGO</span>
+                            </span>
+                            <span th:if="${!stat.last}">, </span>
+                        </span>
+                    </span>
 
-    <span th:if="${p.diasTrabalho == null or #lists.isEmpty(p.diasTrabalho)}">
-        Nenhum dia informado
-    </span>
-</p>
+                    <span th:if="${p.diasTrabalho == null or #lists.isEmpty(p.diasTrabalho)}">
+                        Nenhum dia informado
+                    </span>
+                </p>
 
-        <a th:href="@{/projetoporId/{id}(id=${p.id})}"
-           class="btn-ver-mais"
-           onclick="event.stopPropagation()">
-            Ver informações <i class="ti ti-arrow-right"></i>
-        </a>
-    </div>
-</div>
+                <a th:href="@{/projetoporId/{id}(id=${p.id})}"
+                   class="btn-ver-mais"
+                   onclick="event.stopPropagation()">
+                    Ver informações <i class="ti ti-arrow-right"></i>
+                </a>
+            </div>
+        </div>
     </div>
 
     <script>

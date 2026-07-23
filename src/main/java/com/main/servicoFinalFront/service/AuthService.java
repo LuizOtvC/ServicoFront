@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 
 /**
@@ -137,12 +138,20 @@ public class AuthService {
             .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
 }
     
-    public List<ProjetoListarDto> listarProjetosFiltro(String token) {
+    public List<ProjetoResposta> listarProjetosComFiltro(
+        String token, Double orcamentoMin,
+        List<Long> servicosIds, List<String> diasSemana) {
+
+    UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/projeto/listarFiltro");
+    if (orcamentoMin != null) uri.queryParam("orcamentoMin", orcamentoMin);
+    if (servicosIds != null) servicosIds.forEach(id -> uri.queryParam("servicosIds", id));
+    if (diasSemana != null) diasSemana.forEach(d -> uri.queryParam("diasSemana", d));
+
     return restclient.get()
-            .uri("/projeto/listarFiltro")
+            .uri(uri.toUriString())
             .header("Authorization", "Bearer " + token)
             .retrieve()
-            .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
+            .body(new ParameterizedTypeReference<List<ProjetoResposta>>() {});
 }
     
     public ProjetoResposta listarprojetoPorId(Long id, String token) {
