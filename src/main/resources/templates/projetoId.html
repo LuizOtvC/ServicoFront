@@ -197,7 +197,7 @@
                 </div>
             </div>
 
-            <form th:if="${projeto.propostaAceita != null and usuarioLogadoId == projeto.usuarioId}"
+            <form th:if="${projeto.propostaAceita != null and usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
                   th:action="@{/recusar/{id}(id=${projeto.propostaAceita.id})}" method="post">
                 <button type="submit" class="btn-remover">Remover profissional</button>
             </form>
@@ -209,7 +209,7 @@
     Enviar proposta
 </a>
             
-            <form th:if="${usuarioLogadoId == projeto.usuarioId}"
+            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
       th:action="@{/propostas/projeto/{id}(id=${projeto.id})}"
       method="get">
     <button type="submit" class="btn-proposta">
@@ -233,6 +233,46 @@
       th:action="@{/concluido/{id}(id=${projeto.id})}" method="post">
     <button type="submit" class="btn-proposta">Marcar como Concluido</button>
 </form>
+
+<div th:if="${participou and projeto.status == 'CONCLUIDO' and !jaAvaliou}"
+     class="mt-3 p-3 border rounded">
+
+    <h5>Avaliação</h5>
+
+    <p>Avalie a outra pessoa que participou deste projeto.</p>
+
+    <form th:action="@{/criar/{id}(id=${projeto.id})}" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Nota</label>
+
+            <select name="nota" class="form-select" required>
+                <option value="">Selecione...</option>
+                <option value="5">5 ⭐</option>
+                <option value="4">4 ⭐</option>
+                <option value="3">3 ⭐</option>
+                <option value="2">2 ⭐</option>
+                <option value="1">1 ⭐</option>
+                <option value="0">0 ⭐</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Comentário</label>
+
+            <textarea name="comentario"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Conte como foi trabalhar com essa pessoa."></textarea>
+        </div>
+
+        <button type="submit" class="btn-proposta">
+            Enviar avaliação
+        </button>
+
+    </form>
+
+</div>
             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
       th:action="@{/cancelarr/{id}(id=${projeto.id})}" method="post">
     <button type="submit" class="btn-proposta">Cancelar Projeto</button>

@@ -285,6 +285,25 @@ public class AuthService {
             .retrieve()
             .body(new ParameterizedTypeReference<List<PropostaScoreDto>>() {});
 }
+     public void Avaliar(Long id, Double nota, String comentario, String token) {
+    restclient.post()
+            .uri(uriBuilder -> uriBuilder
+                    .path("/avaliacao/criar/{id}")
+                    .queryParam("nota", nota)
+                    .queryParam("comentario", comentario)
+                    .build(id))
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .toBodilessEntity();
+}
+    public boolean jaAvaliei(Long projetoId, String token) {
+        Boolean resultado = restclient.get()
+                .uri("/avaliacao/jaAvaliei/{projetoId}", projetoId)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Boolean.class);
+        return Boolean.TRUE.equals(resultado);
+    }
     }
    
     

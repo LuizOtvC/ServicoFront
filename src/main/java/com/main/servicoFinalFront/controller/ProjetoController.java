@@ -102,16 +102,31 @@ public String projetoFiltro(
 public String meusProjetosId(@PathVariable Long id, HttpSession session, Model model) {
     String token = (String) session.getAttribute("token");
     if (token == null) return "redirect:/logar";
+
     try {
         ProjetoResposta projeto = service.listarprojetoPorId(id, token);
         UserPerfilDto usuario = service.VerPerfilId(token, projeto.getUsuarioId());
         UserPerfilDto usuarioLogado = service.VerPerfil(token);
         boolean jaEnviou = service.existeProposta(id, token);
-        
+
+        boolean participou =
+                usuarioLogado.getId().equals(projeto.getUsuarioId()) ||
+                (projeto.getPropostaAceita() != null &&
+                 usuarioLogado.getId().equals(projeto.getPropostaAceita().getUsuarioId()));
+
+        boolean jaAvaliou = false;
+        if (participou && "CONCLUIDO".equals(projeto.getStatus())) {
+            jaAvaliou = service.jaAvaliei(id, token);
+        }
+
         model.addAttribute("projeto", projeto);
         model.addAttribute("usuario", usuario);
         model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
         model.addAttribute("jaEnviouProposta", jaEnviou);
+
+        model.addAttribute("participou", participou);
+        model.addAttribute("jaAvaliou", jaAvaliou);
+
     } catch (HttpClientErrorException e) {
         if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
             session.invalidate();
@@ -121,9 +136,9 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
     } catch (Exception e) {
         model.addAttribute("erro", "Erro ao carregar projeto.");
     }
+
     return "projetoId";
 }
-
 @GetMapping("/projetoFiltroUser")
 public String listarProjetosUser(HttpSession session, Model model) {
     String token = (String) session.getAttribute("token");
