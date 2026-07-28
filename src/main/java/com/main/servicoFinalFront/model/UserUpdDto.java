@@ -11,11 +11,11 @@ import java.util.List;
  * @author Mateus
  */
 public class UserUpdDto {
-    
+
     private String nome;
     private String descricao;
     private String telefone;
-     private List<String> diasTrabalho;
+    private List<String> diasTrabalho;
 
     public UserUpdDto(String nome, String descricao, String telefone, List<String> diasTrabalho) {
         this.nome = nome;
@@ -23,12 +23,6 @@ public class UserUpdDto {
         this.telefone = telefone;
         this.diasTrabalho = diasTrabalho;
     }
-
-    
-
-    
-
-    
 
     public UserUpdDto() {
     }
@@ -65,10 +59,4 @@ public class UserUpdDto {
         this.descricao = descricao;
     }
 
-    
-
-  
-
-    
-    
 }

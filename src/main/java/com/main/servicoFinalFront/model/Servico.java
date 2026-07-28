@@ -9,8 +9,9 @@ package com.main.servicoFinalFront.model;
  * @author Mateus
  */
 public class Servico {
-     private Long id;
-     private String nome;
+
+    private Long id;
+    private String nome;
 
     public Servico(Long id, String nome) {
         this.id = id;
@@ -32,6 +33,5 @@ public class Servico {
     public void setNome(String nome) {
         this.nome = nome;
     }
-     
-     
+
 }

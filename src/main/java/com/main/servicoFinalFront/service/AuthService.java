@@ -28,45 +28,45 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
 /**
  *
  * @author Mateus
  */
 @Service
 public class AuthService {
-    
-     private final RestClient restclient;
-     
-     public AuthService() {
+
+    private final RestClient restclient;
+
+    public AuthService() {
         this.restclient = RestClient.builder()
                 .baseUrl("http://localhost:9000")
                 .build();
     }
-     
-     
-     public String logar(UserLogarDto user){
-         return restclient.post()
-                 .uri("/user/logar")
-                 .body(user)
-                 .retrieve()
+
+    public String logar(UserLogarDto user) {
+        return restclient.post()
+                .uri("/user/logar")
+                .body(user)
+                .retrieve()
                 .body(String.class);
-     }
-     
+    }
+
     public String Registrar(UserRegistroDto user) {
         return restclient.post()
                 .uri("/user/registrar")
                 .body(user)
                 .retrieve()
                 .body(String.class);
-}
-    public UserPerfilDto VerPerfil(String token){
+    }
+
+    public UserPerfilDto VerPerfil(String token) {
         return restclient.get()
                 .uri("/user/perfil")
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .body(UserPerfilDto.class);
     }
+
     public void AtualizarPerfil(UserUpdDto user, String token) {
         restclient.put()
                 .uri("/user/atualizar")
@@ -74,228 +74,261 @@ public class AuthService {
                 .body(user)
                 .retrieve()
                 .body(String.class);
-}
+    }
+
     public void adicionarServico(UsuarioServico servico, String token) {
-        try{
-    restclient.post()
-            .uri("/servico/" + servico.getServicoId() + "/habilidades?nivel=" + servico.getNivel())
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-        }catch(HttpClientErrorException e){
+        try {
+            restclient.post()
+                    .uri("/servico/" + servico.getServicoId() + "/habilidades?nivel=" + servico.getNivel())
+                    .header("Authorization", "Bearer " + token)
+                    .retrieve()
+                    .body(Void.class);
+        } catch (HttpClientErrorException e) {
             throw e;
         }
-}
+    }
+
     public List<Servico> listarServicos(String token) {
-    return restclient.get()
-            .uri("/servico/listar")
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<Servico>>() {});
-}
+        return restclient.get()
+                .uri("/servico/listar")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<Servico>>() {
+                });
+    }
+
     public List<ServicoListar> listarServicosId(String token) {
-    return restclient.get()
-            .uri("/servico/listarHabilidadesId")
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<ServicoListar>>() {});
-}
-    
-    public void atualizarServico(ServicoAtualizar atualizar, String token){
+        return restclient.get()
+                .uri("/servico/listarHabilidadesId")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ServicoListar>>() {
+                });
+    }
+
+    public void atualizarServico(ServicoAtualizar atualizar, String token) {
         restclient.put()
                 .uri("/servico/atualizar")
                 .header("Authorization", "Bearer " + token)
                 .body(atualizar)
                 .retrieve()
                 .body(String.class);
-}
+    }
+
     public void apagarServico(ServicoAtualizar dados, String token) {
-    restclient.method(HttpMethod.DELETE)
-            .uri("/servico/deletar")
-            .header("Authorization", "Bearer " + token)
-            .body(dados)
-            .retrieve()
-            .body(Void.class);
-}
-    
+        restclient.method(HttpMethod.DELETE)
+                .uri("/servico/deletar")
+                .header("Authorization", "Bearer " + token)
+                .body(dados)
+                .retrieve()
+                .body(Void.class);
+    }
+
     public void adicionarProjeto(ProjetoUserDto projeto, String token) {
-        try{
-    restclient.post()
-            .uri("/projeto/criar")
-            .header("Authorization", "Bearer " + token)
-            .body(projeto)
-            .retrieve()
-            .body(Void.class);
-        }catch(HttpClientErrorException e){
+        try {
+            restclient.post()
+                    .uri("/projeto/criar")
+                    .header("Authorization", "Bearer " + token)
+                    .body(projeto)
+                    .retrieve()
+                    .body(Void.class);
+        } catch (HttpClientErrorException e) {
             throw e;
         }
     }
+
     public List<ProjetoListarDto> listarProjetos(String token) {
-    return restclient.get()
-            .uri("/projeto/listar")
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
-}
-    
+        return restclient.get()
+                .uri("/projeto/listar")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {
+                });
+    }
+
     public List<ProjetoResposta> listarProjetosComFiltro(
-        String token, Double orcamentoMin,
-        List<Long> servicosIds, List<String> diasSemana) {
+            String token, Double orcamentoMin,
+            List<Long> servicosIds, List<String> diasSemana) {
 
-    UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/projeto/listarFiltro");
-    if (orcamentoMin != null) uri.queryParam("orcamentoMin", orcamentoMin);
-    if (servicosIds != null) servicosIds.forEach(id -> uri.queryParam("servicosIds", id));
-    if (diasSemana != null) diasSemana.forEach(d -> uri.queryParam("diasSemana", d));
+        UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/projeto/listarFiltro");
+        if (orcamentoMin != null) {
+            uri.queryParam("orcamentoMin", orcamentoMin);
+        }
+        if (servicosIds != null) {
+            servicosIds.forEach(id -> uri.queryParam("servicosIds", id));
+        }
+        if (diasSemana != null) {
+            diasSemana.forEach(d -> uri.queryParam("diasSemana", d));
+        }
 
-    return restclient.get()
-            .uri(uri.toUriString())
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<ProjetoResposta>>() {});
-}
-    
+        return restclient.get()
+                .uri(uri.toUriString())
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ProjetoResposta>>() {
+                });
+    }
+
     public ProjetoResposta listarprojetoPorId(Long id, String token) {
-    return restclient.get()
-        .uri("/projeto/listarId/{id}", id)
-        .header("Authorization", "Bearer " + token)
-        .retrieve()
-        .body(ProjetoResposta.class);
-}
-    public UserPerfilDto VerPerfilId(String token, Long id){
-    return restclient.get()
-            .uri("/user/perfilId/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(UserPerfilDto.class);
-}
-    
-    public void adicionarProposta(String token, PropostaEnvioDto envio){
-        try{
-    restclient.post()
-            .uri("/proposta/criar")
-            .header("Authorization", "Bearer " + token)
-            .body(envio)
-            .retrieve()
-            .body(Void.class);
-        }catch(HttpClientErrorException e){
+        return restclient.get()
+                .uri("/projeto/listarId/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(ProjetoResposta.class);
+    }
+
+    public UserPerfilDto VerPerfilId(String token, Long id) {
+        return restclient.get()
+                .uri("/user/perfilId/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(UserPerfilDto.class);
+    }
+
+    public void adicionarProposta(String token, PropostaEnvioDto envio) {
+        try {
+            restclient.post()
+                    .uri("/proposta/criar")
+                    .header("Authorization", "Bearer " + token)
+                    .body(envio)
+                    .retrieve()
+                    .body(Void.class);
+        } catch (HttpClientErrorException e) {
             throw e;
         }
     }
-    
-    public List<PropostaRespostaDto> listarProjetoFiltro(String token){
+
+    public List<PropostaRespostaDto> listarProjetoFiltro(String token) {
         return restclient.get()
-            .uri("/proposta/listarPendente")
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<PropostaRespostaDto>>() {});
-}
+                .uri("/proposta/listarPendente")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<PropostaRespostaDto>>() {
+                });
+    }
+
     public void aceitarProposta(Long id, String token) {
-    restclient.put()
-            .uri("/proposta/aceitar/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-}
-    
-    public List<PropostaRespostaDto> listarPropostas(String token){
+        restclient.put()
+                .uri("/proposta/aceitar/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
+
+    public List<PropostaRespostaDto> listarPropostas(String token) {
         return restclient.get()
-            .uri("/proposta/listarPropostas")
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<PropostaRespostaDto>>() {});
-}
+                .uri("/proposta/listarPropostas")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<PropostaRespostaDto>>() {
+                });
+    }
+
     public void cancelarProposta(Long id, String token) {
-    restclient.put()
-            .uri("/proposta/cancelar/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-}
+        restclient.put()
+                .uri("/proposta/cancelar/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
+
     public void recusarProposta(Long id, String token) {
-    restclient.put()
-            .uri("/proposta/recusar/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-}
-    
+        restclient.put()
+                .uri("/proposta/recusar/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
+
     public List<ProjetoListarDto> listarProjetosFiltroUsuario(String token) {
-    return restclient.get()
-            .uri("/projeto/listarFiltroUser")
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {});
-}
+        return restclient.get()
+                .uri("/projeto/listarFiltroUser")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ProjetoListarDto>>() {
+                });
+    }
+
     public void ProjetoEmAndamento(Long id, String token) {
-    restclient.put()
-            .uri("/projeto/andamento/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-}
+        restclient.put()
+                .uri("/projeto/andamento/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
+
     public void ProjetoConcluido(Long id, String token) {
-    restclient.put()
-            .uri("/projeto/concluido/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-}
+        restclient.put()
+                .uri("/projeto/concluido/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
+
     public List<ServicoListar> listarServicosIdPorUsuario(String token, Long id) {
-    return restclient.get()
-            .uri("/servico/listarHabilidadesId/" + id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<ServicoListar>>() {});
-}
-    
+        return restclient.get()
+                .uri("/servico/listarHabilidadesId/" + id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ServicoListar>>() {
+                });
+    }
+
     public List<MensagemRespostaDto> listarMensagens(String token) {
-    return restclient.get()
-            .uri("/mensagem/listar")
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<MensagemRespostaDto>>() {});
-}
+        return restclient.get()
+                .uri("/mensagem/listar")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<MensagemRespostaDto>>() {
+                });
+    }
+
     public void apagarMensagem(String token, Long id) {
-    restclient.method(HttpMethod.DELETE)
-            .uri("/mensagem/deletar/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-}
+        restclient.method(HttpMethod.DELETE)
+                .uri("/mensagem/deletar/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
+
     public void ProjetoCancelado(Long id, String token) {
-    restclient.put()
-            .uri("/projeto/cancelar/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Void.class);
-}
-    
+        restclient.put()
+                .uri("/projeto/cancelar/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
+
     public boolean existeProposta(Long id, String token) {
-    Boolean resultado = restclient.get()
-            .uri("/proposta/existe/{id}", id)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(Boolean.class);
-    return Boolean.TRUE.equals(resultado);
-}
-     public List<PropostaScoreDto> listarPropostasComScore(String token, Long projetoId) {
-    return restclient.get()
-            .uri("/proposta/propostas/{id}", projetoId)
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<PropostaScoreDto>>() {});
-}
-     public void Avaliar(Long id, Double nota, String comentario, String token) {
-    restclient.post()
-            .uri(uriBuilder -> uriBuilder
-                    .path("/avaliacao/criar/{id}")
-                    .queryParam("nota", nota)
-                    .queryParam("comentario", comentario)
-                    .build(id))
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .toBodilessEntity();
-}
+        Boolean resultado = restclient.get()
+                .uri("/proposta/existe/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Boolean.class);
+        return Boolean.TRUE.equals(resultado);
+    }
+
+    public List<PropostaScoreDto> listarPropostasComScore(String token, Long projetoId) {
+        return restclient.get()
+                .uri("/proposta/propostas/{id}", projetoId)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<PropostaScoreDto>>() {
+                });
+    }
+
+    public void Avaliar(Long id, Double nota, String comentario, String token) {
+        restclient.post()
+                .uri(uriBuilder -> uriBuilder
+                .path("/avaliacao/criar/{id}")
+                .queryParam("nota", nota)
+                .queryParam("comentario", comentario)
+                .build(id))
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
     public boolean jaAvaliei(Long projetoId, String token) {
         Boolean resultado = restclient.get()
                 .uri("/avaliacao/jaAvaliei/{projetoId}", projetoId)
@@ -304,9 +337,4 @@ public class AuthService {
                 .body(Boolean.class);
         return Boolean.TRUE.equals(resultado);
     }
-    }
-   
-    
-    
-    
-    
+}

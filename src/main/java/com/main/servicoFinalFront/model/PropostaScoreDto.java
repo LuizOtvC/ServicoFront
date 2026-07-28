@@ -11,6 +11,7 @@ import java.util.List;
  * @author Mateus
  */
 public class PropostaScoreDto {
+
     private Long propostaId;
     private String nomeUsuario;
     private Double valorProposto;
@@ -95,8 +96,14 @@ public class PropostaScoreDto {
     }
 
     private Long usuarioId;
- public Long getUsuarioId() { return usuarioId; }
-public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
     public List<String> getDiasTrabalho() {
         return diasTrabalho;
@@ -106,6 +113,4 @@ public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
         this.diasTrabalho = diasTrabalho;
     }
 
-
 }
-    

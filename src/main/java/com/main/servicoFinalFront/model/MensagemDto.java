@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  * @author Mateus
  */
 public class MensagemDto {
+
     private Long id;
     private Long projetoId;
     private String mensagem;
@@ -68,6 +69,4 @@ public class MensagemDto {
         this.enviadoEm = enviadoEm;
     }
 
-
-    
 }

@@ -29,137 +29,155 @@ import org.springframework.web.client.HttpClientErrorException;
  */
 @Controller
 public class PropostaController {
-    
+
     @Autowired
     private AuthService service;
-    
+
     @GetMapping("/proposta")
-public String paginaProposta(@RequestParam Long projetoId, HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        ProjetoResposta projeto = service.listarprojetoPorId(projetoId, token);
-        model.addAttribute("projeto", projeto);
-        model.addAttribute("dto", new PropostaEnvioDto());
-    } catch (HttpClientErrorException e) {
+    public String paginaProposta(@RequestParam Long projetoId, HttpSession session, Model model) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
+            return "redirect:/logar";
+        }
+        try {
+            ProjetoResposta projeto = service.listarprojetoPorId(projetoId, token);
+            model.addAttribute("projeto", projeto);
+            model.addAttribute("dto", new PropostaEnvioDto());
+        } catch (HttpClientErrorException e) {
+            return "redirect:/projetoFiltro";
+        }
+        return "proposta";
+    }
+
+    @PostMapping("/adicionarProposta")
+    public String adicionarProposta(@ModelAttribute PropostaEnvioDto dto, HttpSession session, Model model) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
+            return "redirect:/logar";
+        }
+
+        try {
+            service.adicionarProposta(token, dto);
+        } catch (HttpClientErrorException e) {
+            model.addAttribute("errorMessage", "Erro ao enviar proposta");
+            return "perfil";
+        }
         return "redirect:/projetoFiltro";
     }
-    return "proposta";
-}
-    
-    
-    @PostMapping("/adicionarProposta")
-    public String adicionarProposta(@ModelAttribute PropostaEnvioDto dto, HttpSession session, Model model){
-        String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
 
-    try {
-        service.adicionarProposta(token, dto);
-    } catch (HttpClientErrorException e) {
-        model.addAttribute("errorMessage", "Erro ao enviar proposta");
-        return "perfil";
-    }
-    return "redirect:/projetoFiltro";
-    }
-    
     @GetMapping("/propostaFiltro")
-public String listarPropostas(HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        List<PropostaRespostaDto> propostas = service.listarProjetoFiltro(token);
-        model.addAttribute("propostas", propostas);
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+    public String listarPropostas(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
         }
-        model.addAttribute("erro", "Erro ao carregar propostas.");
-    } catch (Exception e) {
-        model.addAttribute("erro", "Erro ao carregar propostas.");
+        try {
+            List<PropostaRespostaDto> propostas = service.listarProjetoFiltro(token);
+            model.addAttribute("propostas", propostas);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+            model.addAttribute("erro", "Erro ao carregar propostas.");
+        } catch (Exception e) {
+            model.addAttribute("erro", "Erro ao carregar propostas.");
+        }
+        return "propostaFiltro";
     }
-    return "propostaFiltro";
-}
 
-@PostMapping("/aceitar/{id}")
-public String aceitarProposta(@PathVariable Long id, HttpSession session) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        service.aceitarProposta(id, token);
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+    @PostMapping("/aceitar/{id}")
+    public String aceitarProposta(@PathVariable Long id, HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
         }
+        try {
+            service.aceitarProposta(id, token);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+        }
+        return "redirect:/propostaFiltro";
     }
-    return "redirect:/propostaFiltro";
-}
 
-@GetMapping("/propostasUsuario")
-public String listarPropostasGeral(HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        List<PropostaRespostaDto> propostas = service.listarPropostas(token);
-        model.addAttribute("propostas", propostas);
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+    @GetMapping("/propostasUsuario")
+    public String listarPropostasGeral(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
         }
-        model.addAttribute("erro", "Erro ao carregar propostas.");
-    } catch (Exception e) {
-        model.addAttribute("erro", "Erro ao carregar propostas.");
+        try {
+            List<PropostaRespostaDto> propostas = service.listarPropostas(token);
+            model.addAttribute("propostas", propostas);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+            model.addAttribute("erro", "Erro ao carregar propostas.");
+        } catch (Exception e) {
+            model.addAttribute("erro", "Erro ao carregar propostas.");
+        }
+        return "propostasUsuario";
     }
-    return "propostasUsuario";
-}
-@PostMapping("/cancelar/{id}")
-public String cancelarProposta(@PathVariable Long id, HttpSession session) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        service.cancelarProposta(id, token);
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+
+    @PostMapping("/cancelar/{id}")
+    public String cancelarProposta(@PathVariable Long id, HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
         }
+        try {
+            service.cancelarProposta(id, token);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+        }
+        return "redirect:/propostasUsuario";
+
     }
-    return "redirect:/propostasUsuario";
-    
-}
-@PostMapping("/recusar/{id}")
-public String recusarProposta(@PathVariable Long id, HttpSession session) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        service.recusarProposta(id, token);
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+
+    @PostMapping("/recusar/{id}")
+    public String recusarProposta(@PathVariable Long id, HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
         }
+        try {
+            service.recusarProposta(id, token);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+        }
+        return "redirect:/propostaFiltro";
+
     }
-    return "redirect:/propostaFiltro";
-    
-}
-@GetMapping("/propostas/projeto/{id}")
-public String propostasDoProjetoComScore(@PathVariable Long id, HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
-    if (token == null) return "redirect:/logar";
-    try {
-        List<PropostaScoreDto> propostas = service.listarPropostasComScore(token, id);
-        model.addAttribute("propostas", propostas);
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+
+    @GetMapping("/propostas/projeto/{id}")
+    public String propostasDoProjetoComScore(@PathVariable Long id, HttpSession session, Model model) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
-        }else if (e.getStatusCode() == HttpStatusCode.valueOf(409)) {
-        model.addAttribute("errorMessage", "Este projeto já possui um candidato aceito!");
-        
+        }
+        try {
+            List<PropostaScoreDto> propostas = service.listarPropostasComScore(token, id);
+            model.addAttribute("propostas", propostas);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            } else if (e.getStatusCode() == HttpStatusCode.valueOf(409)) {
+                model.addAttribute("errorMessage", "Este projeto já possui um candidato aceito!");
+
+            }
+        }
+        return "propostaScore";
     }
-    }
-    return "propostaScore";
-}
 }

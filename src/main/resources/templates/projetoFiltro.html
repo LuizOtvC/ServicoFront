@@ -187,7 +187,7 @@
             <i class="ti ti-arrow-left"></i> Voltar
         </a>
 
-        <h2 class="page-title">Projetos disponíveis</h2>
+        <h2 class="page-title">Serviços disponíveis</h2>
 
         <form method="get" th:action="@{/projetoFiltro}" class="filtro-card">
 
@@ -273,7 +273,7 @@
 
         <div th:if="${#lists.isEmpty(projetos)}" class="text-center text-muted" style="margin-top: 3rem;">
             <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
-            <p style="margin-top: 8px;">Nenhum projeto encontrado com esses filtros.</p>
+            <p style="margin-top: 8px;">Nenhum serviço encontrado com esses filtros.</p>
         </div>
 
         <div th:each="p : ${projetos}" class="projeto-card" th:onclick="|toggleDetalhes('detalhes-' + ${p.id})|">

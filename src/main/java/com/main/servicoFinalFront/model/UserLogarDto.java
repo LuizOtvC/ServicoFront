@@ -4,9 +4,8 @@
  */
 package com.main.servicoFinalFront.model;
 
-
 public class UserLogarDto {
-    
+
     private String email;
     private String senha;
 

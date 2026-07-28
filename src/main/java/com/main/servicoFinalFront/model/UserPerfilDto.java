@@ -11,7 +11,7 @@ import java.util.List;
  * @author Mateus
  */
 public class UserPerfilDto {
-    
+
     private String nome;
     private String descricao;
     private String email;
@@ -32,12 +32,6 @@ public class UserPerfilDto {
         this.id = id;
         this.diasTrabalho = diasTrabalho;
     }
-
-    
-
-    
-
-    
 
     public String getNome() {
         return nome;
@@ -94,11 +88,5 @@ public class UserPerfilDto {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    
-    
-    
 
-   
-    
 }

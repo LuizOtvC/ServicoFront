@@ -25,7 +25,7 @@ public class AvaliacaoController {
     private AuthService service;
 
     @PostMapping("/criar/{id}")
-    public String avaliar(@PathVariable Long id,@RequestParam Double nota,@RequestParam(required = false) String comentario,HttpSession session) {
+    public String avaliar(@PathVariable Long id, @RequestParam Double nota, @RequestParam(required = false) String comentario, HttpSession session) {
 
         String token = (String) session.getAttribute("token");
 

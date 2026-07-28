@@ -20,9 +20,8 @@ public class AvaliacaoRespostaDto {
 
     private Double nota;
 
-    private String comentario; 
+    private String comentario;
 
-    
     public AvaliacaoRespostaDto() {
     }
 
@@ -73,7 +72,5 @@ public class AvaliacaoRespostaDto {
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }
-    
-    
 
 }

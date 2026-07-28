@@ -9,6 +9,7 @@ package com.main.servicoFinalFront.model;
  * @author Mateus
  */
 public class UsuarioServico {
+
     private Long servicoId;
     private String nivel;
 
@@ -35,6 +36,5 @@ public class UsuarioServico {
     public void setNivel(String nivel) {
         this.nivel = nivel;
     }
-    
-    
+
 }

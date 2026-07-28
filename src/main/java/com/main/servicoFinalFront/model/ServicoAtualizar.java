@@ -9,6 +9,7 @@ package com.main.servicoFinalFront.model;
  * @author Mateus
  */
 public class ServicoAtualizar {
+
     private Long idAntigo;
     private Long idNovo;
     private String nivel;
@@ -22,7 +23,6 @@ public class ServicoAtualizar {
         this.nivel = nivel;
     }
 
-   
     public Long getIdAntigo() {
         return idAntigo;
     }
@@ -30,8 +30,6 @@ public class ServicoAtualizar {
     public void setIdAntigo(Long idAntigo) {
         this.idAntigo = idAntigo;
     }
-
-    
 
     public Long getIdNovo() {
         return idNovo;
@@ -49,9 +47,4 @@ public class ServicoAtualizar {
         this.nivel = nivel;
     }
 
-    
-
-    
-    
-    
 }

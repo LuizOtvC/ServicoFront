@@ -9,7 +9,7 @@ package com.main.servicoFinalFront.model;
  * @author Mateus
  */
 public class UserRegistroDto {
-    
+
     private String nome;
     private String email;
     private String senha;
@@ -24,7 +24,6 @@ public class UserRegistroDto {
         this.senha = senha;
         this.telefone = telefone;
     }
-
 
     public String getNome() {
         return nome;
@@ -57,6 +56,5 @@ public class UserRegistroDto {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
-    
+
 }
