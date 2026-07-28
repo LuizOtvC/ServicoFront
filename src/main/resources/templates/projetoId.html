@@ -197,7 +197,7 @@
                 </div>
             </div>
 
-            <form th:if="${projeto.propostaAceita != null and usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
+            <form th:if="${projeto.propostaAceita != null and usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
                   th:action="@{/recusar/{id}(id=${projeto.propostaAceita.id})}" method="post">
                 <button type="submit" class="btn-remover">Remover profissional</button>
             </form>
@@ -209,7 +209,7 @@
     Enviar proposta
 </a>
             
-            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
+            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
       th:action="@{/propostas/projeto/{id}(id=${projeto.id})}"
       method="get">
     <button type="submit" class="btn-proposta">
