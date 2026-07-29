@@ -345,4 +345,11 @@ public class AuthService {
                 .body(Boolean.class);
         return Boolean.TRUE.equals(resultado);
     }
+    public Double getScoreProjeto(String token, Long projetoId) {
+    return restclient.get()
+            .uri("/match/score/{id}", projetoId)
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Double.class);
+}
 }

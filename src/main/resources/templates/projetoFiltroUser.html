@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Meus Projetos</title>
+    <title>Meus Serviços</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
     <style>
@@ -94,13 +94,13 @@
             <i class="ti ti-arrow-left"></i> Voltar
         </a>
 
-        <h2 class="page-title">Meus Servicos</h2>
+        <h2 class="page-title">Meus Serviços</h2>
 
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
         <div th:if="${#lists.isEmpty(projetos)}" class="text-center text-muted" style="margin-top: 3rem;">
             <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
-            <p style="margin-top: 8px;">Você ainda não criou nenhum servico.</p>
+            <p style="margin-top: 8px;">Você ainda não criou nenhum serviço.</p>
         </div>
 
         <div th:each="p : ${projetos}" class="projeto-card" th:onclick="|toggleDetalhes('detalhes-' + ${p.id})|">

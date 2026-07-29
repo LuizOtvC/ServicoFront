@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Detalhes do Projeto</title>
+    <title>Detalhes do Serviço</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
     <style>
@@ -143,7 +143,7 @@
 
         <a href="#" onclick="history.back(); return false;" class="btn-voltar">  <i class="ti ti-arrow-left"></i> Voltar</a>
 
-        <h2 class="page-title">Detalhes do projeto</h2>
+        <h2 class="page-title">Detalhes do serviço</h2>
 
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
@@ -202,6 +202,14 @@
                 <button type="submit" class="btn-remover">Remover profissional</button>
             </form>
             
+            <br>
+<div class="detalhe-row" th:if="${usuarioLogadoId != projeto.usuarioId}">
+    <strong>Sua compatibilidade</strong>
+    <span class="valor">
+        <span th:text="${#numbers.formatDecimal(scoreProjeto * 100, 1, 1)}">0</span>%
+    </span>
+</div>
+            
 
             <a th:if="${usuarioLogadoId != projeto.usuarioId and !jaEnviouProposta}"
    th:href="@{/proposta(projetoId=${projeto.id})}"
@@ -233,6 +241,7 @@
       th:action="@{/concluido/{id}(id=${projeto.id})}" method="post">
     <button type="submit" class="btn-proposta">Marcar como Concluido</button>
 </form>
+
 
 <div th:if="${participou and projeto.status == 'CONCLUIDO' and !jaAvaliou}"
      class="mt-3 p-3 border rounded">

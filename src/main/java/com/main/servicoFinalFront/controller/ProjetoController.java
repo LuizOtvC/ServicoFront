@@ -124,7 +124,8 @@ public class ProjetoController {
             if (participou && "CONCLUIDO".equals(projeto.getStatus())) {
                 jaAvaliou = service.jaAvaliei(id, token);
             }
-
+            Double scoreProjeto = service.getScoreProjeto(token, id);
+            model.addAttribute("scoreProjeto", scoreProjeto);
             model.addAttribute("projeto", projeto);
             model.addAttribute("usuario", usuario);
             model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
