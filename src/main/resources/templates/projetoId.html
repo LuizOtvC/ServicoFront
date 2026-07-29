@@ -210,7 +210,7 @@
 </a>
             
             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
-      th:action="@{/propostas/projeto/{id}(id=${projeto.id})}"
+      th:action="@{/propostas/{id}(id=${projeto.id})}"
       method="get">
     <button type="submit" class="btn-proposta">
         Ver propostas recebidas
@@ -276,6 +276,11 @@
             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
       th:action="@{/cancelarr/{id}(id=${projeto.id})}" method="post">
     <button type="submit" class="btn-proposta">Cancelar Projeto</button>
+</form>
+
+<form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'CANCELADO' or projeto.status == 'ARQUIVADO'}"
+      th:action="@{/arquivar/{id}(id=${projeto.id})}" method="post">
+    <button type="submit" class="btn-proposta">Arquivar Projeto</button>
 </form>
         </div>
 

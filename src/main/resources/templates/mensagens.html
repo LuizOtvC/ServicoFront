@@ -136,7 +136,7 @@
 
             <span class="mensagem-data" th:text="${#temporals.format(m.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
             <a th:if="${#strings.equalsIgnoreCase(m.status, 'PROPOSTA')}"
-   th:href="@{/propostas/projeto/{id}(id=${m.projetoId})}"
+   th:href="@{/propostas/{id}(id=${m.projetoId})}"
    style="display: block; width: 100%; background: #1a1a2e; color: white; border-radius: 8px; 
           padding: 0.45rem; font-size: 13px; text-align: center; text-decoration: none; 
           margin-top: 10px; transition: background 0.2s;">

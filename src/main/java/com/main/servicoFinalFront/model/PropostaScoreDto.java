@@ -22,6 +22,7 @@ public class PropostaScoreDto {
     private Double scoreOrcamento;
     private Double scoreHistorico;
     private List<String> diasTrabalho;
+    private boolean temConflitoDias;
 
     public Long getPropostaId() {
         return propostaId;
@@ -112,5 +113,15 @@ public class PropostaScoreDto {
     public void setDiasTrabalho(List<String> diasTrabalho) {
         this.diasTrabalho = diasTrabalho;
     }
+
+    public boolean isTemConflitoDias() {
+        return temConflitoDias;
+    }
+
+    public void setTemConflitoDias(boolean temConflitoDias) {
+        this.temConflitoDias = temConflitoDias;
+    }
+    
+    
 
 }

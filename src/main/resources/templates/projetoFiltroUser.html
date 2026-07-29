@@ -94,13 +94,13 @@
             <i class="ti ti-arrow-left"></i> Voltar
         </a>
 
-        <h2 class="page-title">Meus Projetos</h2>
+        <h2 class="page-title">Meus Servicos</h2>
 
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
         <div th:if="${#lists.isEmpty(projetos)}" class="text-center text-muted" style="margin-top: 3rem;">
             <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
-            <p style="margin-top: 8px;">Você ainda não criou nenhum projeto.</p>
+            <p style="margin-top: 8px;">Você ainda não criou nenhum servico.</p>
         </div>
 
         <div th:each="p : ${projetos}" class="projeto-card" th:onclick="|toggleDetalhes('detalhes-' + ${p.id})|">

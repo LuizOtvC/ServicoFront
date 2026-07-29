@@ -298,6 +298,14 @@ public class AuthService {
                 .retrieve()
                 .body(Void.class);
     }
+    
+     public void ProjetoArquivado(Long id, String token) {
+        restclient.put()
+                .uri("/projeto/arquivar/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .body(Void.class);
+    }
 
     public boolean existeProposta(Long id, String token) {
         Boolean resultado = restclient.get()

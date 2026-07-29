@@ -220,4 +220,22 @@ public class ProjetoController {
         return "redirect:/projetoFiltroUser";
 
     }
+    
+    @PostMapping("/arquivar/{id}")
+    public String ArquivarProjeto(@PathVariable Long id, HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
+            return "redirect:/logar";
+        }
+        try {
+            service.ProjetoArquivado(id, token);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+        }
+        return "redirect:/projetoFiltroUser";
+
+    }
 }

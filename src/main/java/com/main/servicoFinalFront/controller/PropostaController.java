@@ -87,7 +87,7 @@ public class PropostaController {
     }
 
     @PostMapping("/aceitar/{id}")
-    public String aceitarProposta(@PathVariable Long id, HttpSession session) {
+    public String aceitarProposta(@PathVariable Long id, HttpSession session, @RequestParam Long projetoId) {
         String token = (String) session.getAttribute("token");
         if (token == null) {
             return "redirect:/logar";
@@ -100,7 +100,7 @@ public class PropostaController {
                 return "redirect:/logar";
             }
         }
-        return "redirect:/propostaFiltro";
+        return "redirect:/propostas/" + projetoId;
     }
 
     @GetMapping("/propostasUsuario")
@@ -143,7 +143,7 @@ public class PropostaController {
     }
 
     @PostMapping("/recusar/{id}")
-    public String recusarProposta(@PathVariable Long id, HttpSession session) {
+    public String recusarProposta(@PathVariable Long id, HttpSession session, @RequestParam Long projetoId) {
         String token = (String) session.getAttribute("token");
         if (token == null) {
             return "redirect:/logar";
@@ -156,28 +156,29 @@ public class PropostaController {
                 return "redirect:/logar";
             }
         }
-        return "redirect:/propostaFiltro";
+        return "redirect:/propostas/" + projetoId;
 
     }
 
-    @GetMapping("/propostas/projeto/{id}")
-    public String propostasDoProjetoComScore(@PathVariable Long id, HttpSession session, Model model) {
-        String token = (String) session.getAttribute("token");
-        if (token == null) {
+    @GetMapping("/propostas/{id}")
+public String propostasDoProjetoComScore(@PathVariable Long id, HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) return "redirect:/logar";
+    try {
+        List<PropostaScoreDto> propostas = service.listarPropostasComScore(token, id);
+        
+        boolean temPropostaAceita = propostas.stream()
+            .anyMatch(p -> "ACEITA".equals(p.getStatus()));
+        
+        model.addAttribute("propostas", propostas);
+        model.addAttribute("projetoId", id);
+        model.addAttribute("temPropostaAceita", temPropostaAceita);
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
             return "redirect:/logar";
         }
-        try {
-            List<PropostaScoreDto> propostas = service.listarPropostasComScore(token, id);
-            model.addAttribute("propostas", propostas);
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            } else if (e.getStatusCode() == HttpStatusCode.valueOf(409)) {
-                model.addAttribute("errorMessage", "Este projeto já possui um candidato aceito!");
-
-            }
-        }
-        return "propostaScore";
     }
+    return "propostaScore";
+}
 }

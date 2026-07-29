@@ -6,9 +6,7 @@ package com.main.servicoFinalFront.controller;
 
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoAtualizar;
-import com.main.servicoFinalFront.model.ServicoListar;
 import com.main.servicoFinalFront.model.UsuarioServico;
-import com.main.servicoFinalFront.model.UserPerfilDto;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
