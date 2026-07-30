@@ -198,7 +198,7 @@
             <details class="filtro-details" th:if="${not #lists.isEmpty(todosServicos)}"
                       th:open="${servicosSelecionados != null and not #lists.isEmpty(servicosSelecionados)}">
                 <summary>
-                    <span>Serviços</span>
+                    <span>Profissões</span>
                     <span class="filtro-count" th:if="${servicosSelecionados != null and not #lists.isEmpty(servicosSelecionados)}"
                           th:text="${#lists.size(servicosSelecionados)} + ' selecionado(s)'"></span>
                     <i class="ti ti-chevron-down"></i>

@@ -121,9 +121,9 @@
         <div th:each="p : ${propostas}" class="proposta-card">
             <div class="proposta-header">
                 <p class="proposta-projeto">
-                    Projeto:
+                    Serviço:
                     <a th:href="@{/projetoporId/{id}(id=${p.projetoId})}" th:text="${p.nomeProjeto}">
-                        Título do projeto
+                        Título do serviço
                     </a>
                 </p>
                 <span class="proposta-status"
@@ -137,7 +137,7 @@
                 </span>
             </div>
 
-            <p class="proposta-descricao" th:text="${p.descricao}">Descrição da proposta</p>
+            <p class="proposta-descricao" th:text="${p.descricao}">Descrição do serviço</p>
 
             <div class="proposta-footer">
                 <span class="proposta-valor">R$ <span th:text="${p.valorProposto}">0,00</span></span>

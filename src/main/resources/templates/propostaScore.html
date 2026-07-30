@@ -243,7 +243,7 @@
                 </div>
                 <div th:if="${p.temConflitoDias}" class="alerta-conflito">
                     <i class="ti ti-alert-triangle"></i>
-                    <strong>Atenção:</strong> Este profissional já está aceito em outro projeto com dias em comum.
+                    <strong>Atenção:</strong> Este profissional já está aceito em outro serviço com dias em comum.
                 </div>
                 <div th:if="${!temPropostaAceita and #strings.equalsIgnoreCase(p.status, 'PENDENTE')}" class="acoes-row">
                     <form th:action="@{/aceitar/{id}(id=${p.propostaId})}" method="post">
@@ -257,7 +257,7 @@
                 </div>
                 <div th:if="${temPropostaAceita and #strings.equalsIgnoreCase(p.status, 'PENDENTE')}" class="aviso-aceito">
     <i class="ti ti-circle-check"></i>
-    Este projeto já tem um profissional aceito.
+    Este serviço já tem um profissional aceito.
 </div>
             </div>
 

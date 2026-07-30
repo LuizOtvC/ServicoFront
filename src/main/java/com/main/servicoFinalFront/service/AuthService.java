@@ -77,16 +77,13 @@ public class AuthService {
     }
 
     public void adicionarServico(UsuarioServico servico, String token) {
-        try {
             restclient.post()
                     .uri("/servico/" + servico.getServicoId() + "/habilidades?nivel=" + servico.getNivel())
                     .header("Authorization", "Bearer " + token)
                     .retrieve()
                     .body(Void.class);
-        } catch (HttpClientErrorException e) {
-            throw e;
-        }
-    }
+        } 
+    
 
     public List<Servico> listarServicos(String token) {
         return restclient.get()
