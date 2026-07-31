@@ -67,4 +67,21 @@ public class MensagemController {
         return "redirect:/listarMensagens";
     }
 
+    @PostMapping("/marcarLido")
+    public String marcarMensagensComoLidas(HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
+            return "redirect:/logar";
+        }
+        try {
+            service.marcarMensagensComoLidas(token);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+        }
+        return "redirect:/";
+    }
+
 }

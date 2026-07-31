@@ -56,11 +56,14 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String home(HttpSession session) {
+    public String home(HttpSession session, Model model) {
         Object token = (String) session.getAttribute("token");
+
         if (token == null) {
             return "redirect:/logar";
         }
+        long naoLidas = authService.contarNaoLidas((String) token);
+        model.addAttribute("naoLidas", naoLidas);
         return "home";
     }
 
@@ -107,12 +110,41 @@ public class UserController {
 
     @GetMapping("/atualizar")
     public String PaginaAtualizar(HttpSession session, Model model) {
-        Object token = (String) session.getAttribute("token");
+        String token = (String) session.getAttribute("token");
         if (token == null) {
             return "redirect:/logar";
         }
-        model.addAttribute("atualizar", new UserUpdDto());
-        return "atualizar";
+
+        try {
+            UserPerfilDto usuario = authService.VerPerfil(token);
+            List<Servico> servicos = authService.listarServicos(token);
+            List<ServicoListar> habilidades = authService.listarServicosId(token);
+
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("servicos", servicos);
+            model.addAttribute("habilidades", habilidades);
+
+            UserUpdDto atualizar = new UserUpdDto();
+            atualizar.setNome(usuario.getNome());
+            atualizar.setTelefone(usuario.getTelefone());
+            atualizar.setDescricao(usuario.getDescricao());
+            List<String> dias = usuario.getDiasTrabalho()
+                    .stream()
+                    .map(String::toUpperCase)
+                    .toList();
+
+            atualizar.setDiasTrabalho(dias);
+            model.addAttribute("atualizar", atualizar);
+            System.out.println(usuario.getDiasTrabalho());
+            return "atualizar";
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
+            model.addAttribute("erro", "Erro ao carregar perfil.");
+            return "perfil";
+        }
     }
 
     @PostMapping("/atualizar")
@@ -124,7 +156,7 @@ public class UserController {
 
         try {
             authService.AtualizarPerfil(user, token);
-            return "redirect:/";
+            return "redirect:/perfil";
         } catch (HttpClientErrorException e) {
             String msg = extrairMensagemDeErro(e);
             model.addAttribute("errorMessage", msg);
@@ -149,6 +181,7 @@ public class UserController {
             model.addAttribute("usuario", usuario);
             model.addAttribute("servicos", servicos);
             model.addAttribute("habilidades", habilidades);
+
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
                 session.invalidate();

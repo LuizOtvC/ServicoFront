@@ -349,4 +349,18 @@ public class AuthService {
             .retrieve()
             .body(Double.class);
 }
+    public void marcarMensagensComoLidas(String token) {
+    restclient.post()
+            .uri("/mensagem/marcarLido")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .toBodilessEntity();
+}
+    public Long contarNaoLidas(String token) {
+    return restclient.get()
+            .uri("/mensagem/naoLidas")
+            .header("Authorization", "Bearer " + token)
+            .retrieve()
+            .body(Long.class);
+}
 }

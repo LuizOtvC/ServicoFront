@@ -55,7 +55,7 @@
     <div class="card">
         <div class="card-header">
             <h4>Editar Habilidade</h4>
-            <p>Altere o serviço ou o nível</p>
+            <p>Altere a habilidade ou o nível</p>
         </div>
         <div class="card-body">
 
@@ -68,9 +68,9 @@
                 <input type="hidden" th:field="*{idAntigo}"/>
 
                 <div class="mb-3">
-                    <label class="info-label">Novo serviço</label>
+                    <label class="info-label">Nova habilidade</label>
                     <select th:field="*{idNovo}" class="form-select form-select-sm">
-                        <option value="">Selecione um serviço</option>
+                        <option value="">Selecione uma habilidade</option>
                         <option th:each="s : ${servicos}"
                                 th:value="${s.id}"
                                 th:text="${s.nome}">

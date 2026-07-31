@@ -50,8 +50,12 @@
                     color: #0d1b3e;
                     border-color: #0d1b3e;
                 }
-                .navbar-nav { flex-wrap: nowrap; }
-                .navbar-toggler { border-color: rgba(13, 27, 62, 0.2); }
+                .navbar-nav {
+                    flex-wrap: nowrap;
+                }
+                .navbar-toggler {
+                    border-color: rgba(13, 27, 62, 0.2);
+                }
             </style>
 
             <nav class="navbar navbar-expand-lg mb-4">
@@ -81,7 +85,13 @@
                                 <a class="nav-link" href="/perfil"> Perfil</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/listarMensagens"> Notificações</a>
+                                <a class="nav-link" href="/listarMensagens"> Notificações
+                                    <span th:if="${naoLidas > 0}"
+                                          style="background: #b00020; color: white; border-radius: 50%;
+                                          padding: 1px 6px; font-size: 10px; font-weight: 700; margin-left: 4px;"
+                                          th:text="${naoLidas}">
+                                    </span>
+                                </a>
                             </li>
                         </ul>
                         <button class="btn-sair" onclick="confirmarSaida()">Sair</button>
@@ -91,9 +101,9 @@
 
             <script>
                 function confirmarSaida() {
-                    if (confirm("Tem certeza que deseja sair?")) {
-                        window.location.href = "/logout";
-                    }
+                if (confirm("Tem certeza que deseja sair?")) {
+                window.location.href = "/logout";
+                }
                 }
             </script>
         </header>

@@ -105,9 +105,11 @@
 <body>
     <div style="max-width: 520px; margin: 0 auto;">
 
-        <a th:href="@{/}" class="btn-voltar">
-            <i class="ti ti-arrow-left"></i> Voltar
-        </a>
+        <form th:action="@{/marcarLido}" method="post">
+    <button type="submit" class="btn-voltar">
+        <i class="ti ti-arrow-left"></i> Voltar
+    </button>
+</form>
 
         <h2 class="page-title">Minhas mensagens</h2>
 
@@ -124,6 +126,10 @@
                     <a th:href="@{/projetoporId/{id}(id=${m.projetoId})}" th:text="${m.nomeProjeto}">
                         Título do serviço
                     </a>
+                    <span th:if="${!m.lida}"
+                  style="display: inline-block; width: 8px; height: 8px; 
+                         background: #1957a6; border-radius: 50%; margin-left: 6px;">
+            </span>
                 </p>
                 <span class="mensagem-status"
                       th:text="${m.status}"
