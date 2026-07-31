@@ -135,7 +135,6 @@ public class UserController {
 
             atualizar.setDiasTrabalho(dias);
             model.addAttribute("atualizar", atualizar);
-            System.out.println(usuario.getDiasTrabalho());
             return "atualizar";
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
