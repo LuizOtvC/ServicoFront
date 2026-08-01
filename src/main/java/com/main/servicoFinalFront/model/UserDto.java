@@ -33,11 +33,13 @@ public class UserDto {
     private Double pesoHistorico;
 
     private List<String> diasTrabalho;
+    
+    private String status;
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String nome, String email, String telefone, String senha, Integer horasSemana, Double pesoServicos, Double pesoOrcamento, Double pesoHistorico, List<String> diasTrabalho) {
+    public UserDto(Long id, String nome, String email, String telefone, String senha, Integer horasSemana, Double pesoServicos, Double pesoOrcamento, Double pesoHistorico, List<String> diasTrabalho, String status) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -48,7 +50,10 @@ public class UserDto {
         this.pesoOrcamento = pesoOrcamento;
         this.pesoHistorico = pesoHistorico;
         this.diasTrabalho = diasTrabalho;
+        this.status = status;
     }
+
+    
 
     public Long getId() {
         return id;
@@ -138,4 +143,13 @@ public class UserDto {
         this.diasTrabalho = diasTrabalho;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    
 }

@@ -167,6 +167,30 @@
                     <p class="rep-value" th:text="${usuario.reputacao}">0</p>
                 </div>
             </div>
+            <div class="info-row">
+    <i class="ti ti-user-check" aria-hidden="true"></i>
+    <div>
+        <span class="info-label">Status</span>
+
+        <span class="info-value"
+              th:if="${usuario.status == 'ATIVO'}"
+              style="color:green;">
+            Ativo
+        </span>
+
+        <span class="info-value"
+              th:if="${usuario.status == 'INATIVO'}"
+              style="color:orange;">
+            Inativo
+        </span>
+
+        <span class="info-value"
+              th:if="${usuario.status == 'ARQUIVADO'}"
+              style="color:red;">
+            Arquivado
+        </span>
+    </div>
+</div>
            <div th:each="h : ${habilidades}">
     <div class="info-row">
         <i class="ti ti-tool" aria-hidden="true"></i>

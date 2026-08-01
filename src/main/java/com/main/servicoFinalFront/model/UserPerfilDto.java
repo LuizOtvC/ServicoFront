@@ -19,11 +19,12 @@ public class UserPerfilDto {
     private Double reputacao;
     private Long id;
     private List<String> diasTrabalho;
+    private String status;
 
     public UserPerfilDto() {
     }
 
-    public UserPerfilDto(String nome, String descricao, String email, String telefone, Double reputacao, Long id, List<String> diasTrabalho) {
+    public UserPerfilDto(String nome, String descricao, String email, String telefone, Double reputacao, Long id, List<String> diasTrabalho, String status) {
         this.nome = nome;
         this.descricao = descricao;
         this.email = email;
@@ -31,8 +32,11 @@ public class UserPerfilDto {
         this.reputacao = reputacao;
         this.id = id;
         this.diasTrabalho = diasTrabalho;
+        this.status = status;
     }
 
+   
+    
     public String getNome() {
         return nome;
     }
@@ -89,4 +93,13 @@ public class UserPerfilDto {
         this.descricao = descricao;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    
 }
