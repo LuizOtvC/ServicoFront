@@ -56,6 +56,9 @@ public class PropostaController {
             return "redirect:/logar";
         }
 
+        System.out.println("Projeto: " + dto.getProjetoId());
+    System.out.println("Valor: " + dto.getValorProposto());
+    System.out.println("Descrição: " + dto.getDescricao());
         try {
             service.adicionarProposta(token, dto);
         } catch (HttpClientErrorException e) {
@@ -156,7 +159,7 @@ public class PropostaController {
                 return "redirect:/logar";
             }
         }
-        return "redirect:/propostas/" + projetoId;
+        return "redirect:/projetoporId/" + projetoId;
 
     }
 

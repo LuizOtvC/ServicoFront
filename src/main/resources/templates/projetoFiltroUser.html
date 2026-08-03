@@ -118,7 +118,17 @@
 
             <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
                 <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
-                <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
+                <p class="detalhe-row">
+    <strong>Orçamento:</strong>
+
+    <span th:if="${p.orcamento == 0}">
+        A ser definido pelo profissional
+    </span>
+
+    <span th:unless="${p.orcamento == 0}">
+        R$ <span th:text="${p.orcamento}">—</span>
+    </span>
+</p>
                 <p class="detalhe-row">
     <strong>Dias de trabalho:</strong>
     <span th:each="dia, iter : ${p.diasTrabalho}">

@@ -163,9 +163,16 @@
                     <span class="valor" th:text="${projeto.descricao}">—</span>
                 </div>
                 <div class="detalhe-row">
-                    <strong>Orçamento</strong>
-                    <span class="valor">R$ <span th:text="${projeto.orcamento}">—</span></span>
-                </div>
+    <strong>Orçamento</strong>
+
+    <span class="valor" th:if="${projeto.orcamento > 0}">
+        R$ <span th:text="${projeto.orcamento}"></span>
+    </span>
+
+    <span class="valor" th:if="${projeto.orcamento == 0}">
+        A ser definido pelo profissional
+    </span>
+</div>
                 <div class="detalhe-row">
     <strong>Dias de trabalho</strong>
 
@@ -197,7 +204,11 @@
 
             <form th:if="${projeto.propostaAceita != null and usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
                   th:action="@{/recusar/{id}(id=${projeto.propostaAceita.id})}" method="post">
-                <button type="submit" class="btn-remover">Remover profissional</button>
+                <input type="hidden" name="projetoId" th:value="${projeto.id}"/>
+
+    <button type="submit" class="btn-remover">
+        Remover profissional
+    </button>
             </form>
             
             <br>

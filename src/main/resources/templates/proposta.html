@@ -87,19 +87,32 @@
             <div th:if="${projeto}" class="projeto-info">
                 <p class="titulo" th:text="${projeto.titulo}">Título</p>
                 <div class="servicos">
-                    <span th:each="s : ${projeto.servicos}" th:text="${s}">Serviço</span>
-                </div>
-                <p class="orcamento">Orçamento: R$ <span th:text="${projeto.orcamento}">—</span></p>
-            </div>
+    <span th:each="s : ${projeto.servicos}" th:text="${s}">Serviço</span>
+</div>
+
+<p class="orcamento" th:if="${projeto.orcamento > 0}">
+    Orçamento: R$ <span th:text="${projeto.orcamento}">—</span>
+</p>
+
+<p class="orcamento" th:if="${projeto.orcamento == 0}">
+    Orçamento: Será definido pelo profissional
+</p>
 
             <form action="/adicionarProposta" method="post" th:object="${dto}">
-               <input type="hidden" name="projetoId" th:value="${projeto.id}"/>
+    <input type="hidden" name="projetoId" th:value="${projeto.id}"/>
 
-                <div class="mb-3">
-                    <label class="info-label">Valor proposto (R$)</label>
-                    <input type="number" step="0.01" class="form-control form-control-sm"
-                           th:field="*{valorProposto}" placeholder="Ex: 1200.00"/>
-                </div>
+    <div th:if="${projeto.orcamento == 0}">
+    <input type="hidden" name="valorProposto" value="0"/>
+</div>
+
+    <div th:unless="${projeto.orcamento == 0}" class="mb-3">
+        <label class="info-label">Valor proposto (R$)</label>
+        <input type="number"
+               step="0.01"
+               class="form-control form-control-sm"
+               th:field="*{valorProposto}"
+               placeholder="Ex: 1200.00"/>
+    </div>
 
                 <div class="mb-3">
                     <label class="info-label">Descrição da proposta</label>
