@@ -2,159 +2,298 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Criar Servico</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 480px;
-            border: none;
-        }
-        .card-header {
-            background: #1a1a2e;
-            padding: 1.4rem 1.5rem;
-            text-align: center;
-            border-radius: 12px 12px 0 0;
-        }
-        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
-        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
-        .card-body { padding: 1.25rem 1.5rem; }
-        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
-        .btn-editar {
-            display: block;
-            width: 100%;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.55rem;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 1rem;
-            text-align: center;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-editar:hover { background: #2d2d50; color: white; }
-        .servico-check {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .servico-check:last-of-type { border-bottom: none; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <div class="card-header">
-            <h4>Criar Servico</h4>
-            <p>Preencha os dados do seu servico</p>
-        </div>
-        <div class="card-body">
+    <title>Criar Serviço</title>
 
-            <div th:if="${errorMessage}"
-                 class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
-                <span th:text="${errorMessage}"></span>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+
+    <style>
+
+        body{
+    margin:0;
+    background:#f4f6f9;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    margin:40px auto;
+    padding:0 20px;
+}
+
+.header{
+    margin-bottom:35px;
+}
+
+.header h2{
+    color:#1a1a2e;
+    font-size:34px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.header p{
+    color:#6c757d;
+    font-size:15px;
+}
+
+.form-section{
+    margin-bottom:35px;
+}
+
+.section-title{
+    font-size:13px;
+    font-weight:700;
+    color:#6c757d;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:18px;
+    padding-bottom:8px;
+    border-bottom:1px solid #dcdfe4;
+}
+
+.info-label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:#1a1a2e;
+    margin-bottom:6px;
+}
+
+.form-control,
+.form-select{
+    border-radius:8px;
+    min-height:44px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#1a1a2e;
+    box-shadow:0 0 0 .2rem rgba(26,26,46,.15);
+}
+
+textarea.form-control{
+    min-height:120px;
+}
+
+.botoes{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    margin-top:40px;
+}
+
+.btn-principal{
+    background:#1a1a2e;
+    color:white;
+    border:none;
+    border-radius:8px;
+    padding:11px 26px;
+}
+
+.btn-principal:hover{
+    background:#2d2d50;
+}
+
+.btn-secundario{
+    border:1px solid #1a1a2e;
+    color:#1a1a2e;
+    border-radius:8px;
+    padding:11px 26px;
+    text-decoration:none;
+}
+
+.btn-secundario:hover{
+    background:#1a1a2e;
+    color:white;
+}
+
+    </style>
+
+</head>
+
+<body>
+<div class="container">
+<div class="pagina">
+
+    <div class="cabecalho">
+        <h2>Criar Serviço</h2>
+        <p>Preencha as informações do projeto que deseja publicar.</p>
+    </div>
+
+    <div class="conteudo">
+
+        <div th:if="${errorMessage}"
+             class="alert alert-danger"
+             role="alert">
+
+            <span th:text="${errorMessage}"></span>
+
+        </div>
+
+        <form action="/projeto/criar"
+              method="post"
+              th:object="${projeto}">
+
+            <div class="bloco">
+
+                <label class="info-label">
+                    <i class="ti ti-clipboard-text"></i>
+                    Título
+                </label>
+
+                <input
+                        type="text"
+                        class="form-control"
+                        th:field="*{titulo}"
+                        placeholder="Ex: Reforma elétrica residencial">
+
             </div>
 
-            <form action="/projeto/criar" method="post" th:object="${projeto}">
+            <div class="bloco">
 
-                <div class="mb-3">
-                    <label class="info-label">Título</label>
-                    <input type="text" class="form-control form-control-sm"
-                           th:field="*{titulo}" placeholder="Ex: Reforma elétrica"/>
+                <label class="info-label">
+                    <i class="ti ti-file-description"></i>
+                    Descrição
+                </label>
+
+                <textarea
+                        class="form-control"
+                        th:field="*{descricao}"
+                        placeholder="Descreva tudo o que precisa ser feito..."></textarea>
+
+            </div>
+
+                            <div class="bloco">
+
+                <label class="info-label">
+                    <i class="ti ti-cash"></i>
+                    Orçamento (R$)
+                </label>
+
+                <input
+                        type="number"
+                        step="0.01"
+                        class="form-control"
+                        th:field="*{orcamento}"
+                        placeholder="Ex: 1500.00">
+
+                <div class="form-check">
+
+                    <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="semOrcamento">
+
+                    <label class="form-check-label" for="semOrcamento">
+                        O orçamento será definido pelo profissional.
+                    </label>
+
                 </div>
 
-                <div class="mb-3">
-                    <label class="info-label">Descrição</label>
-                    <textarea class="form-control form-control-sm" rows="3"
-                              th:field="*{descricao}" placeholder="Descreva o que precisa ser feito..."></textarea>
-                </div>
+            </div>
 
-                <div class="mb-3">
-    <label class="info-label">Orçamento (R$)</label>
 
-    <input type="number" step="0.01"
-           class="form-control form-control-sm"
-           th:field="*{orcamento}"
-           placeholder="Ex: 1500.00"/>
+            <div class="bloco">
 
-    <div class="form-check mt-2">
-        <input class="form-check-input"
-               type="checkbox"
-               id="semOrcamento">
+                <label class="info-label">
+                    <i class="ti ti-calendar-week"></i>
+                    Dias de trabalho
+                </label>
 
-        <label class="form-check-label" for="semOrcamento">
-            O orçamento será definido pelo profissional.
-        </label>
+                <select
+                        th:field="*{diasTrabalho}"
+                        class="form-select"
+                        multiple
+                        size="7">
+
+                    <option value="SEGUNDA">SEGUNDA</option>
+                    <option value="TERCA">TERÇA</option>
+                    <option value="QUARTA">QUARTA</option>
+                    <option value="QUINTA">QUINTA</option>
+                    <option value="SEXTA">SEXTA</option>
+                    <option value="SABADO">SÁBADO</option>
+                    <option value="DOMINGO">DOMINGO</option>
+
+                </select>
+
+                <small class="text-muted">
+                    Segure Ctrl (ou Cmd no Mac) para selecionar mais de um dia.
+                </small>
+
+            </div>
+
+
+            <div class="bloco">
+
+                <label class="info-label">
+                    <i class="ti ti-tool"></i>
+                    Serviços necessários
+                </label>
+
+                <select
+                        name="servicosId"
+                        class="form-select"
+                        multiple
+                        size="7">
+
+                    <option
+                            th:each="s : ${servicos}"
+                            th:value="${s.id}"
+                            th:text="${s.nome}">
+                    </option>
+
+                </select>
+
+                <small class="text-muted">
+                    Segure Ctrl (ou Cmd no Mac) para selecionar mais de um serviço.
+                </small>
+
+            </div>
+
+
+            <button
+                    type="submit"
+                    class="btn-principal">
+
+                <i class="ti ti-check"></i>
+                Criar Serviço
+
+            </button>
+
+        
+
+        <a
+                th:href="@{/}"
+                class="btn-secundario">
+
+            <i class="ti ti-arrow-left"></i>
+            Cancelar
+
+        </a>
+</form>
     </div>
+
 </div>
 
-                <div class="mb-3">
-    <label class="info-label">Dias de trabalho</label>
-
-    <select th:field="*{diasTrabalho}" multiple
-            class="form-select form-select-sm" size="7">
-        <option value="SEGUNDA">SEGUNDA</option>
-        <option value="TERCA">TERÇA</option>
-        <option value="QUARTA">QUARTA</option>
-        <option value="QUINTA">QUINTA</option>
-        <option value="SEXTA">SEXTA</option>
-        <option value="SABADO">SÁBADO</option>
-        <option value="DOMINGO">DOMINGO</option>
-    </select>
-
-    <small class="text-muted" style="font-size:10px;">
-        Segure Ctrl (ou Cmd no Mac) para selecionar mais de um dia.
-    </small>
-</div>
-
-                <div class="mb-3">
-    <label class="info-label">Serviços necessários</label>
-    <select name="servicosId" multiple class="form-select form-select-sm" size="6">
-        <option th:each="s : ${servicos}"
-                th:value="${s.id}"
-                th:text="${s.nome}">
-        </option>
-    </select>
-    <small class="text-muted" style="font-size: 10px;">
-        Segure Ctrl (ou Cmd no Mac) para selecionar mais de um
-    </small>
-</div>
-
-                <button type="submit" class="btn-editar">Criar servico</button>
-            </form>
-
-            <a th:href="@{/}" class="btn-editar">Cancelar</a>
-        </div>
-    </div>
-    
-    <script>
+   <script>
 document.getElementById("semOrcamento").addEventListener("change", function () {
+
     const campo = document.querySelector("[name='orcamento']");
 
     if (this.checked) {
         campo.value = 0;
         campo.readOnly = true;
+        campo.style.background = "#f4f6f9";
     } else {
-        campo.readOnly = false;
         campo.value = "";
+        campo.readOnly = false;
+        campo.style.background = "white";
     }
+
 });
 </script>
+</div>
 </body>
 </html>

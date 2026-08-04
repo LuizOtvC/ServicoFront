@@ -1,307 +1,668 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Detalhes do Serviço</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
-    <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
-            padding: 2rem 1rem;
-        }
-        .page-title {
-            color: #1a1a2e;
-            font-weight: 700;
-            font-size: 22px;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .btn-voltar {
-            display: block;
-            width: fit-content;
-            margin: 0 auto 1.5rem;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.45rem 1.2rem;
-            font-size: 13px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-voltar:hover { background: #2d2d50; color: white; }
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Detalhes do Serviço</title>
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+        <style>
+            :root {
+                --navy: #1a1a2e;
+                --navy-hover: #2d2d50;
+                --accent: #2E5395;
+                --text: #1c1f2b;
+                --text-muted: #767a85;
+                --border: #e6e8ec;
+                --border-strong: #d7dae0;
+                --chip-blue-bg: #eef2fb;
+                --chip-blue-border: #d0d9f5;
+                --chip-blue-text: #2E5395;
+                --chip-neutral-bg: #f2f3f5;
+                --chip-neutral-border: #e1e3e8;
+                --chip-neutral-text: #51555f;
+                --danger: #b3261e;
+                --danger-bg: #fdecea;
+                --danger-border: #f3c6c2;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                background: #ffffff;
+                margin: 0;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                color: var(--text);
+            }
 
-        .projeto-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            border: none;
-            padding: 1.5rem;
-            max-width: 520px;
-            margin: 0 auto;
-        }
-        .projeto-titulo {
-            font-size: 19px;
-            font-weight: 700;
-            color: #1a1a2e;
-            margin: 0 0 6px;
-        }
-        .projeto-status {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 600;
-            background: #d4edda;
-            color: #155724;
-            border-radius: 20px;
-            padding: 3px 12px;
-            margin-bottom: 1rem;
-        }
-        .projeto-servicos {
-            font-size: 12px;
-            color: #666;
-            margin: 0 0 1rem;
-        }
-        .projeto-servicos span {
-            display: inline-block;
-            background: #f0f4ff;
-            border: 1px solid #d0d9f5;
-            border-radius: 20px;
-            padding: 2px 8px;
-            margin: 2px 4px 2px 0;
-            font-size: 11px;
-            color: #2E5395;
-        }
+            /* header */
+            .header-bar{
+                background:transparent;
+                border:none;
+                margin-bottom:2rem;
+            }
 
-        .projeto-detalhes {
-            border-top: 1px solid #f0f0f0;
-            padding-top: 12px;
-        }
-        .detalhe-row {
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 8px;
-        }
-        .detalhe-row strong {
-            color: #1a1a2e;
-            display: block;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 2px;
-        }
-        .detalhe-row .valor {
-            font-size: 14px;
-            color: #333;
-        }
-        .detalhe-row .valor a {
-            color: #2E5395;
-            text-decoration: none;
-        }
-        .detalhe-row .valor a:hover {
-            text-decoration: underline;
-        }
+            .header-inner{
+                max-width:1120px;
+                margin:0 auto;
+                padding:0;
+            }
+            .header-top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 1.1rem;
+            }
+            .back-link {
+                color: #b7bbd4;
+                text-decoration: none;
+                font-size: 13px;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+            }
+            .back-link:hover {
+                color: #fff;
+            }
+            .eyebrow-id {
+                color: #7c81a0;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+            }
+            .header-title-row {
+                display: flex;
+                align-items: flex-start;
+                gap: 14px;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .title {
+                font-size: 25px;
+                font-weight: 700;
+                color:#495057;
+                margin: 0;
+                line-height: 1.3;
+            }
 
-        .btn-proposta {
-            display: block;
-            width: 100%;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.6rem;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 1.25rem;
-            transition: background 0.2s;
-        }
-        .btn-proposta:hover { background: #2d2d50; color: white; }
+            .status-pill {
+                display: inline-block;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.4px;
+                border-radius: 20px;
+                padding: 4px 11px;
+                margin-top: 4px;
+            }
+            .status-aberto {
+                background: #d4edda;
+                color: #155724;
+            }
+            .status-em_andamento {
+                background: #cce5ff;
+                color: #004085;
+            }
+            .status-concluido {
+                background: #d1ecf1;
+                color: #0c5460;
+            }
+            .status-cancelado {
+                background: #f8d7da;
+                color: #721c24;
+            }
+            .status-arquivado {
+                background: #e2e3e5;
+                color: #383d41;
+            }
 
-        .btn-remover {
-            display: block;
-            width: 100%;
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f1b0b7;
-            border-radius: 8px;
-            padding: 0.55rem;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 0.75rem;
-            transition: background 0.2s;
-        }
-        .btn-remover:hover { background: #f1b0b7; }
-    </style>
-</head>
-<body>
-    <div style="max-width: 520px; margin: 0 auto;">
+            /* content shell */
+            .content {
+                max-width: 1120px;
+                margin: 0 auto;
+                padding: 0 2rem 4rem;
+            }
+            .alert-danger {
+                margin-top: 1.5rem;
+                border-radius: 6px;
+                font-size: 13px;
+            }
 
-        <a th:href="@{/}" class="btn-voltar">
-    <i class="ti ti-arrow-left"></i> Voltar
-</a>
+            /* stepper */
+            .stepper {
+                display: flex;
+                align-items: flex-start;
+                list-style: none;
+                padding: 0;
+                margin: 1.75rem 0 2.5rem;
+            }
+            .step {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 6px;
+                flex: 0 0 auto;
+                width: 96px;
+            }
+            .step-dot {
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+                font-weight: 700;
+                border: 2px solid var(--border-strong);
+                color: var(--text-muted);
+                background: #fff;
+            }
+            .step.is-complete .step-dot {
+                background: var(--navy);
+                border-color: var(--navy);
+                color: #fff;
+            }
+            .step.is-active .step-dot {
+                border-color: var(--accent);
+                color: var(--accent);
+                box-shadow: 0 0 0 3px rgba(46,83,149,0.12);
+            }
+            .step-label {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--text-muted);
+                text-align: center;
+            }
+            .step.is-complete .step-label, .step.is-active .step-label {
+                color: var(--text);
+            }
+            .step-line {
+                flex: 1 1 auto;
+                height: 2px;
+                background: var(--border-strong);
+                margin-top: 12px;
+            }
+            .step-line.is-filled {
+                background: var(--navy);
+            }
 
-        <h2 class="page-title">Detalhes do serviço</h2>
+            .terminated-banner {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 0.85rem 1rem;
+                margin: 1.75rem 0 2.5rem;
+                border: 1px solid var(--danger-border);
+                background: var(--danger-bg);
+                color: var(--danger);
+                border-radius: 6px;
+                font-size: 13px;
+            }
 
-        <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+            /* two-column layout */
+            .layout {
+                display: grid;
+                grid-template-columns: minmax(0,1fr) 300px;
+                gap: 3rem;
+                align-items: start;
+            }
 
-        <div th:if="${projeto}" class="projeto-card">
-            <p class="projeto-titulo" th:text="${projeto.titulo}">Título</p>
-            <span class="projeto-status" th:text="${projeto.status}">ABERTO</span>
+            /* main column sections */
+            .section {
+                padding-top: 1.75rem;
+                border-top: 1px solid var(--border);
+            }
+            .section:first-child {
+                padding-top: 0;
+                border-top: none;
+            }
+            .section-label {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: var(--text-muted);
+                margin-bottom: 0.85rem;
+            }
+            .section-label i {
+                color: var(--accent);
+                font-size: 14px;
+            }
+            .body-text {
+                font-size: 14.5px;
+                line-height: 1.7;
+                color: #333747;
+                margin: 0;
+            }
 
-            <p class="projeto-servicos">
-                <span th:each="s : ${projeto.servicos}" th:text="${s}">Serviço</span>
-            </p>
+            .chip-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .chip {
+                display: inline-block;
+                border-radius: 20px;
+                padding: 3px 11px;
+                font-size: 11.5px;
+                border: 1px solid;
+            }
+            .chip-blue {
+                background: var(--chip-blue-bg);
+                border-color: var(--chip-blue-border);
+                color: var(--chip-blue-text);
+            }
+            .chip-neutral {
+                background: var(--chip-neutral-bg);
+                border-color: var(--chip-neutral-border);
+                color: var(--chip-neutral-text);
+            }
 
-            <div class="projeto-detalhes">
-                <div class="detalhe-row">
-                    <strong>Descrição</strong>
-                    <span class="valor" th:text="${projeto.descricao}">—</span>
-                </div>
-                <div class="detalhe-row">
-    <strong>Orçamento</strong>
+            /* aside */
+            .aside {
+                border-left: 1px solid var(--border);
+                padding-left: 2rem;
+            }
+            .aside-block {
+                padding-bottom: 1.5rem;
+                margin-bottom: 1.5rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .aside-block:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+            .aside-label {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: var(--text-muted);
+                margin-bottom: 0.85rem;
+            }
+            .aside-label i {
+                color: var(--accent);
+                font-size: 14px;
+            }
 
-    <span class="valor" th:if="${projeto.orcamento > 0}">
-        R$ <span th:text="${projeto.orcamento}"></span>
-    </span>
+            .prop-row {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                padding: 5px 0;
+                font-size: 13px;
+            }
+            .prop-label {
+                color: var(--text-muted);
+            }
+            .prop-value {
+                color: var(--text);
+                font-weight: 600;
+                text-align: right;
+            }
+            .prop-value a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+            .prop-value a:hover {
+                text-decoration: underline;
+            }
 
-    <span class="valor" th:if="${projeto.orcamento == 0}">
-        A ser definido pelo profissional
-    </span>
-</div>
-                <div class="detalhe-row">
-    <strong>Dias de trabalho</strong>
+            .meter-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .meter-track {
+                flex: 1;
+                height: 7px;
+                background: var(--chip-neutral-bg);
+                border-radius: 20px;
+                overflow: hidden;
+            }
+            .meter-fill {
+                height: 100%;
+                border-radius: 20px;
+            }
+            .meter-fill-high {
+                background: #1f9d55;
+            }
+            .meter-fill-mid {
+                background: #d97706;
+            }
+            .meter-fill-low {
+                background: #c0392b;
+            }
+            .meter-value {
+                font-size: 14px;
+                font-weight: 700;
+                min-width: 42px;
+                text-align: right;
+            }
 
-    <div class="projeto-servicos">
-        <span th:each="dia : ${projeto.diasTrabalho}"
-              th:text="${dia}">
-        </span>
-    </div>
-</div>
-                <div class="detalhe-row">
-                    <strong>Publicado por</strong>
-                    <span class="valor">
-                        <a th:href="@{/perfilId/{id}(id=${projeto.usuarioId})}" th:text="${usuario.nome}">Nome do usuário</a>
-                    </span>
-                </div>              
-                <div class="detalhe-row">
-                    <strong>Criado em</strong>
-                    <span class="valor" th:text="${#temporals.format(projeto.criadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
-                </div>
-                <div class="detalhe-row" th:if="${projeto.propostaAceita != null}">
-                    <strong>Profissional selecionado</strong>
-                    <span class="valor">
-                        <a th:href="@{/perfilId/{id}(id=${projeto.propostaAceita.usuarioId})}" th:text="${projeto.propostaAceita.nomeUsuario}">
-                            Nome do usuário
-                        </a>
-                    </span>
+            .person-name {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                font-size: 13.5px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+            .person-name i {
+                color: #2e9e5b;
+                font-size: 16px;
+            }
+            .person-name a {
+                color: var(--text);
+                text-decoration: none;
+            }
+            .person-name a:hover {
+                color: var(--accent);
+            }
+
+            .action-list {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .btn-sys {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                width: 100%;
+                border: none;
+                border-radius: 6px;
+                padding: 0.55rem 0.8rem;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                text-decoration: none;
+                text-align: left;
+                transition: background 0.15s, border-color 0.15s;
+            }
+            .btn-sys-primary {
+                background: var(--navy);
+                color: #fff;
+            }
+            .btn-sys-primary:hover {
+                background: var(--navy-hover);
+                color: #fff;
+            }
+            .btn-sys-outline {
+                background: #fff;
+                color: var(--text);
+                border: 1px solid var(--border-strong);
+            }
+            .btn-sys-outline:hover {
+                background: #f7f7f8;
+            }
+            .btn-sys-danger {
+                background: var(--danger-bg);
+                color: var(--danger);
+                border: 1px solid var(--danger-border);
+            }
+            .btn-sys-danger:hover {
+                background: #fbdedb;
+            }
+            .toolbar-note {
+                font-size: 12.5px;
+                color: var(--text-muted);
+                font-style: italic;
+            }
+
+            .form-label {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text);
+            }
+
+            @media (max-width: 860px) {
+                .header-inner {
+                    padding: 1.1rem 1.25rem 1.35rem;
+                }
+                .content {
+                    padding: 0 1.25rem 3rem;
+                }
+                .layout {
+                    grid-template-columns: 1fr;
+                    gap: 2rem;
+                }
+                .aside {
+                    border-left: none;
+                    padding-left: 0;
+                    border-top: 1px solid var(--border);
+                    padding-top: 1.75rem;
+                }
+                .step-label {
+                    display: none;
+                }
+                .step {
+                    width: auto;
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+        <div class="content">
+
+            <div class="header-bar">
+                <div class="header-inner">
+
+                    <div class="header-title-row" th:if="${projeto}">
+                        <h1 class="title" th:text="${projeto.titulo}"></h1>
+
+                        <span class="status-pill"
+                              th:text="${projeto.status}"
+                              th:classappend="'status-' + ${#strings.toLowerCase(projeto.status)}">
+                        </span>
+                    </div>
+
                 </div>
             </div>
 
-            <form th:if="${projeto.propostaAceita != null and usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
-                  th:action="@{/recusar/{id}(id=${projeto.propostaAceita.id})}" method="post">
-                <input type="hidden" name="projetoId" th:value="${projeto.id}"/>
-
-    <button type="submit" class="btn-remover">
-        Remover profissional
-    </button>
-            </form>
-            
-            <br>
-<div class="detalhe-row" th:if="${usuarioLogadoId != projeto.usuarioId}">
-    <strong>Sua compatibilidade</strong>
-    <span class="valor">
-        <span th:text="${#numbers.formatDecimal(scoreProjeto * 100, 1, 1)}">0</span>%
-    </span>
-</div>
-            
-
-            <a th:if="${usuarioLogadoId != projeto.usuarioId and !jaEnviouProposta}"
-   th:href="@{/proposta(projetoId=${projeto.id})}"
-   class="btn-proposta">
-    Enviar proposta
-</a>
-            
-            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
-      th:action="@{/propostas/{id}(id=${projeto.id})}"
-      method="get">
-    <button type="submit" class="btn-proposta">
-        Ver propostas recebidas
-    </button>
-</form>
-
-<p th:if="${usuarioLogadoId != projeto.usuarioId and jaEnviouProposta}"
-   style="text-align:center; font-size:13px; color:#888; margin-top:1.25rem;">
-    Você já enviou uma proposta para este serviço.
-</p>
-            <form th:if="${usuarioLogadoId == projeto.usuarioId
-              and projeto.status == 'ABERTO'
-              and projeto.propostaAceita != null}"
-      th:action="@{/andamento/{id}(id=${projeto.id})}" method="post">
-    <button type="submit" class="btn-proposta">
-        Marcar como Em andamento
-    </button>
-</form>
-            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
-      th:action="@{/concluido/{id}(id=${projeto.id})}" method="post">
-    <button type="submit" class="btn-proposta">Marcar como Concluido</button>
-</form>
 
 
-<div th:if="${participou and projeto.status == 'CONCLUIDO' and !jaAvaliou}"
-     class="mt-3 p-3 border rounded">
+            <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
-    <h5>Avaliação</h5>
+            <div th:if="${projeto}"
+                 th:with="terminado=${projeto.status == 'CANCELADO' or projeto.status == 'ARQUIVADO'},
+                 emAndamentoOuMais=${projeto.status == 'EM_ANDAMENTO' or projeto.status == 'CONCLUIDO'},
+                 concluido=${projeto.status == 'CONCLUIDO'}">
 
-    <p>Avalie a outra pessoa que participou deste serviço.</p>
+                <div class="terminated-banner" th:if="${terminado}">
+                    <i class="ti ti-circle-x"></i>
+                    <span>Este serviço foi encerrado como <strong th:text="${#strings.toLowerCase(projeto.status)}">cancelado</strong> e não segue o fluxo padrão de andamento.</span>
+                </div>
 
-    <form th:action="@{/criar/{id}(id=${projeto.id})}" method="post">
+                <ol class="stepper" th:unless="${terminado}">
+                    <li class="step" th:classappend="${emAndamentoOuMais} ? 'is-complete' : 'is-active'">
+                        <span class="step-dot">
+                            <i class="ti ti-check" th:if="${emAndamentoOuMais}"></i>
+                            <span th:unless="${emAndamentoOuMais}">1</span>
+                        </span>
+                        <span class="step-label">Aberto</span>
+                    </li>
+                    <li class="step-line" th:classappend="${emAndamentoOuMais} ? 'is-filled' : ''"></li>
+                    <li class="step" th:classappend="${concluido} ? 'is-complete' : (${projeto.status == 'EM_ANDAMENTO'} ? 'is-active' : '')">
+                        <span class="step-dot">
+                            <i class="ti ti-check" th:if="${concluido}"></i>
+                            <span th:unless="${concluido}">2</span>
+                        </span>
+                        <span class="step-label">Em andamento</span>
+                    </li>
+                    <li class="step-line" th:classappend="${concluido} ? 'is-filled' : ''"></li>
+                    <li class="step" th:classappend="${concluido} ? 'is-complete' : ''">
+                        <span class="step-dot">
+                            <i class="ti ti-check" th:if="${concluido}"></i>
+                            <span th:unless="${concluido}">3</span>
+                        </span>
+                        <span class="step-label">Concluído</span>
+                    </li>
+                </ol>
 
-        <div class="mb-3">
-            <label class="form-label">Nota</label>
+                <div class="layout">
 
-            <select name="nota" class="form-select" required>
-                <option value="">Selecione...</option>
-                <option value="5">5 ⭐</option>
-                <option value="4">4 ⭐</option>
-                <option value="3">3 ⭐</option>
-                <option value="2">2 ⭐</option>
-                <option value="1">1 ⭐</option>
-                <option value="0">0 ⭐</option>
-            </select>
+                    <!-- coluna principal -->
+                    <div class="main">
+
+                        <div class="section">
+                            <div class="section-label"><i class="ti ti-file-description"></i> Descrição</div>
+                            <p class="body-text" th:text="${projeto.descricao}">—</p>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-label"><i class="ti ti-tools"></i> Serviços</div>
+                            <div class="chip-row">
+                                <span class="chip chip-blue" th:each="s : ${projeto.servicos}" th:text="${s}">Serviço</span>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-label"><i class="ti ti-calendar"></i> Dias de trabalho</div>
+                            <div class="chip-row">
+                                <span class="chip chip-neutral" th:each="dia : ${projeto.diasTrabalho}" th:text="${dia}">—</span>
+                            </div>
+                        </div>
+
+                        <div class="section" th:if="${participou and projeto.status == 'CONCLUIDO' and !jaAvaliou}">
+                            <div class="section-label"><i class="ti ti-star"></i> Avaliação</div>
+                            <p class="body-text" style="margin-bottom:1rem;">Avalie a outra pessoa que participou deste serviço.</p>
+                            <form th:action="@{/criar/{id}(id=${projeto.id})}" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Nota</label>
+                                    <select name="nota" class="form-select" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="5">5 ⭐</option>
+                                        <option value="4">4 ⭐</option>
+                                        <option value="3">3 ⭐</option>
+                                        <option value="2">2 ⭐</option>
+                                        <option value="1">1 ⭐</option>
+                                        <option value="0">0 ⭐</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Comentário</label>
+                                    <textarea name="comentario" class="form-control" rows="3" placeholder="Conte como foi trabalhar com essa pessoa."></textarea>
+                                </div>
+                                <button type="submit" class="btn-sys btn-sys-primary" style="width:auto;">
+                                    <i class="ti ti-send"></i> Enviar avaliação
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <!-- barra lateral -->
+                    <div class="aside">
+
+                        <div class="aside-block">
+                            <div class="aside-label"><i class="ti ti-info-circle"></i> Detalhes</div>
+                            <div class="prop-row">
+                                <span class="prop-label">Orçamento</span>
+                                <span class="prop-value" th:if="${projeto.orcamento > 0}">R$ <span th:text="${projeto.orcamento}"></span></span>
+                                <span class="prop-value" th:if="${projeto.orcamento == 0}">A combinar</span>
+                            </div>
+                            <div class="prop-row">
+                                <span class="prop-label">Publicado por</span>
+                                <span class="prop-value"><a th:href="@{/perfilId/{id}(id=${projeto.usuarioId})}" th:text="${usuario.nome}">Nome</a></span>
+                            </div>
+                            <div class="prop-row">
+                                <span class="prop-label">Criado em</span>
+                                <span class="prop-value" th:text="${#temporals.format(projeto.criadoEm, 'dd/MM/yyyy')}">—</span>
+                            </div>
+                        </div>
+
+                        <div class="aside-block" th:if="${usuarioLogadoId != projeto.usuarioId}">
+                            <div class="aside-label"><i class="ti ti-target-arrow"></i> Sua compatibilidade</div>
+                            <div class="meter-row">
+                                <div class="meter-track">
+                                    <div class="meter-fill"
+                                         th:style="'width:' + ${scoreProjeto * 100} + '%'"
+                                         th:classappend="${scoreProjeto >= 0.7} ? 'meter-fill-high' : (${scoreProjeto >= 0.4} ? 'meter-fill-mid' : 'meter-fill-low')"></div>
+                                </div>
+                                <span class="meter-value"><span th:text="${#numbers.formatDecimal(scoreProjeto * 100, 1, 1)}">0</span>%</span>
+                            </div>
+                        </div>
+
+                        <div class="aside-block" th:if="${projeto.propostaAceita != null}">
+                            <div class="aside-label"><i class="ti ti-user-check"></i> Profissional selecionado</div>
+                            <span class="person-name">
+                                <i class="ti ti-circle-check"></i>
+                                <a th:href="@{/perfilId/{id}(id=${projeto.propostaAceita.usuarioId})}" th:text="${projeto.propostaAceita.nomeUsuario}">Nome</a>
+                            </span>
+                            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
+                                  th:action="@{/recusar/{id}(id=${projeto.propostaAceita.id})}" method="post">
+                                <input type="hidden" name="projetoId" th:value="${projeto.id}"/>
+                                <button type="submit" class="btn-sys btn-sys-danger">
+                                    <i class="ti ti-user-x"></i> Remover profissional
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="aside-block">
+                            <div class="aside-label"><i class="ti ti-bolt"></i> Ações</div>
+                            <div class="action-list">
+
+                                <a th:if="${usuarioLogadoId != projeto.usuarioId and !jaEnviouProposta}"
+                                   th:href="@{/proposta(projetoId=${projeto.id})}"
+                                   class="btn-sys btn-sys-primary">
+                                    <i class="ti ti-send"></i> Enviar proposta
+                                </a>
+
+                                <span class="toolbar-note" th:if="${usuarioLogadoId != projeto.usuarioId and jaEnviouProposta}">
+                                    Você já enviou uma proposta para este serviço.
+                                </span>
+
+                                <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
+                                      th:action="@{/propostas/{id}(id=${projeto.id})}" method="get">
+                                    <button type="submit" class="btn-sys btn-sys-outline">
+                                        <i class="ti ti-list"></i> Ver propostas recebidas
+                                    </button>
+                                </form>
+
+                                <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO' and projeto.propostaAceita != null}"
+                                      th:action="@{/andamento/{id}(id=${projeto.id})}" method="post">
+                                    <button type="submit" class="btn-sys btn-sys-primary">
+                                        <i class="ti ti-player-play"></i> Marcar como em andamento
+                                    </button>
+                                </form>
+
+                                <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'EM_ANDAMENTO'}"
+                                      th:action="@{/concluido/{id}(id=${projeto.id})}" method="post">
+                                    <button type="submit" class="btn-sys btn-sys-primary">
+                                        <i class="ti ti-check"></i> Marcar como concluído
+                                    </button>
+                                </form>
+
+                                <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
+                                      th:action="@{/cancelarr/{id}(id=${projeto.id})}" method="post">
+                                    <button type="submit" class="btn-sys btn-sys-danger">
+                                        <i class="ti ti-x"></i> Cancelar serviço
+                                    </button>
+                                </form>
+
+                                <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'CANCELADO' or projeto.status == 'ARQUIVADO'}"
+                                      th:action="@{/arquivar/{id}(id=${projeto.id})}" method="post">
+                                    <button type="submit" class="btn-sys btn-sys-outline">
+                                        <i class="ti ti-archive"></i> Arquivar serviço
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Comentário</label>
-
-            <textarea name="comentario"
-                      class="form-control"
-                      rows="3"
-                      placeholder="Conte como foi trabalhar com essa pessoa."></textarea>
-        </div>
-
-        <button type="submit" class="btn-proposta">
-            Enviar avaliação
-        </button>
-
-    </form>
-
-</div>
-            <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
-      th:action="@{/cancelarr/{id}(id=${projeto.id})}" method="post">
-    <button type="submit" class="btn-proposta">Cancelar Serviço</button>
-</form>
-
-<form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'CANCELADO' or projeto.status == 'ARQUIVADO'}"
-      th:action="@{/arquivar/{id}(id=${projeto.id})}" method="post">
-    <button type="submit" class="btn-proposta">Arquivar serviço</button>
-</form>
-        </div>
-
-    </div>
-</body>
+    </body>
 </html>
