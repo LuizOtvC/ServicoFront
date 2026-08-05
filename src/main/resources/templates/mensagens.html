@@ -141,6 +141,7 @@
             <p class="mensagem-texto" th:text="${m.mensagem}">Texto da mensagem</p>
 
             <span class="mensagem-data" th:text="${#temporals.format(m.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
+            <form th:action="@{/marcarLido}" method="post">
             <a th:if="${#strings.equalsIgnoreCase(m.status, 'PROPOSTA')}"
    th:href="@{/propostas/{id}(id=${m.projetoId})}"
    style="display: block; width: 100%; background: #1a1a2e; color: white; border-radius: 8px; 
@@ -148,6 +149,7 @@
           margin-top: 10px; transition: background 0.2s;">
     Ver propostas do serviço
 </a>
+            </form>
             <form th:action="@{/deletar/{id}(id=${m.id})}" method="post" style="margin:0;">
     <button type="submit" class="btn-apagar" title="Apagar mensagem">
         <i class="ti ti-trash"></i>

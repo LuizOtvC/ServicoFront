@@ -68,7 +68,7 @@ public class ProjetoController {
             return "redirect:/logar";
         }
         service.adicionarProjeto(projeto, token);
-        return "redirect:/";
+        return "redirect:/projetoFiltroUser";
     }
 
     @GetMapping("/projetoFiltro")

@@ -277,6 +277,20 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Senha</label>
+                        <input type="password"
+                               class="form-control"
+                               th:field="*{senha}"
+                               id="senha"
+                               placeholder="Mínimo 6 caracteres"
+                               required/>
+                        <small class="text-muted" style="font-size:10px; color: white !important;">
+                            A senha deve conter no minimo 6 caracteres, uma Letra Maiuscula, Um caractere especial, e um numero, ex: Teste8@
+                        </small>
+                    </div>
+
+
+                    <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email"
                                class="form-control"
@@ -291,16 +305,11 @@
                                class="form-control"
                                th:field="*{telefone}"
                                placeholder="(11) 99999-9999"/>
-                    </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Senha</label>
-                        <input type="password"
-                               class="form-control"
-                               th:field="*{senha}"
-                               id="senha"
-                               placeholder="Mínimo 6 caracteres"
-                               required/>
+                        <small class="text-muted" style="font-size:10px; color: white !important;">
+                            Informe um telefone válido no formato (11) 99999-9999.
+                            O telefone deve conter DDD e número com 11 dígitos.
+                        </small>
                     </div>
 
                     <div class="mb-4">

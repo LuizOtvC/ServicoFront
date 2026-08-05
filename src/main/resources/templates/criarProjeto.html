@@ -11,31 +11,30 @@
 
         body{
     margin:0;
-    background:#f4f6f9;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .container{
     width:100%;
-    max-width:900px;
-    margin:40px auto;
-    padding:0 20px;
+    max-width:1000px;
+    margin:50px auto 40px;
+    padding:0 30px;
 }
 
 .header{
     margin-bottom:35px;
 }
 
-.header h2{
-    color:#1a1a2e;
-    font-size:34px;
+.cabecalho h2{
+    color:white;
+    font-size:38px;
     font-weight:700;
-    margin-bottom:6px;
+    margin-bottom:8px;
 }
 
-.header p{
-    color:#6c757d;
-    font-size:15px;
+.cabecalho p{
+    color:#cbd5e1;
+    font-size:16px;
 }
 
 .form-section{
@@ -45,26 +44,28 @@
 .section-title{
     font-size:13px;
     font-weight:700;
-    color:#6c757d;
+    color:#bfdbfe;
     text-transform:uppercase;
     letter-spacing:.5px;
     margin-bottom:18px;
     padding-bottom:8px;
-    border-bottom:1px solid #dcdfe4;
+    border-bottom:1px solid rgba(255,255,255,0.25);
 }
 
 .info-label{
     display:block;
-    font-size:13px;
+    font-size:14px;
     font-weight:600;
-    color:#1a1a2e;
-    margin-bottom:6px;
+    color:white;
+    margin-bottom:8px;
 }
 
 .form-control,
 .form-select{
-    border-radius:8px;
-    min-height:44px;
+    border-radius:10px;
+    min-height:45px;
+    background:white;
+    border:none;
 }
 
 .form-control:focus,
@@ -85,22 +86,24 @@ textarea.form-control{
 }
 
 .btn-principal{
-    background:#1a1a2e;
-    color:white;
+    background:white;
+    color:#0d1b3e;
     border:none;
-    border-radius:8px;
-    padding:11px 26px;
+    border-radius:10px;
+    padding:12px 30px;
+    font-weight:600;
 }
 
 .btn-principal:hover{
-    background:#2d2d50;
+    background:#dbeafe;
+    color:#0d1b3e;
 }
 
 .btn-secundario{
-    border:1px solid #1a1a2e;
-    color:#1a1a2e;
-    border-radius:8px;
-    padding:11px 26px;
+    border:1px solid rgba(255,255,255,.5);
+    color:white;
+    border-radius:10px;
+    padding:12px 30px;
     text-decoration:none;
 }
 
@@ -110,10 +113,13 @@ textarea.form-control{
 }
 
     </style>
-
+<div th:replace="~{fragment/Background :: background-css}"></div>
 </head>
 
-<body>
+<body class="background-padrao">
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+    
+    
 <div class="container">
 <div class="pagina">
 
@@ -186,7 +192,7 @@ textarea.form-control{
                             type="checkbox"
                             id="semOrcamento">
 
-                    <label class="form-check-label" for="semOrcamento">
+                    <label class="form-check-label" for="semOrcamento" style="color:#dbeafe;">
                         O orçamento será definido pelo profissional.
                     </label>
 
@@ -218,7 +224,7 @@ textarea.form-control{
 
                 </select>
 
-                <small class="text-muted">
+                <small style="color:#dbeafe;">
                     Segure Ctrl (ou Cmd no Mac) para selecionar mais de um dia.
                 </small>
 
@@ -246,7 +252,7 @@ textarea.form-control{
 
                 </select>
 
-                <small class="text-muted">
+                <small style="color:#dbeafe;">
                     Segure Ctrl (ou Cmd no Mac) para selecionar mais de um serviço.
                 </small>
 

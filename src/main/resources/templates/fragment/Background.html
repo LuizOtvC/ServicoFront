@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <style th:fragment="background-css">
+            .background-padrao {
+                background: linear-gradient(135deg, #0d1b3e 0%, #12305e 45%, #1957a6 100%);
+                min-height:100vh;
+                font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                position: relative;
+                overflow-x: hidden;
+            }
+
+            .background-padrao::before,
+            .background-padrao::after {
+                content: "";
+                position: fixed;
+                border-radius: 50%;
+                opacity: 0.18;
+                z-index: 0;
+                pointer-events: none;
+            }
+
+            .background-padrao::before {
+                width: 480px;
+                height: 480px;
+                background: #3b82f6;
+                top: -180px;
+                right: -160px;
+                animation: flutuar1 14s ease-in-out infinite;
+            }
+
+            .background-padrao::after {
+                width: 420px;
+                height: 420px;
+                background: #60a5fa;
+                bottom: -160px;
+                left: -140px;
+                animation: flutuar2 16s ease-in-out infinite;
+            }
+
+            @keyframes flutuar1 {
+                0%, 100% {
+                    transform: translate(0,0) scale(1);
+                }
+
+                50% {
+                    transform: translate(-30px,25px) scale(1.05);
+                }
+            }
+
+            @keyframes flutuar2 {
+                0%, 100% {
+                    transform: translate(0,0) scale(1);
+                }
+
+                50% {
+                    transform: translate(25px,-20px) scale(1.05);
+                }
+            }
+        </style>
+    </head>
+
+</html>
