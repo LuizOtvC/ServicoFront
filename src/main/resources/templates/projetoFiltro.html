@@ -1,187 +1,238 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Servicos</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
-    <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
-            padding: 2rem 1rem;
-        }
-        .page-title {
-            color: #1a1a2e;
-            font-weight: 700;
-            font-size: 22px;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .projeto-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            border: none;
-            margin-bottom: 1rem;
-            padding: 1rem 1.25rem;
-            cursor: pointer;
-            transition: box-shadow 0.2s;
-        }
-        .projeto-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
-        .projeto-titulo { font-size: 15px; font-weight: 600; color: #1a1a2e; margin: 0 0 4px; }
-        .projeto-status {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            background: #d4edda;
-            color: #155724;
-            border-radius: 20px;
-            padding: 2px 10px;
-            margin-bottom: 8px;
-        }
-        .projeto-servicos { font-size: 12px; color: #666; margin: 0; }
-        .projeto-servicos span {
-            display: inline-block;
-            background: #f0f4ff;
-            border: 1px solid #d0d9f5;
-            border-radius: 20px;
-            padding: 2px 8px;
-            margin: 2px;
-            font-size: 11px;
-            color: #2E5395;
-        }
-        .btn-voltar {
-            display: block;
-            width: fit-content;
-            margin: 0 auto 1.5rem;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.45rem 1.2rem;
-            font-size: 13px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-voltar:hover { background: #2d2d50; color: white; }
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Servicos</title>
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+        <style>
+            .page-content{
+                max-width:520px;
+                margin:0 auto;
+                padding:2rem 1rem;
+                position:relative;
+                z-index:1;
+            }
 
-        .projeto-detalhes {
-            display: none;
-            margin-top: 10px;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 10px;
-        }
-        .projeto-detalhes.aberto { display: block; }
-        .detalhe-row { font-size: 12px; color: #555; margin-bottom: 4px; }
-        .detalhe-row strong { color: #1a1a2e; }
+            body {    
+                min-height: 100vh;
+            }
+            .page-title {
+                color: #ffffff;
+                font-weight: 700;
+                font-size: 22px;
+                margin-bottom: 1.5rem;
+                text-align: center;
+            }
+            .projeto-card {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+                border: none;
+                margin-bottom: 1rem;
+                padding: 1rem 1.25rem;
+                cursor: pointer;
+                transition: box-shadow 0.2s;
+            }
+            .projeto-card:hover {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            }
+            .projeto-titulo {
+                font-size: 15px;
+                font-weight: 600;
+                color: #1a1a2e;
+                margin: 0 0 4px;
+            }
+            .projeto-status {
+                display: inline-block;
+                font-size: 10px;
+                font-weight: 600;
+                background: #d4edda;
+                color: #155724;
+                border-radius: 20px;
+                padding: 2px 10px;
+                margin-bottom: 8px;
+            }
+            .projeto-servicos {
+                font-size: 12px;
+                color: #666;
+                margin: 0;
+            }
+            .projeto-servicos span {
+                display: inline-block;
+                background: #f0f4ff;
+                border: 1px solid #d0d9f5;
+                border-radius: 20px;
+                padding: 2px 8px;
+                margin: 2px;
+                font-size: 11px;
+                color: #2E5395;
+            }
+            .btn-voltar {
+                display: block;
+                width: fit-content;
+                margin: 0 auto 1.5rem;
+                background: #1a1a2e;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0.45rem 1.2rem;
+                font-size: 13px;
+                text-decoration: none;
+                transition: background 0.2s;
+            }
+            .btn-voltar:hover {
+                background: #2d2d50;
+                color: white;
+            }
 
-        .btn-ver-mais {
-            display: inline-block;
-            margin-top: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #2E5395;
-            text-decoration: none;
-        }
-        .btn-ver-mais:hover { text-decoration: underline; }
+            .projeto-detalhes {
+                display: none;
+                margin-top: 10px;
+                border-top: 1px solid #f0f0f0;
+                padding-top: 10px;
+            }
+            .projeto-detalhes.aberto {
+                display: block;
+            }
+            .detalhe-row {
+                font-size: 12px;
+                color: #555;
+                margin-bottom: 4px;
+            }
+            .detalhe-row strong {
+                color: #1a1a2e;
+            }
 
-        /* filtro compacto */
-        .filtro-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            padding: 0.85rem 1rem;
-            margin-bottom: 1.25rem;
-        }
-        .filtro-label {
-            display: block;
-            font-size: 10px;
-            font-weight: 600;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 4px;
-        }
-        .filtro-input {
-            width: 100%;
-            border: 1px solid #d9dde3;
-            border-radius: 8px;
-            padding: 6px 10px;
-            font-size: 13px;
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-        .filtro-details {
-            border: 1px solid #d9dde3;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            overflow: hidden;
-        }
-        .filtro-details summary {
-            padding: 8px 10px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #1a1a2e;
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .filtro-details summary::-webkit-details-marker { display: none; }
-        .filtro-count { color: #2E5395; font-weight: 600; }
-        .filtro-details-body {
-            padding: 6px 10px 10px;
-            border-top: 1px solid #f0f0f0;
-        }
-        .filtro-checkboxes { display: flex; flex-wrap: wrap; }
-        .filtro-check {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: #f0f4ff;
-            border: 1px solid #d0d9f5;
-            border-radius: 20px;
-            padding: 4px 10px;
-            margin: 3px 4px 3px 0;
-            font-size: 12px;
-            color: #2E5395;
-            cursor: pointer;
-        }
-        .filtro-check input[type="checkbox"] { accent-color: #1a1a2e; cursor: pointer; }
-        .filtro-actions { display: flex; gap: 8px; margin-top: 4px; }
-        .btn-filtrar {
-            flex: 1;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.5rem;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-filtrar:hover { background: #2d2d50; }
-        .btn-limpar {
-            flex: 1;
-            background: #f0f0f0;
-            color: #555;
-            border: none;
-            border-radius: 8px;
-            padding: 0.5rem;
-            font-size: 13px;
-            font-weight: 500;
-            text-align: center;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-limpar:hover { background: #e2e2e2; }
-    </style>
+            .btn-ver-mais {
+                display: inline-block;
+                margin-top: 10px;
+                font-size: 12px;
+                font-weight: 600;
+                color: #2E5395;
+                text-decoration: none;
+            }
+            .btn-ver-mais:hover {
+                text-decoration: underline;
+            }
+
+            /* filtro compacto */
+            .filtro-card {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+                padding: 0.85rem 1rem;
+                margin-bottom: 1.25rem;
+            }
+            .filtro-label {
+                display: block;
+                font-size: 10px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                margin-bottom: 4px;
+            }
+            .filtro-input {
+                width: 100%;
+                border: 1px solid #d9dde3;
+                border-radius: 8px;
+                padding: 6px 10px;
+                font-size: 13px;
+                color: #1a1a2e;
+                margin-bottom: 10px;
+            }
+            .filtro-details {
+                border: 1px solid #d9dde3;
+                border-radius: 8px;
+                margin-bottom: 8px;
+                overflow: hidden;
+            }
+            .filtro-details summary {
+                padding: 8px 10px;
+                font-size: 13px;
+                font-weight: 500;
+                color: #1a1a2e;
+                cursor: pointer;
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .filtro-details summary::-webkit-details-marker {
+                display: none;
+            }
+            .filtro-count {
+                color: #2E5395;
+                font-weight: 600;
+            }
+            .filtro-details-body {
+                padding: 6px 10px 10px;
+                border-top: 1px solid #f0f0f0;
+            }
+            .filtro-checkboxes {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .filtro-check {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                background: #f0f4ff;
+                border: 1px solid #d0d9f5;
+                border-radius: 20px;
+                padding: 4px 10px;
+                margin: 3px 4px 3px 0;
+                font-size: 12px;
+                color: #2E5395;
+                cursor: pointer;
+            }
+            .filtro-check input[type="checkbox"] {
+                accent-color: #1a1a2e;
+                cursor: pointer;
+            }
+            .filtro-actions {
+                display: flex;
+                gap: 8px;
+                margin-top: 4px;
+            }
+            .btn-filtrar {
+                flex: 1;
+                background: #1a1a2e;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0.5rem;
+                font-size: 13px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .btn-filtrar:hover {
+                background: #2d2d50;
+            }
+            .btn-limpar {
+                flex: 1;
+                background: #f0f0f0;
+                color: #555;
+                border: none;
+                border-radius: 8px;
+                padding: 0.5rem;
+                font-size: 13px;
+                font-weight: 500;
+                text-align: center;
+                text-decoration: none;
+                transition: background 0.2s;
+            }
+            .btn-limpar:hover {
+                background: #e2e2e2;
+            }
+        </style>
+    <div th:replace="~{fragment/Background :: background-css}"></div>
 </head>
-<body>
-    <div style="max-width: 520px; margin: 0 auto;">
+<body class="background-padrao">
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+    <div class="page-content">
 
         <a th:href="@{/}" class="btn-voltar">
             <i class="ti ti-arrow-left"></i> Voltar
@@ -196,7 +247,7 @@
                    th:value="${orcamentoMin}" placeholder="Sem mínimo" class="filtro-input"/>
 
             <details class="filtro-details" th:if="${not #lists.isEmpty(todosServicos)}"
-                      th:open="${servicosSelecionados != null and not #lists.isEmpty(servicosSelecionados)}">
+                     th:open="${servicosSelecionados != null and not #lists.isEmpty(servicosSelecionados)}">
                 <summary>
                     <span>Profissões</span>
                     <span class="filtro-count" th:if="${servicosSelecionados != null and not #lists.isEmpty(servicosSelecionados)}"
@@ -215,7 +266,7 @@
             </details>
 
             <details class="filtro-details"
-                      th:open="${diasSelecionados != null and not #lists.isEmpty(diasSelecionados)}">
+                     th:open="${diasSelecionados != null and not #lists.isEmpty(diasSelecionados)}">
                 <summary>
                     <span>Dias de trabalho</span>
                     <span class="filtro-count" th:if="${diasSelecionados != null and not #lists.isEmpty(diasSelecionados)}"
@@ -271,9 +322,9 @@
 
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
-        <div th:if="${#lists.isEmpty(projetos)}" class="text-center text-muted" style="margin-top: 3rem;">
-            <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
-            <p style="margin-top: 8px;">Nenhum serviço encontrado com esses filtros.</p>
+        <div th:if="${#lists.isEmpty(projetos)}" class="text-center text-muted" style="margin-top: 3rem; color: #D2DAE6">
+            <i class="ti ti-mood-empty" style="font-size: 40px; color: #D2DAE6"></i>
+            <p style="margin-top: 8px; color: #D2DAE6">Nenhum serviço encontrado com esses filtros.</p>
         </div>
 
         <div th:each="p : ${projetos}" class="projeto-card" th:onclick="|toggleDetalhes('detalhes-' + ${p.id})|">
@@ -320,8 +371,8 @@
 
     <script>
         function toggleDetalhes(id) {
-            const el = document.getElementById(id);
-            if (el) el.classList.toggle('aberto');
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('aberto');
         }
     </script>
 </body>

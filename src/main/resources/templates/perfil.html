@@ -6,29 +6,58 @@
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
         <style>
+            .page-content{
+                max-width: 650px;
+                margin: 0 auto;
+                padding: 2rem 1rem;
+                position: relative;
+                z-index: 1;
+            }
+            .page-title{
+                color: #ffffff;
+                font-size: 22px;
+                font-weight: 700;
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+            .empty-state{
+                color: rgba(255,255,255,.75);
+            }
+
             body {
-                background: #f4f6f9;
                 min-height: 100vh;
             }
 
-            .perfil-sidebar {
-                background: #1a1a2e;
-                min-height: 100vh;
-                padding: 2rem 1.5rem;
-                color: white;
-                position: fixed;
-                width: 260px;
+
+            .perfil-sidebar{
+                position: sticky;
+                top:125px;
+
+                width:340px;          /* antes era 260px */
+                min-height:650px;     /* deixa a caixa maior */
+
+                background:#1a1a2e;
+                color:white;
+                padding:32px;
+                border-radius:16px;
+
+                margin-left:24px;     /* afasta da borda */
+
+                box-shadow:0 8px 30px rgba(0,0,0,.15);
             }
 
-            .perfil-main {
-                margin-left: 260px;
-                min-height: 100vh;
+            .perfil-container{
+                display:flex;
+                align-items:flex-start;
+                gap:40px;
 
+                padding:30px 30px 0;
+            }
 
-                padding: 2rem;
-
-                width: calc(100% - 260px);
-                max-width: none;
+            .perfil-main{
+                flex:1;
+                padding-top:72px;
+                min-width:0;
             }
 
             .avatar {
@@ -45,11 +74,12 @@
                 margin: 0 auto 1rem;
             }
 
-            .sidebar-nome {
-                font-size: 16px;
-                font-weight: 600;
-                text-align: center;
-                margin-bottom: 4px;
+            .sidebar-nome{
+                font-size:16px;
+                font-weight:600;
+                text-align:center;
+                margin-bottom:4px;
+                color:white;
             }
 
             .sidebar-email {
@@ -61,7 +91,7 @@
 
             .sidebar-info {
                 font-size: 12px;
-                color: #adb5bd;
+                color: white;
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -97,10 +127,11 @@
                 color: #adb5bd;
                 margin: 0;
             }
-            .rep-value {
-                font-size: 20px;
-                font-weight: 700;
-                margin: 0;
+            .rep-value{
+                font-size:20px;
+                font-weight:700;
+                margin:0;
+                color:white;
             }
 
             .status-badge {
@@ -130,7 +161,7 @@
             .section-title {
                 font-size: 13px;
                 font-weight: 700;
-                color: #6c757d;
+                color: white;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 margin-bottom: 1rem;
@@ -209,23 +240,23 @@
                 color: white;
             }
 
-            .btn-outline-dark-custom {
-                background: none;
-                color: #1a1a2e;
-                border: 1px solid #1a1a2e;
-                border-radius: 8px;
-                padding: 0.5rem 1.2rem;
-                font-size: 13px;
-                font-weight: 500;
-                text-decoration: none;
-                transition: all 0.2s;
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
+            .btn-outline-dark-custom{
+                background:none;
+                color:white;
+                border:1px solid rgba(255,255,255,.35);
+                border-radius:8px;
+                padding:.5rem 1.2rem;
+                font-size:13px;
+                text-decoration:none;
+                display:inline-flex;
+                justify-content:center;
+                align-items:center;
+                gap:6px;
             }
-            .btn-outline-dark-custom:hover {
-                background: #1a1a2e;
-                color: white;
+
+            .btn-outline-dark-custom:hover{
+                background:white;
+                color:#1a1a2e;
             }
 
             .dia-badge {
@@ -245,114 +276,123 @@
                 font-style: italic;
             }
         </style>
-    </head>
-    <body>
+    <div th:replace="~{fragment/Background :: background-css}"></div>
+</head>
+<body class="background-padrao">
 
-        <div th:if="${errorMessage}"
-             class="alert alert-danger m-3" role="alert">
-            <span th:text="${errorMessage}"></span>
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+    <div th:if="${errorMessage}"
+         class="alert alert-danger m-3">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <div th:if="${usuario != null}" class="perfil-container">
+
+        <div class="perfil-sidebar">
+            <div class="avatar" id="avatar-initials">?</div>
+            <p class="sidebar-nome" id="header-nome" th:text="${usuario.nome}">Nome</p>
+            <p class="sidebar-email" th:text="${usuario.email}">email</p>
+
+            <div class="sidebar-info">
+                <i class="ti ti-phone"></i>
+                <span th:text="${usuario.telefone}">—</span>
+            </div>
+
+            <div class="sidebar-info">
+                <i class="ti ti-file-description"></i>
+                <span th:if="${usuario.descricao != null and !#strings.isEmpty(usuario.descricao)}"
+                      th:text="${usuario.descricao}">—</span>
+                <span th:if="${usuario.descricao == null or #strings.isEmpty(usuario.descricao)}"
+                      style="color: #6c757d; font-style: italic;">Sem descrição</span>
+            </div>
+
+            <div class="rep-badge">
+                <i class="ti ti-star"></i>
+                <div>
+                    <p class="rep-label">Reputação</p>
+                    <p class="rep-value" th:text="${usuario.reputacao}">0</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <span class="status-badge status-ativo"    th:if="${usuario.status == 'ATIVO'}">● Ativo</span>
+                <span class="status-badge status-inativo"  th:if="${usuario.status == 'INATIVO'}">● Inativo</span>
+                <span class="status-badge status-arquivado" th:if="${usuario.status == 'ARQUIVADO'}">● Arquivado</span>
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 8px;">
+                <a th:href="@{/atualizar}" class="btn-primary-dark">
+                    <i class="ti ti-edit"></i> Editar perfil
+                </a>
+                <a th:href="@{/}" class="btn-outline-dark-custom" style="color: white; border-color: rgba(255,255,255,0.3);">
+                    <i class="ti ti-arrow-left"></i> Voltar
+                </a>
+            </div>
         </div>
 
-        <div th:if="${usuario != null}" style="display: flex;">
+        <!-- Main -->
+        <div class="perfil-main">
 
-            <!-- Sidebar -->
-            <div class="perfil-sidebar">
-                <div class="avatar" id="avatar-initials">?</div>
-                <p class="sidebar-nome" id="header-nome" th:text="${usuario.nome}">Nome</p>
-                <p class="sidebar-email" th:text="${usuario.email}">email</p>
+            <div class="page-content">
 
-                <div class="sidebar-info">
-                    <i class="ti ti-phone"></i>
-                    <span th:text="${usuario.telefone}">—</span>
+                <!-- Dias de trabalho -->
+                <div class="section-title">
+                    <i class="ti ti-calendar-week"></i> Dias de trabalho
+                </div>
+                <div th:if="${usuario.diasTrabalho != null and !#lists.isEmpty(usuario.diasTrabalho)}">
+                    <span th:each="dia : ${usuario.diasTrabalho}" class="dia-badge" th:text="${dia}"></span>
+                </div>
+                <p class="vazio-msg" th:if="${usuario.diasTrabalho == null or #lists.isEmpty(usuario.diasTrabalho)}">
+                    Nenhum dia informado
+                </p>
+
+                <!-- Habilidades -->
+                <div class="section-title">
+                    <i class="ti ti-tool"></i> Habilidades
                 </div>
 
-                <div class="sidebar-info">
-                    <i class="ti ti-file-description"></i>
-                    <span th:if="${usuario.descricao != null and !#strings.isEmpty(usuario.descricao)}"
-                          th:text="${usuario.descricao}">—</span>
-                    <span th:if="${usuario.descricao == null or #strings.isEmpty(usuario.descricao)}"
-                          style="color: #6c757d; font-style: italic;">Sem descrição</span>
-                </div>
+                <p class="vazio-msg" th:if="${#lists.isEmpty(habilidades)}">
+                    Nenhuma habilidade cadastrada ainda.
+                </p>
 
-                <div class="rep-badge">
-                    <i class="ti ti-star"></i>
-                    <div>
-                        <p class="rep-label">Reputação</p>
-                        <p class="rep-value" th:text="${usuario.reputacao}">0</p>
+                <div th:each="h : ${habilidades}" class="habilidade-row">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="habilidade-nome" th:text="${h.nomeServico}">Serviço</span>
+                        <span class="habilidade-nivel" th:text="${h.nivel}">Nível</span>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <form action="/servico/editar" method="post">
+                            <input type="hidden" name="idAntigo" th:value="${h.servicoId}"/>
+                            <button type="submit" class="btn-acao btn-editar-hab">Editar</button>
+                        </form>
+                        <form action="/servico/deletar" method="post">
+                            <input type="hidden" name="idAntigo" th:value="${h.servicoId}"/>
+                            <button type="submit" class="btn-acao btn-remover-hab">Remover</button>
+                        </form>
                     </div>
                 </div>
 
-                <div style="margin-top: 1rem;">
-                    <span class="status-badge status-ativo"    th:if="${usuario.status == 'ATIVO'}">● Ativo</span>
-                    <span class="status-badge status-inativo"  th:if="${usuario.status == 'INATIVO'}">● Inativo</span>
-                    <span class="status-badge status-arquivado" th:if="${usuario.status == 'ARQUIVADO'}">● Arquivado</span>
-                </div>
-
-                <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 8px;">
-                    <a th:href="@{/atualizar}" class="btn-primary-dark">
-                        <i class="ti ti-edit"></i> Editar perfil
+                <div style="margin-top: 1.5rem;">
+                    <a th:href="@{/habilidades}" class="btn-primary-dark">
+                        <i class="ti ti-plus"></i> Adicionar habilidade
                     </a>
-                    <a th:href="@{/}" class="btn-outline-dark-custom" style="color: white; border-color: rgba(255,255,255,0.3);">
-                        <i class="ti ti-arrow-left"></i> Voltar
-                    </a>
                 </div>
+
             </div>
+        </div>
 
-            <!-- Main -->
-            <div class="perfil-main">
-                <div style="max-width: 1100px; width: 100%;">
+    </div>
 
-                    <!-- Dias de trabalho -->
-                    <div class="section-title">
-                        <i class="ti ti-calendar-week"></i> Dias de trabalho
-                    </div>
-                    <div th:if="${usuario.diasTrabalho != null and !#lists.isEmpty(usuario.diasTrabalho)}">
-                        <span th:each="dia : ${usuario.diasTrabalho}" class="dia-badge" th:text="${dia}"></span>
-                    </div>
-                    <p class="vazio-msg" th:if="${usuario.diasTrabalho == null or #lists.isEmpty(usuario.diasTrabalho)}">
-                        Nenhum dia informado
-                    </p>
+</div>
 
-                    <!-- Habilidades -->
-                    <div class="section-title">
-                        <i class="ti ti-tool"></i> Habilidades
-                    </div>
 
-                    <p class="vazio-msg" th:if="${#lists.isEmpty(habilidades)}">
-                        Nenhuma habilidade cadastrada ainda.
-                    </p>
 
-                    <div th:each="h : ${habilidades}" class="habilidade-row">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="habilidade-nome" th:text="${h.nomeServico}">Serviço</span>
-                            <span class="habilidade-nivel" th:text="${h.nivel}">Nível</span>
-                        </div>
-                        <div style="display: flex; gap: 6px;">
-                            <form action="/servico/editar" method="post">
-                                <input type="hidden" name="idAntigo" th:value="${h.servicoId}"/>
-                                <button type="submit" class="btn-acao btn-editar-hab">Editar</button>
-                            </form>
-                            <form action="/servico/deletar" method="post">
-                                <input type="hidden" name="idAntigo" th:value="${h.servicoId}"/>
-                                <button type="submit" class="btn-acao btn-remover-hab">Remover</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 1.5rem;">
-                        <a th:href="@{/habilidades}" class="btn-primary-dark">
-                            <i class="ti ti-plus"></i> Adicionar habilidade
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-
-            <script>
-                const nome = document.getElementById('header-nome')?.textContent?.trim() || '';
-                const initials = nome.split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
-                const av = document.getElementById('avatar-initials');
-                if (av && initials) av.textContent = initials;
-            </script>
-    </body>
+<script>
+    const nome = document.getElementById('header-nome')?.textContent?.trim() || '';
+    const initials = nome.split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
+    const av = document.getElementById('avatar-initials');
+    if (av && initials) av.textContent = initials;
+</script>
+</body>
 </html>

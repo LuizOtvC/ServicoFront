@@ -6,13 +6,15 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
     <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
+        .page-content {
+            max-width: 520px;
+            margin: 0 auto;
             padding: 2rem 1rem;
+            position: relative;
+            z-index: 1;
         }
         .page-title {
-            color: #1a1a2e;
+            color: #ffffff;
             font-weight: 700;
             font-size: 22px;
             margin-bottom: 1.5rem;
@@ -59,7 +61,7 @@
             margin: 0 auto 1.5rem;
             background: #1a1a2e;
             color: white;
-            border: none;
+            border: 1px solid rgba(255,255,255,0.15);
             border-radius: 8px;
             padding: 0.45rem 1.2rem;
             font-size: 13px;
@@ -85,10 +87,14 @@
             font-weight: 500;
         }
         .btn-ver-mais:hover { text-decoration: underline; }
+        .empty-state { color: rgba(255,255,255,0.75); }
     </style>
+    <div th:replace="~{fragment/Background :: background-css}"></div>
 </head>
-<body>
-    <div style="max-width: 520px; margin: 0 auto;">
+<body class="background-padrao">
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+    <div class="page-content">
 
         <a th:href="@{/}" class="btn-voltar">
             <i class="ti ti-arrow-left"></i> Voltar
@@ -98,7 +104,7 @@
 
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
-        <div th:if="${#lists.isEmpty(projetos)}" class="text-center text-muted" style="margin-top: 3rem;">
+        <div th:if="${#lists.isEmpty(projetos)}" class="text-center empty-state" style="margin-top: 3rem;">
             <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
             <p style="margin-top: 8px;">Você ainda não criou nenhum serviço.</p>
         </div>
@@ -119,22 +125,16 @@
             <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
                 <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
                 <p class="detalhe-row">
-    <strong>Orçamento:</strong>
-
-    <span th:if="${p.orcamento == 0}">
-        A ser definido pelo profissional
-    </span>
-
-    <span th:unless="${p.orcamento == 0}">
-        R$ <span th:text="${p.orcamento}">—</span>
-    </span>
-</p>
+                    <strong>Orçamento:</strong>
+                    <span th:if="${p.orcamento == 0}">A ser definido pelo profissional</span>
+                    <span th:unless="${p.orcamento == 0}">R$ <span th:text="${p.orcamento}">—</span></span>
+                </p>
                 <p class="detalhe-row">
-    <strong>Dias de trabalho:</strong>
-    <span th:each="dia, iter : ${p.diasTrabalho}">
-        <span th:text="${dia}"></span><span th:if="${!iter.last}">, </span>
-    </span>
-</p>
+                    <strong>Dias de trabalho:</strong>
+                    <span th:each="dia, iter : ${p.diasTrabalho}">
+                        <span th:text="${dia}"></span><span th:if="${!iter.last}">, </span>
+                    </span>
+                </p>
 
                 <a th:href="@{/projetoporId/{id}(id=${p.id})}"
                    class="btn-ver-mais"
