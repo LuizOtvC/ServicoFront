@@ -1,163 +1,327 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Mensagens</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
-    <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
-            padding: 2rem 1rem;
-        }
-        .page-title {
-            color: #1a1a2e;
-            font-weight: 700;
-            font-size: 22px;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .btn-voltar {
-            display: block;
-            width: fit-content;
-            margin: 0 auto 1.5rem;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.45rem 1.2rem;
-            font-size: 13px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-voltar:hover { background: #2d2d50; color: white; }
 
-        .mensagem-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            border: none;
-            margin-bottom: 1rem;
-            padding: 1rem 1.25rem;
-            transition: box-shadow 0.2s;
-        }
-        .mensagem-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Minhas Mensagens</title>
 
-        .mensagem-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-        .mensagem-projeto { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 0; }
-        .mensagem-projeto a { color: #1a1a2e; text-decoration: none; }
-        .mensagem-projeto a:hover { text-decoration: underline; }
+        <link rel="stylesheet"
+              th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
 
-        .mensagem-status {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            border-radius: 20px;
-            padding: 2px 10px;
-            white-space: nowrap;
-        }
-        .status-aceita    { background: #d4edda; color: #155724; }
-        .status-recusada  { background: #f8d7da; color: #721c24; }
-        .status-cancelada,
-        .status-cancelado { background: #f8d7da; color: #721c24; }
-        .status-em_andamento { background: #cce5ff; color: #004085; }
-        .status-concluido { background: #d1ecf1; color: #0c5460; }
-        .status-criado,
-        .status-enviada,
-        .status-proposta { background: #fff3cd; color: #856404; }
-        .status-default   { background: #e2e3e5; color: #383d41; }
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 
-        .mensagem-texto {
-            font-size: 13px;
-            color: #444;
-            margin: 6px 0 10px;
-        }
+        <style>
 
-        .mensagem-data {
-            font-size: 11px;
-            color: #aaa;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 8px;
-            display: block;
-        }
-        .btn-apagar {
-    background: #fff;
-    border: 1px solid #dc3545;
-    color: #dc3545;
-    border-radius: 6px;
-    padding: 4px 8px;
-    transition: 0.2s;
-}
+            body {
+                min-height: 100vh;
+            }
 
-.btn-apagar:hover {
-    background: #dc3545;
-    color: #fff;
-}
-    </style>
+            .mensagens-container {
+                width: 100%;
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 110px 25px 40px;
+            }
+
+            .page-title {
+                color: white !important;
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 30px;
+                text-align: left;
+            }
+
+            .texto-vazio {
+                color: rgba(255,255,255,.75);
+            }
+
+            .mensagem-card {
+                background: rgba(255, 255, 255, 0.07);
+                backdrop-filter: blur(18px) saturate(140%);
+                -webkit-backdrop-filter: blur(18px) saturate(140%);
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                border-radius: 12px;
+                box-shadow: 0 8px 24px rgba(3, 8, 20, 0.28);
+                margin-bottom: 1rem;
+                padding: 1rem 1.25rem;
+                transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+            }
+
+            .mensagem-card:hover {
+                background: rgba(255, 255, 255, 0.11);
+                border-color: rgba(255, 255, 255, 0.24);
+                box-shadow: 0 10px 28px rgba(3, 8, 20, 0.34);
+            }
+
+            .mensagem-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 7px;
+            }
+
+            .mensagem-projeto {
+                font-size: 14px;
+                font-weight: 600;
+                color: #ffffff !important;
+                margin: 0;
+            }
+
+            .mensagem-projeto a {
+                color: #ffffff !important;
+                text-decoration: none;
+            }
+
+            .mensagem-projeto a:hover {
+                text-decoration: underline;
+            }
+
+            .mensagem-status {
+                display: inline-block;
+                font-size: 10px;
+                font-weight: 600;
+                border-radius: 20px;
+                padding: 4px 10px;
+                white-space: nowrap;
+            }
+
+            .status-aceita {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .status-recusada {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .status-cancelada,
+            .status-cancelado {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .status-em_andamento {
+                background: #cce5ff;
+                color: #004085;
+            }
+
+            .status-concluido {
+                background: #d1ecf1;
+                color: #0c5460;
+            }
+
+            .status-criado,
+            .status-enviada,
+            .status-proposta {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .status-default {
+                background: #e2e3e5;
+                color: #383d41;
+            }
+
+            .mensagem-texto {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.85) !important;
+                margin: 6px 0 10px;
+            }
+
+            .mensagem-data {
+                font-size: 11px;
+                color: rgba(255, 255, 255, 0.55) !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.14);
+                padding-top: 8px;
+                display: block;
+            }
+
+            .btn-apagar {
+                background: #fff;
+                border: 1px solid #dc3545;
+                color: #dc3545;
+                border-radius: 6px;
+                padding: 4px 8px;
+                transition: 0.2s;
+            }
+
+            .btn-apagar:hover {
+                background: #dc3545;
+                color: #fff;
+            }
+
+            .btn-voltar {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+
+                background: transparent;
+                border: 1px solid rgba(255,255,255,.5);
+                color: white;
+
+                border-radius: 8px;
+                padding: 8px 15px;
+
+                font-size: 13px;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .btn-voltar:hover {
+                background: white;
+                color: #1a1a2e;
+            }
+
+            .btn-propostas {
+                display: block;
+                width: 100%;
+
+                background: #1a1a2e;
+                color: white !important;
+
+                border-radius: 8px;
+                padding: 8px;
+
+                font-size: 13px;
+                text-align: center;
+                text-decoration: none;
+
+                margin-top: 12px;
+                transition: background 0.2s;
+            }
+
+            .btn-propostas:hover {
+                background: #2d2d50;
+                color: white !important;
+            }
+
+            @media (max-width: 700px) {
+
+                .mensagens-container {
+                    padding: 100px 15px 30px;
+                }
+
+                .page-title {
+                    font-size: 24px;
+                }
+
+                .mensagem-header {
+                    align-items: flex-start;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
+                .mensagem-status {
+                    align-self: flex-start;
+                }
+            }
+
+        </style>
+
+    <div th:replace="~{fragment/Background :: background-css}"></div>
+
 </head>
-<body>
-    <div style="max-width: 520px; margin: 0 auto;">
 
-        <form th:action="@{/marcarLido}" method="post">
-    <button type="submit" class="btn-voltar">
-        <i class="ti ti-arrow-left"></i> Voltar
-    </button>
-</form>
+<body class="background-padrao">
 
-        <h2 class="page-title">Minhas mensagens</h2>
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
 
-        <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div class="mensagens-container">
 
-        <div th:if="${#lists.isEmpty(mensagem)}" class="text-center text-muted" style="margin-top: 3rem;">
-            <i class="ti ti-mail-opened" style="font-size: 40px;"></i>
-            <p style="margin-top: 8px;">Nenhuma mensagem por enquanto.</p>
+        <h2 class="page-title">
+            Minhas mensagens
+        </h2>
+
+        <div th:if="${erro}"
+             class="alert alert-danger"
+             th:text="${erro}">
         </div>
 
-        <div th:each="m : ${mensagem}" class="mensagem-card">
+        <div th:if="${#lists.isEmpty(mensagem)}"
+             class="text-center texto-vazio"
+             style="margin-top: 3rem;">
+
+            <i class="ti ti-mail-opened"
+               style="font-size: 40px;">
+            </i>
+
+            <p style="margin-top: 8px;">
+                Nenhuma mensagem por enquanto.
+            </p>
+
+        </div>
+
+        <div th:each="m : ${mensagem}"
+             class="mensagem-card">
+
             <div class="mensagem-header">
+
                 <p class="mensagem-projeto">
-                    <a th:href="@{/projetoporId/{id}(id=${m.projetoId})}" th:text="${m.nomeProjeto}">
+
+                    <a th:href="@{/projetoporId/{id}(id=${m.projetoId})}"
+                       th:text="${m.nomeProjeto}">
                         Título do serviço
                     </a>
+
                     <span th:if="${!m.lida}"
-                  style="display: inline-block; width: 8px; height: 8px; 
-                         background: #1957a6; border-radius: 50%; margin-left: 6px;">
-            </span>
+                          style="
+                          display:inline-block;
+                          width:8px;
+                          height:8px;
+                          background:#5fb8ff;
+                          border-radius:50%;
+                          margin-left:6px;
+                          box-shadow: 0 0 0 3px rgba(95,184,255,0.25);
+                          ">
+                    </span>
+
                 </p>
+
                 <span class="mensagem-status"
                       th:text="${m.status}"
                       th:classappend="'status-' + ${#strings.toLowerCase(m.status)}">
                     ACEITA
                 </span>
+
             </div>
 
-            <p class="mensagem-texto" th:text="${m.mensagem}">Texto da mensagem</p>
+            <p class="mensagem-texto"
+               th:text="${m.mensagem}">
+                Texto da mensagem
+            </p>
 
-            <span class="mensagem-data" th:text="${#temporals.format(m.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
-            <form th:action="@{/marcarLido}" method="post">
+            <span class="mensagem-data"
+                  th:text="${#temporals.format(m.enviadoEm, 'dd/MM/yyyy HH:mm')}">
+                —
+            </span>
+
             <a th:if="${#strings.equalsIgnoreCase(m.status, 'PROPOSTA')}"
-   th:href="@{/propostas/{id}(id=${m.projetoId})}"
-   style="display: block; width: 100%; background: #1a1a2e; color: white; border-radius: 8px; 
-          padding: 0.45rem; font-size: 13px; text-align: center; text-decoration: none; 
-          margin-top: 10px; transition: background 0.2s;">
-    Ver propostas do serviço
-</a>
-            </form>
-            <form th:action="@{/deletar/{id}(id=${m.id})}" method="post" style="margin:0;">
-    <button type="submit" class="btn-apagar" title="Apagar mensagem">
-        <i class="ti ti-trash"></i>
-    </button>
-</form>
-            
+               th:href="@{/propostas/{id}(id=${m.projetoId})}"
+               class="btn-propostas">
+
+                Ver propostas do serviço
+
+            </a>
+
+        </div>
+
+        <div style="margin-top: 25px;">
+
+            <a th:href="@{/}"
+               class="btn-voltar">
+
+                <i class="ti ti-arrow-left"></i>
+
+                Voltar
+
+            </a>
+
         </div>
 
     </div>
+
 </body>
 </html>
