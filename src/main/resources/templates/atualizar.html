@@ -2,147 +2,138 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8"/>
-        <title>Cadastro - ServiçoFinal</title>
+        <title>Atualizar Perfil - ServiçoFinal</title>
+
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-        <style>
-            body {
-                background: #f0f2f5;
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 1rem;
-            }
-            .card {
-                background: white;
-                border-radius: 12px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-                width: 100%;
-                max-width: 420px;
-                overflow: hidden;
-                border: none;
-            }
-            .card-header {
-                background: #1a1a2e;
-                padding: 1.4rem 1.5rem;
-                text-align: center;
-            }
-            .avatar {
-                width: 52px;
-                height: 52px;
-                border-radius: 50%;
-                background: #3a3a6e;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 18px;
-                font-weight: 600;
-                color: white;
-                margin: 0 auto 10px;
-            }
-            .card-header h4 {
-                color: white;
-                font-weight: 600;
-                margin: 0 0 2px;
-                font-size: 18px;
-            }
-            .card-header p  {
-                color: #adb5bd;
-                font-size: 12px;
-                margin: 0;
-            }
-            .card-body {
-                padding: 1.25rem 1.5rem;
-            }
-            .info-row {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 10px 0;
-                border-bottom: 1px solid #f0f0f0;
-            }
-            .info-row:last-of-type {
-                border-bottom: none;
-            }
-            .info-row i {
-                font-size: 17px;
-                color: #888;
-                width: 20px;
-                flex-shrink: 0;
-            }
-            .info-label {
-                font-size: 11px;
-                color: #aaa;
-                display: block;
-                margin-bottom: 1px;
-            }
-            .info-value {
-                font-size: 13px;
-                color: #1a1a2e;
-                font-weight: 500;
-            }
-            .rep-badge {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                background: #f0f4ff;
-                border: 1px solid #d0d9f5;
-                border-radius: 8px;
-                padding: 8px 12px;
-                margin-top: 1rem;
-            }
-            .rep-badge i  {
-                font-size: 20px;
-                color: #f5a623;
-            }
-            .rep-label {
-                font-size: 11px;
-                color: #666;
-                margin: 0;
-            }
-            .rep-value {
-                font-size: 16px;
-                font-weight: 600;
-                color: #1a1a2e;
-                margin: 0;
-                line-height: 1;
-            }
-            .btn-editar {
-                display: block;
-                width: 100%;
-                background: #1a1a2e;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                padding: 0.55rem;
-                font-size: 14px;
-                font-weight: 500;
-                cursor: pointer;
-                margin-top: 1rem;
-                text-align: center;
-                text-decoration: none;
-                transition: background 0.2s;
-            }
-            .btn-editar:hover {
-                background: #2d2d50;
-                color: white;
-            }
-        </style>
 
-    </head>
-    <body class="d-flex align-items-center justify-content-center py-4">
+    <div th:replace="~{fragment/Background :: background-css}"></div>
 
-        <div class="card shadow-sm" style="width: 100%; max-width: 420px;">
+    <style>
+        .page-content{
+            width:100%;
+            max-width:520px;
+            margin:50px auto 60px;
+            padding:0 20px;
+        }
 
-            <div class="card-header text-center">
-                <h4 class="mb-1">Atualizar</h4>
+        .card{
+            background: rgba(13, 27, 62, .72);
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius:20px;
+            box-shadow:0 20px 60px rgba(3,8,20,.40);
+            overflow:hidden;
+        }
+
+        .card-header{
+            background:transparent;
+            border-bottom:1px solid rgba(255,255,255,.16);
+            text-align:center;
+            padding:2rem 2rem 1.5rem;
+        }
+
+        .card-header h4{
+            color:white;
+            font-weight:700;
+            margin-bottom:6px;
+        }
+
+        .card-header p{
+            color:#cbd5e1;
+            margin:0;
+            font-size:14px;
+        }
+
+        .card-body{
+            padding:2rem;
+        }
+
+        .form-label{
+            color:white;
+            font-weight:600;
+            margin-bottom:8px;
+        }
+
+        .form-control,
+        .form-select{
+            border-radius:10px;
+            min-height:45px;
+            background:rgba(255,255,255,.94);
+            border:1px solid rgba(255,255,255,.25);
+            color:#1a1a2e;
+        }
+
+        .form-control:focus,
+        .form-select:focus{
+            background:white;
+            border-color:#60a5fa;
+            box-shadow:0 0 0 .2rem rgba(96,165,250,.25);
+        }
+
+        textarea.form-control{
+            min-height:120px;
+        }
+
+        small{
+            color:#cbd5e1 !important;
+        }
+
+        .btn-principal{
+            width:100%;
+            background:white;
+            color:#0d1b3e;
+            border:none;
+            border-radius:10px;
+            padding:12px;
+            font-weight:600;
+            transition:.2s;
+        }
+
+        .btn-principal:hover{
+            background:#dbeafe;
+            color:#0d1b3e;
+        }
+
+        .btn-secundario{
+            display:block;
+            width:100%;
+            margin-top:12px;
+            text-align:center;
+            text-decoration:none;
+            border:1px solid rgba(255,255,255,.5);
+            color:white;
+            border-radius:10px;
+            padding:12px;
+            transition:.2s;
+        }
+
+        .btn-secundario:hover{
+            background:rgba(255,255,255,.1);
+            border-color:white;
+            color:white;
+        }
+    </style>
+</head>
+
+<body class="background-padrao">
+
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+    <div class="page-content">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h4>Atualizar Perfil</h4>
                 <p>Atualize seus dados</p>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body">
 
                 <div th:if="${errorMessage}"
-                     class="alert alert-danger alerta-erro d-flex align-items-center gap-2 py-2" role="alert">
+                     class="alert alert-danger"
+                     role="alert">
                     <span th:text="${errorMessage}"></span>
                 </div>
 
@@ -154,30 +145,34 @@
                                class="form-control"
                                th:field="*{nome}"
                                placeholder="João Silva"
-                               required autofocus/>
+                               required
+                               autofocus/>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Telefone</label>
+
                         <input type="tel"
                                class="form-control"
                                th:field="*{telefone}"
                                placeholder="(11) 99999-9999"/>
-                        <small class="text-muted" style="font-size:10px;">
-        Informe um telefone válido no formato (11) 99999-9999.
-        O telefone deve conter DDD e número com 11 dígitos.
-    </small>
+
+                        <small>
+                            Informe um telefone válido no formato (11) 99999-9999.
+                            O telefone deve conter DDD e número com 11 dígitos.
+                        </small>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Descrição</label>
+
                         <textarea class="form-control"
                                   rows="3"
                                   th:field="*{descricao}"
                                   placeholder="Fale um pouco sobre você..."></textarea>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label class="form-label">Dias de trabalho</label>
 
                         <select th:field="*{diasTrabalho}"
@@ -195,24 +190,26 @@
 
                         </select>
 
-                        <small class="text-muted" style="font-size:10px;">
+                        <small>
                             Segure Ctrl (ou Cmd no Mac) para selecionar mais de um dia.
                         </small>
                     </div>
 
-                    <button type="submit" class="btn btn-editar w-100">
+                    <button type="submit" class="btn-principal">
                         Atualizar
                     </button>
 
                 </form>
 
-                <div class="text-center mt-3">
-                    <a th:href="@{/perfil}" class="btn btn-editar w-100">Cancelar atualização de perfil</a>
-                </div>
+                <a th:href="@{/perfil}" class="btn-secundario">
+                    Cancelar atualização de perfil
+                </a>
 
             </div>
+
         </div>
 
+    </div>
 
-    </body>
+</body>
 </html>

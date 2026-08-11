@@ -6,6 +6,8 @@ package com.main.servicoFinalFront.controller;
 
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoAtualizar;
+import com.main.servicoFinalFront.model.ServicoListar;
+import com.main.servicoFinalFront.model.UserPerfilDto;
 import com.main.servicoFinalFront.model.UsuarioServico;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -29,6 +33,19 @@ public class ServicoController {
     @Autowired
     private AuthService authService;
 
+    private String extrairMensagemDeErro(HttpClientErrorException e) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(e.getResponseBodyAsString());
+            if (root.has("message")) {
+                return root.get("message").asText();
+            }
+        } catch (Exception ex) {
+        }
+        return "Ocorreu um erro inesperado na comunicação.";
+    }
+    
+    
     @GetMapping("/habilidades")
     public String telaAdicionarServico(Model model, HttpSession session) {
         String token = (String) session.getAttribute("token");
@@ -37,6 +54,8 @@ public class ServicoController {
         }
         try {
             List<Servico> servicos = authService.listarServicos(token);
+            long naoLidas = authService.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
             model.addAttribute("servicos", servicos);
             model.addAttribute("dto", new UsuarioServico());
         } catch (HttpClientErrorException e) {
@@ -58,12 +77,29 @@ public class ServicoController {
 
         try {
             authService.adicionarServico(dto, token);
+            
         } catch (HttpClientErrorException e) {
-            model.addAttribute("errorMessage", "Você já possui essa habilidade no perfil!");
-            model.addAttribute("usuario", authService.VerPerfil(token));
-            model.addAttribute("servicos", authService.listarServicos(token));
-            return "perfil";
-        }
+
+    if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+        session.invalidate();
+        return "redirect:/logar";
+    }
+
+    String msg = extrairMensagemDeErro(e);
+
+    UserPerfilDto usuario = authService.VerPerfil(token);
+    List<Servico> servicos = authService.listarServicos(token);
+    List<ServicoListar> habilidades = authService.listarServicosId(token);
+    long naoLidas = authService.contarNaoLidas(token);
+
+    model.addAttribute("errorMessage", msg);
+    model.addAttribute("usuario", usuario);
+    model.addAttribute("servicos", servicos);
+    model.addAttribute("habilidades", habilidades);
+    model.addAttribute("naoLidas", naoLidas);
+
+    return "perfil";
+}
         return "redirect:/perfil";
     }
 

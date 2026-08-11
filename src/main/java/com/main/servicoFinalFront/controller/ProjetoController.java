@@ -55,21 +55,42 @@ public class ProjetoController {
             return "redirect:/logar";
         }
         List<Servico> servicos = service.listarServicos(token);
+        long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
         model.addAttribute("servicos", servicos);
         model.addAttribute("projeto", new ProjetoUserDto());
         return "criarProjeto";
     }
 
     @PostMapping("/projeto/criar")
-    public String criarProjeto(
-            @ModelAttribute ProjetoUserDto projeto, HttpSession session) {
-        String token = (String) session.getAttribute("token");
-        if (token == null) {
-            return "redirect:/logar";
-        }
+public String criarProjeto(@ModelAttribute ProjetoUserDto projeto,
+                           HttpSession session,
+                           Model model) {
+
+    String token = (String) session.getAttribute("token");
+    if (token == null) {
+        return "redirect:/logar";
+    }
+
+    try {
         service.adicionarProjeto(projeto, token);
         return "redirect:/projetoFiltroUser";
+
+    } catch (HttpClientErrorException e) {
+
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
+
+        model.addAttribute("errorMessage", extrairMensagemDeErro(e));
+        model.addAttribute("projeto", projeto);
+        model.addAttribute("servicos", service.listarServicos(token));
+        model.addAttribute("naoLidas", service.contarNaoLidas(token));
+
+        return "criarProjeto";
     }
+}
 
     @GetMapping("/projetoFiltro")
     public String projetoFiltro(
@@ -87,6 +108,9 @@ public class ProjetoController {
 
             List<ProjetoResposta> projetos = service
                     .listarProjetosComFiltro(token, orcamentoMin, servicosIds, diasSemana);
+            
+            long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
 
             model.addAttribute("projetos", projetos);
             model.addAttribute("todosServicos", todosServicos);
@@ -125,6 +149,8 @@ public class ProjetoController {
                 jaAvaliou = service.jaAvaliei(id, token);
             }
             Double scoreProjeto = service.getScoreProjeto(token, id);
+            long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
             model.addAttribute("scoreProjeto", scoreProjeto);
             model.addAttribute("projeto", projeto);
             model.addAttribute("usuario", usuario);
@@ -155,6 +181,8 @@ public class ProjetoController {
         }
         try {
             List<ProjetoListarDto> projetos = service.listarProjetosFiltroUsuario(token);
+            long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
             model.addAttribute("projetos", projetos);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {

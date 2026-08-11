@@ -41,6 +41,8 @@ public class PropostaController {
         }
         try {
             ProjetoResposta projeto = service.listarprojetoPorId(projetoId, token);
+            long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
             model.addAttribute("projeto", projeto);
             model.addAttribute("dto", new PropostaEnvioDto());
         } catch (HttpClientErrorException e) {
@@ -76,6 +78,8 @@ public class PropostaController {
         }
         try {
             List<PropostaRespostaDto> propostas = service.listarProjetoFiltro(token);
+            long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
             model.addAttribute("propostas", propostas);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
@@ -114,6 +118,8 @@ public class PropostaController {
         }
         try {
             List<PropostaRespostaDto> propostas = service.listarPropostas(token);
+            long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
             model.addAttribute("propostas", propostas);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
@@ -172,6 +178,8 @@ public String propostasDoProjetoComScore(@PathVariable Long id, HttpSession sess
         
         boolean temPropostaAceita = propostas.stream()
             .anyMatch(p -> "ACEITA".equals(p.getStatus()));
+        long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
         
         model.addAttribute("propostas", propostas);
         model.addAttribute("projetoId", id);

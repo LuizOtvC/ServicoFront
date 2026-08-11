@@ -34,7 +34,10 @@ public class MensagemController {
             return "redirect:/logar";
         }
         try {
+             service.marcarMensagensComoLidas(token);
             List<MensagemRespostaDto> mensagem = service.listarMensagens(token);
+            long naoLidas = service.contarNaoLidas((String) token);
+            model.addAttribute("naoLidas", naoLidas);
             model.addAttribute("mensagem", mensagem);
         } catch (HttpClientErrorException e) {
             e.printStackTrace();

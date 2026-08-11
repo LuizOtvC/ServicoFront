@@ -28,10 +28,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-/**
- *
- * @author Mateus
- */
+
 @Service
 public class AuthService {
 

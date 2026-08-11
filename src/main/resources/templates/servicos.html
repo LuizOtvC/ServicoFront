@@ -1,96 +1,185 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Adicionar Habilidade</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Adicionar Habilidade</title>
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+
+    <div th:replace="~{fragment/Background :: background-css}"></div>
+
     <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
+        .page-content{
+            flex: 1;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 1rem;
+            align-items: center;
+            padding: 30px 20px;
         }
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 420px;
-            overflow: hidden;
-            border: none;
+
+        .card{
+            background:transparent;
+            border:none;
+            box-shadow:none;
         }
-        .card-header {
-            background: #1a1a2e;
-            padding: 1.4rem 1.5rem;
-            text-align: center;
+
+        .card-header{
+            background:transparent;
+            text-align:center;
+            border:none;
+            padding-bottom:1.5rem;
         }
-        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
-        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
-        .card-body { padding: 1.25rem 1.5rem; }
-        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
-        .btn-editar {
-            display: block;
-            width: 100%;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.55rem;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 1rem;
-            text-align: center;
-            text-decoration: none;
-            transition: background 0.2s;
+
+        .card-header h4{
+            color:white;
+            font-weight:700;
+            font-size:30px;
+            margin-bottom:8px;
         }
-        .btn-editar:hover { background: #2d2d50; color: white; }
+
+        .card-header p{
+            color:#cbd5e1;
+            margin:0;
+        }
+
+        .card-body{
+            padding:0;
+        }
+
+        .info-label{
+            display:block;
+            color:white;
+            font-size:14px;
+            font-weight:600;
+            margin-bottom:8px;
+        }
+
+        .form-control,
+        .form-select{
+            border-radius:10px;
+            min-height:45px;
+            background:rgba(255,255,255,.94);
+            border:1px solid rgba(255,255,255,.25);
+        }
+
+        .form-control:focus,
+        .form-select:focus{
+            background:#fff;
+            border-color:#60a5fa;
+            box-shadow:0 0 0 .2rem rgba(96,165,250,.25);
+        }
+
+        .btn-principal{
+            width:100%;
+            background:white;
+            color:#0d1b3e;
+            border:none;
+            border-radius:10px;
+            padding:12px;
+            font-weight:600;
+            transition:.2s;
+            margin-top:20px;
+        }
+
+        .btn-principal:hover{
+            background:#dbeafe;
+            color:#0d1b3e;
+        }
+
+        .btn-secundario{
+            display:block;
+            width:100%;
+            margin-top:12px;
+            text-align:center;
+            text-decoration:none;
+            border:1px solid rgba(255,255,255,.5);
+            color:white;
+            border-radius:10px;
+            padding:12px;
+            transition:.2s;
+        }
+
+        .btn-secundario:hover{
+            background:rgba(255,255,255,.1);
+            color:white;
+            border-color:white;
+        }
     </style>
 </head>
-<body>
-    <div class="card">
-        <div class="card-header">
-            <h4>Adicionar Habilidade</h4>
-            <p>Selecione o serviço e seu nível</p>
-        </div>
-        <div class="card-body">
 
+<body class="background-padrao d-flex flex-column">
+
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+    <div class="page-content">
+
+        <div style="width:100%; max-width:460px;">
+        <div class="card">
+            
             <div th:if="${errorMessage}"
-                 class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
+                 class="alert alert-danger alerta-erro d-flex align-items-center gap-2 py-2" role="alert">
                 <span th:text="${errorMessage}"></span>
             </div>
 
-            <form action="/servicos" method="post" th:object="${dto}">
-                <div class="mb-3">
-                    <label class="info-label">Serviço</label>
-                    <select th:field="*{servicoId}" class="form-select form-select-sm">
-                        <option value="">Selecione um serviço</option>
-                        <option th:each="s : ${servicos}"
-                                th:value="${s.id}"
-                                th:text="${s.nome}">
-                        </option>
-                    </select>
+            
+            <div class="card-header">
+                <h4>Adicionar Habilidade</h4>
+                <p>Selecione o serviço e seu nível</p>
+            </div>
+
+            <div class="card-body">
+
+                <div th:if="${errorMessage}"
+                     class="alert alert-danger"
+                     role="alert">
+                    <span th:text="${errorMessage}"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label class="info-label">Nível</label>
-                    <select th:field="*{nivel}" class="form-select form-select-sm">
-                        <option value="">Selecione um nível</option>
-                        <option value="BASICO">Básico</option>
-                        <option value="INTERMEDIARIO">Intermediário</option>
-                        <option value="AVANCADO">Avançado</option>
-                    </select>
-                </div>
+                <form action="/servicos" method="post" th:object="${dto}">
 
-                <button type="submit" class="btn-editar">Adicionar</button>
-            </form>
+                    <div class="mb-3">
+                        <label class="info-label">
+                            <i class="ti ti-tool"></i> Serviço
+                        </label>
 
-            <a th:href="@{/perfil}" class="btn-editar">Voltar ao perfil</a>
+                        <select th:field="*{servicoId}" class="form-select">
+                            <option value="">Selecione um serviço</option>
+                            <option th:each="s : ${servicos}"
+                                    th:value="${s.id}"
+                                    th:text="${s.nome}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="info-label">
+                            <i class="ti ti-award"></i> Nível
+                        </label>
+
+                        <select th:field="*{nivel}" class="form-select">
+                            <option value="">Selecione um nível</option>
+                            <option value="BASICO">Básico</option>
+                            <option value="INTERMEDIARIO">Intermediário</option>
+                            <option value="AVANCADO">Avançado</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-principal">
+                        Adicionar
+                    </button>
+
+                </form>
+
+                <a th:href="@{/perfil}" class="btn-secundario">
+                    Voltar ao perfil
+                </a>
+
+            </div>
+
         </div>
+
+    </div>
     </div>
 </body>
 </html>

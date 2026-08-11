@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, Model model) {
         session.setAttribute("token", "");
         return "redirect:/logar";
     }
@@ -176,10 +176,12 @@ public class UserController {
             UserPerfilDto usuario = authService.VerPerfil(token);
             List<Servico> servicos = authService.listarServicos(token);
             List<ServicoListar> habilidades = authService.listarServicosId(token);
+            long naoLidas = authService.contarNaoLidas((String) token);
 
             model.addAttribute("usuario", usuario);
             model.addAttribute("servicos", servicos);
             model.addAttribute("habilidades", habilidades);
+            model.addAttribute("naoLidas", naoLidas);
 
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
@@ -204,8 +206,10 @@ public class UserController {
         try {
             UserPerfilDto usuario = authService.VerPerfilId(token, id);
             List<ServicoListar> habilidades = authService.listarServicosIdPorUsuario(token, id);
+            long naoLidas = authService.contarNaoLidas((String) token);
             model.addAttribute("usuario", usuario);
             model.addAttribute("habilidades", habilidades);
+            model.addAttribute("naoLidas", naoLidas);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
                 session.invalidate();
