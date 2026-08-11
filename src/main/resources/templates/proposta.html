@@ -1,131 +1,276 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Enviar Proposta</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Enviar Proposta</title>
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+
+    <div th:replace="~{fragment/Background :: background-css}"></div>
+
     <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
+
+        .page-content{
+            flex:1;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
         }
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 480px;
-            border: none;
+
+        .card{
+            background:transparent;
+            border:none;
+            box-shadow:none;
+            width:100%;
+            max-width:400px;
         }
-        .card-header {
-            background: #1a1a2e;
-            padding: 1.4rem 1.5rem;
-            text-align: center;
-            border-radius: 12px 12px 0 0;
+
+        .card-header{
+            background:transparent;
+            border:none;
+            text-align:center;
+            padding-bottom:1rem;
         }
-        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
-        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
-        .card-body { padding: 1.25rem 1.5rem; }
-        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
-        .projeto-info {
-            background: #f0f4ff;
-            border: 1px solid #d0d9f5;
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 1rem;
+
+        .card-header h4{
+            color:white;
+            font-size:22px;
+            font-weight:700;
+            margin-bottom:4px;
         }
-        .projeto-info .titulo { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 0 0 4px; }
-        .projeto-info .servicos span {
-            display: inline-block;
-            background: white;
-            border: 1px solid #d0d9f5;
-            border-radius: 20px;
-            padding: 2px 8px;
-            margin: 2px 4px 2px 0;
-            font-size: 11px;
-            color: #2E5395;
+
+        .card-header p{
+            color:#cbd5e1;
+            font-size:13px;
+            margin:0;
         }
-        .projeto-info .orcamento { font-size: 12px; color: #555; margin: 6px 0 0; }
-        .btn-editar {
-            display: block;
-            width: 100%;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.55rem;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 1rem;
-            text-align: center;
-            text-decoration: none;
-            transition: background 0.2s;
+
+        .card-body{
+            padding:0;
         }
-        .btn-editar:hover { background: #2d2d50; color: white; }
+
+        .info-label{
+            display:block;
+            color:white;
+            font-size:13px;
+            font-weight:600;
+            margin-bottom:6px;
+        }
+
+        .projeto-info{
+            background:rgba(255,255,255,.12);
+            border:1px solid rgba(255,255,255,.20);
+            border-radius:10px;
+            padding:12px;
+            margin-bottom:16px;
+            color:white;
+        }
+
+        .projeto-info .titulo{
+            color:white;
+            font-size:15px;
+            font-weight:700;
+            margin-bottom:8px;
+        }
+
+        .projeto-info .servicos{
+            margin-bottom:8px;
+        }
+
+        .projeto-info .servicos span{
+            display:inline-block;
+            background:white;
+            color:#0d1b3e;
+            border-radius:18px;
+            padding:3px 8px;
+            font-size:10px;
+            font-weight:600;
+            margin:2px;
+        }
+
+        .projeto-info .orcamento{
+            color:#e2e8f0;
+            font-size:12px;
+            margin:0;
+        }
+
+        .form-control{
+            background:rgba(255,255,255,.95);
+            border:none;
+            border-radius:8px;
+            min-height:40px;
+            font-size:14px;
+        }
+
+        .form-control:focus{
+            box-shadow:0 0 0 .2rem rgba(96,165,250,.25);
+        }
+
+        textarea.form-control{
+            min-height:100px;
+        }
+
+        .btn-principal{
+            width:100%;
+            background:white;
+            color:#0d1b3e;
+            border:none;
+            border-radius:8px;
+            padding:10px;
+            font-size:14px;
+            font-weight:600;
+            margin-top:16px;
+            transition:.2s;
+        }
+
+        .btn-principal:hover{
+            background:#dbeafe;
+            color:#0d1b3e;
+        }
+
+        .btn-secundario{
+            display:block;
+            width:100%;
+            text-align:center;
+            margin-top:10px;
+            border:1px solid rgba(255,255,255,.5);
+            color:white;
+            border-radius:8px;
+            padding:10px;
+            font-size:14px;
+            text-decoration:none;
+            transition:.2s;
+        }
+
+        .btn-secundario:hover{
+            background:rgba(255,255,255,.1);
+            color:white;
+            border-color:white;
+        }
+
     </style>
 </head>
-<body>
-    <div class="card">
-        <div class="card-header">
-            <h4>Enviar Proposta</h4>
-            <p>Preencha os dados da sua proposta</p>
-        </div>
-        <div class="card-body">
 
-            <div th:if="${errorMessage}"
-                 class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
-                <span th:text="${errorMessage}"></span>
+<body class="background-padrao d-flex flex-column">
+
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+    <div class="page-content">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h4>Enviar Proposta</h4>
+                <p>Preencha os dados da sua proposta</p>
             </div>
 
-            <!-- resumo do projeto -->
-            <div th:if="${projeto}" class="projeto-info">
-                <p class="titulo" th:text="${projeto.titulo}">Título</p>
-                <div class="servicos">
-    <span th:each="s : ${projeto.servicos}" th:text="${s}">Serviço</span>
-</div>
+            <div class="card-body">
 
-<p class="orcamento" th:if="${projeto.orcamento > 0}">
-    Orçamento: R$ <span th:text="${projeto.orcamento}">—</span>
-</p>
-
-<p class="orcamento" th:if="${projeto.orcamento == 0}">
-    Orçamento: Será definido pelo profissional
-</p>
-
-            <form action="/adicionarProposta" method="post" th:object="${dto}">
-    <input type="hidden" name="projetoId" th:value="${projeto.id}"/>
-
-    <div th:if="${projeto.orcamento == 0}">
-    <input type="hidden" name="valorProposto" value="0"/>
-</div>
-
-    <div th:unless="${projeto.orcamento == 0}" class="mb-3">
-        <label class="info-label">Valor proposto (R$)</label>
-        <input type="number"
-               step="0.01"
-               class="form-control form-control-sm"
-               th:field="*{valorProposto}"
-               placeholder="Ex: 1200.00"/>
-    </div>
-
-                <div class="mb-3">
-                    <label class="info-label">Descrição da proposta</label>
-                    <textarea class="form-control form-control-sm" rows="4"
-                              th:field="*{descricao}"
-                              placeholder="Descreva sua proposta, experiência, prazo..."></textarea>
+                <div th:if="${errorMessage}"
+                     class="alert alert-danger d-flex align-items-center gap-2 py-2"
+                     role="alert">
+                    <span th:text="${errorMessage}"></span>
                 </div>
 
-                <button type="submit" class="btn-editar">Enviar proposta</button>
-            </form>
+                <div th:if="${projeto}" class="projeto-info mb-4">
 
-            <a th:href="@{/projetoFiltro}" class="btn-editar">Cancelar</a>
+                    <p class="titulo"
+                       th:text="${projeto.titulo}">
+                        Título
+                    </p>
+
+                    <div class="servicos mb-2">
+                        <span th:each="s : ${projeto.servicos}"
+                              th:text="${s}">
+                            Serviço
+                        </span>
+                    </div>
+
+                    <p class="orcamento"
+                       th:if="${projeto.orcamento > 0}">
+                        Orçamento:
+                        <strong>
+                            R$
+                            <span th:text="${projeto.orcamento}"></span>
+                        </strong>
+                    </p>
+
+                    <p class="orcamento"
+                       th:if="${projeto.orcamento == 0}">
+                        Orçamento:
+                        <strong>Será definido pelo profissional</strong>
+                    </p>
+
+                </div>
+
+                <form action="/adicionarProposta"
+                      method="post"
+                      th:object="${dto}">
+
+                    <input type="hidden"
+                           name="projetoId"
+                           th:value="${projeto.id}"/>
+
+                    <div th:if="${projeto.orcamento == 0}">
+                        <input type="hidden"
+                               name="valorProposto"
+                               value="0"/>
+                    </div>
+
+                    <div class="mb-3"
+                         th:unless="${projeto.orcamento == 0}">
+
+                        <label class="info-label">
+                            <i class="ti ti-cash"></i>
+                            Valor proposto (R$)
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            class="form-control"
+                            th:field="*{valorProposto}"
+                            placeholder="Ex: 1200.00">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="info-label">
+                            <i class="ti ti-message"></i>
+                            Descrição da proposta
+                        </label>
+
+                        <textarea
+                            rows="4"
+                            class="form-control"
+                            th:field="*{descricao}"
+                            placeholder="Descreva sua experiência, prazo e detalhes da proposta."></textarea>
+
+                    </div>
+
+                    <button type="submit"
+                            class="btn-principal">
+                        Enviar proposta
+                    </button>
+
+                </form>
+
+                <a th:href="@{/projetoFiltro}"
+                   class="btn-secundario">
+                    Cancelar
+                </a>
+
+            </div>
+
         </div>
+
     </div>
+
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+
 </body>
 </html>

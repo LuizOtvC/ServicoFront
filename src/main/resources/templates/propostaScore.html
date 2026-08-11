@@ -3,264 +3,371 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Propostas Recebidas</title>
+
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
-        <style>
-            body {
-                background: #f0f2f5;
-                min-height: 100vh;
-                padding: 2rem 1rem;
-            }
-            .page-title {
-                color: #1a1a2e;
-                font-weight: 700;
-                font-size: 22px;
-                margin-bottom: 1.5rem;
-                text-align: center;
-            }
-            .btn-voltar {
-                display: block;
-                width: fit-content;
-                margin: 0 auto 1.5rem;
-                background: #1a1a2e;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                padding: 0.45rem 1.2rem;
-                font-size: 13px;
-                text-decoration: none;
-                transition: background 0.2s;
-            }
-            .btn-voltar:hover {
-                background: #2d2d50;
-                color: white;
-            }
 
-            .proposta-card {
-                background: white;
-                border-radius: 12px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-                border: none;
-                margin-bottom: 1rem;
-                padding: 1rem 1.25rem;
-                transition: box-shadow 0.2s;
-            }
-            .proposta-card:hover {
-                box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-            }
+    <div th:replace="~{fragment/Background :: background-css}"></div>
 
-            .proposta-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                gap: 8px;
-                margin-bottom: 4px;
-            }
+    <style>
 
-            .proposta-usuario {
-                font-size: 12px;
-                color: #888;
-                margin: 0 0 8px;
-            }
-            .proposta-usuario a {
-                color: #888;
-                text-decoration: none;
-            }
-            .proposta-usuario a:hover {
-                text-decoration: underline;
-                color: #2E5395;
-            }
+        .page-content{
+            flex:1;
+            display:flex;
+            justify-content:center;
+            padding:20px 18px;
+        }
 
-            .proposta-status {
-                display: inline-block;
-                font-size: 10px;
-                font-weight: 600;
-                border-radius: 20px;
-                padding: 2px 10px;
-                white-space: nowrap;
-            }
-            .status-pendente {
-                background: #fff3cd;
-                color: #856404;
-            }
-            .status-aceita   {
-                background: #d4edda;
-                color: #155724;
-            }
-            .status-recusada {
-                background: #f8d7da;
-                color: #721c24;
-            }
-            .status-default  {
-                background: #e2e3e5;
-                color: #383d41;
-            }
+        .container-propostas{
+            width:100%;
+            max-width:560px;
+        }
 
-            .proposta-descricao {
-                font-size: 12px;
-                color: #666;
-                margin: 6px 0 10px;
-            }
+        .page-title{
+            color:white;
+            font-size:23px;
+            font-weight:700;
+            text-align:center;
+            margin-bottom:18px;
+        }
 
-            .proposta-footer {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-top: 1px solid #f0f0f0;
-                padding-top: 8px;
-            }
-            .proposta-valor {
-                font-size: 14px;
-                font-weight: 700;
-                color: #2E5395;
-            }
+        .btn-voltar{
+            display:inline-block;
+            margin-bottom:18px;
+            background:white;
+            color:#0d1b3e;
+            text-decoration:none;
+            padding:8px 15px;
+            border-radius:8px;
+            font-size:14px;
+            font-weight:600;
+            transition:.2s;
+        }
 
-            .score-box {
-                background: #f8f9fb;
-                border: 1px solid #eef0f4;
-                border-radius: 8px;
-                padding: 10px 12px;
-                margin-top: 10px;
-            }
-            .score-total {
-                font-size: 13px;
-                font-weight: 700;
-                color: #1a1a2e;
-                margin: 0 0 4px;
-            }
-            .score-detalhe {
-                font-size: 12px;
-                color: #666;
-                margin: 0 0 2px;
-            }
+        .btn-voltar:hover{
+            background:#dbeafe;
+            color:#0d1b3e;
+        }
 
-            .alerta-conflito {
-                background: #fff3cd;
-                border: 1px solid #ffc107;
-                border-radius: 8px;
-                padding: 8px 12px;
-                margin-top: 8px;
-                font-size: 12px;
-                color: #856404;
-            }
+        .proposta-card{
+            background:rgba(255,255,255,.10);
+            border:1px solid rgba(255,255,255,.15);
+            backdrop-filter:blur(12px);
+            border-radius:12px;
+            padding:14px;
+            margin-bottom:14px;
+            color:white;
+        }
 
-            .acoes-row {
-                display: flex;
-                gap: 8px;
-                margin-top: 10px;
-            }
-            .acoes-row form {
-                flex: 1;
-            }
+        .proposta-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            margin-bottom:8px;
+        }
 
-            .btn-acao {
-                display: block;
-                width: 100%;
-                border: none;
-                border-radius: 8px;
-                padding: 0.55rem;
-                font-size: 13px;
-                font-weight: 500;
-                cursor: pointer;
-                text-align: center;
-                transition: background 0.2s;
-            }
-            .btn-aceitar {
-                background: #1a1a2e;
-                color: white;
-            }
-            .btn-aceitar:hover {
-                background: #2d2d50;
-            }
-            .btn-recusar {
-                background: #f8d7da;
-                color: #721c24;
-                border: 1px solid #f1b0b7;
-            }
-            .btn-recusar:hover {
-                background: #f1b0b7;
-            }
-            .aviso-aceito {
-                background: #eef4ff;
-                border: 1px solid #d0d9f5;
-                border-radius: 8px;
-                padding: 8px 12px;
-                margin-top: 10px;
-                font-size: 12px;
-                color: #2E5395;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-            }
-        </style>
-    </head>
-    <body>
-        <div style="max-width: 520px; margin: 0 auto;">
+        .proposta-usuario{
+            margin:0;
+            color:#e2e8f0;
+            font-size:13px;
+        }
+
+        .proposta-usuario a{
+            color:white;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        .proposta-usuario a:hover{
+            color:#93c5fd;
+        }
+
+        .proposta-status{
+            font-size:10px;
+            font-weight:600;
+            border-radius:18px;
+            padding:3px 9px;
+        }
+
+        .status-pendente{
+            background:#fff3cd;
+            color:#856404;
+        }
+
+        .status-aceita{
+            background:#d1e7dd;
+            color:#0a5235;
+        }
+
+        .status-recusada{
+            background:#f8d7da;
+            color:#842029;
+        }
+
+        .status-default{
+            background:#e9ecef;
+            color:#495057;
+        }
+
+        .proposta-descricao{
+            color:#e2e8f0;
+            font-size:13px;
+            margin-bottom:8px;
+        }
+
+        .proposta-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-top:10px;
+        }
+
+        .proposta-valor{
+            color:white;
+            font-size:16px;
+            font-weight:700;
+        }
+
+        .score-box{
+            margin-top:12px;
+            padding:10px;
+            border-radius:8px;
+            background:rgba(255,255,255,.08);
+            border:1px solid rgba(255,255,255,.12);
+        }
+
+        .score-total{
+            color:white;
+            font-size:14px;
+            font-weight:700;
+            margin-bottom:5px;
+        }
+
+        .score-detalhe{
+            color:#dbeafe;
+            font-size:12px;
+            margin-bottom:2px;
+        }
+
+        .alerta-conflito{
+            margin-top:10px;
+            background:#fff3cd;
+            color:#856404;
+            border-radius:8px;
+            padding:8px 10px;
+            font-size:12px;
+        }
+
+        .aviso-aceito{
+            margin-top:10px;
+            background:rgba(255,255,255,.15);
+            color:white;
+            border-radius:8px;
+            padding:8px 10px;
+            font-size:12px;
+        }
+
+        .acoes-row{
+            display:flex;
+            gap:8px;
+            margin-top:12px;
+        }
+
+        .acoes-row form{
+            flex:1;
+        }
+
+        .btn-acao{
+            width:100%;
+            border:none;
+            border-radius:8px;
+            padding:8px;
+            font-size:13px;
+            font-weight:600;
+            transition:.2s;
+        }
+
+        .btn-aceitar{
+            background:white;
+            color:#0d1b3e;
+        }
+
+        .btn-aceitar:hover{
+            background:#dbeafe;
+        }
+
+        .btn-recusar{
+            background:#dc3545;
+            color:white;
+        }
+
+        .btn-recusar:hover{
+            background:#bb2d3b;
+        }
+
+    </style>
+
+</head>
+
+<body class="background-padrao d-flex flex-column">
+
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+    <div class="page-content">
+
+        <div class="container-propostas">
 
             <a th:href="@{/projetoporId/{id}(id=${projetoId})}" class="btn-voltar">
-                <i class="ti ti-arrow-left"></i> Voltar
+                <i class="ti ti-arrow-left"></i>
+                Voltar
             </a>
 
-            <h2 class="page-title">Propostas recebidas</h2>
+            <h2 class="page-title">
+                Propostas Recebidas
+            </h2>
 
             <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
-            <div th:if="${#lists.isEmpty(propostas)}" class="text-center text-muted" style="margin-top: 3rem;">
-                <i class="ti ti-mood-empty" style="font-size: 40px;"></i>
-                <p style="margin-top: 8px;">Nenhuma proposta recebida ainda.</p>
+            <div th:if="${#lists.isEmpty(propostas)}"
+                 class="text-center text-white mt-5">
+
+                <i class="ti ti-mood-empty" style="font-size:48px;"></i>
+
+                <p class="mt-3">
+                    Nenhuma proposta recebida ainda.
+                </p>
+
             </div>
 
-            <div th:each="p : ${propostas}" 
-                 th:if="${!#strings.equalsIgnoreCase(p.status, 'ACEITA')}"
+            <div th:each="p : ${propostas}"
+                 th:if="${!#strings.equalsIgnoreCase(p.status,'ACEITA')}"
                  class="proposta-card">
+
                 <div class="proposta-header">
+
                     <p class="proposta-usuario">
-                        <i class="ti ti-user" aria-hidden="true"></i>
-                        <a th:href="@{/perfilId/{id}(id=${p.usuarioId})}" th:text="${p.nomeUsuario}">Nome</a>
+                        <i class="ti ti-user"></i>
+
+                        <a th:href="@{/perfilId/{id}(id=${p.usuarioId})}"
+                           th:text="${p.nomeUsuario}">
+                            Nome
+                        </a>
                     </p>
+
                     <span class="proposta-status"
                           th:text="${p.status}"
-                          th:classappend="${#strings.equalsIgnoreCase(p.status, 'PENDENTE')} ? 'status-pendente' :
-                          (${#strings.equalsIgnoreCase(p.status, 'ACEITA')} ? 'status-aceita' :
-                          (${#strings.equalsIgnoreCase(p.status, 'RECUSADA')} ? 'status-recusada' : 'status-default'))">
+                          th:classappend="${#strings.equalsIgnoreCase(p.status,'PENDENTE')} ? 'status-pendente' :
+                          (${#strings.equalsIgnoreCase(p.status,'ACEITA')} ? 'status-aceita' :
+                          (${#strings.equalsIgnoreCase(p.status,'RECUSADA')} ? 'status-recusada' : 'status-default'))">
                     </span>
+
                 </div>
-                <p class="proposta-descricao" th:text="${p.descricao}">Descrição</p>
+
+                <p class="proposta-descricao"
+                   th:text="${p.descricao}">
+                    Descrição
+                </p>
+
                 <p class="score-detalhe">
-                    Dias disponíveis:
+                    <strong>Dias disponíveis:</strong>
+
                     <span th:each="dia, stat : ${p.diasTrabalho}">
                         <span th:text="${dia}"></span><span th:if="${!stat.last}">, </span>
                     </span>
                 </p>
+
                 <div class="proposta-footer">
-                    <span class="proposta-valor">R$ <span th:text="${p.valorProposto}">0,00</span></span>
+
+                    <span class="proposta-valor">
+                        R$
+                        <span th:text="${p.valorProposto}">0,00</span>
+                    </span>
+
                 </div>
+
                 <div class="score-box">
-                    <p class="score-total">Score: <span th:text="${#numbers.formatDecimal(p.scoreTotal * 100, 1, 1)}">0</span>%</p>
-                    <p class="score-detalhe">Habilidades: <span th:text="${#numbers.formatDecimal(p.scoreServicos * 100, 1, 1)}">0</span>%</p>
-                    <p class="score-detalhe">Orçamento: <span th:text="${#numbers.formatDecimal(p.scoreOrcamento * 100, 1, 1)}">0</span>%</p>
-                    <p class="score-detalhe">Histórico: <span th:text="${#numbers.formatDecimal(p.scoreHistorico * 100, 1, 1)}">0</span>%</p>
+
+                    <p class="score-total">
+                        Score:
+                        <span th:text="${#numbers.formatDecimal(p.scoreTotal * 100,1,1)}"></span>%
+                    </p>
+
+                    <p class="score-detalhe">
+                        Habilidades:
+                        <span th:text="${#numbers.formatDecimal(p.scoreServicos * 100,1,1)}"></span>%
+                    </p>
+
+                    <p class="score-detalhe">
+                        Orçamento:
+                        <span th:text="${#numbers.formatDecimal(p.scoreOrcamento * 100,1,1)}"></span>%
+                    </p>
+
+                    <p class="score-detalhe">
+                        Histórico:
+                        <span th:text="${#numbers.formatDecimal(p.scoreHistorico * 100,1,1)}"></span>%
+                    </p>
+
                 </div>
-                <div th:if="${p.temConflitoDias}" class="alerta-conflito">
+
+                <div th:if="${p.temConflitoDias}"
+                     class="alerta-conflito">
+
                     <i class="ti ti-alert-triangle"></i>
-                    <strong>Atenção:</strong> Este profissional já está aceito em outro serviço com dias em comum.
+
+                    <strong>Atenção:</strong>
+                    Este profissional já está aceito em outro serviço com dias em comum.
+
                 </div>
-                <div th:if="${!temPropostaAceita and #strings.equalsIgnoreCase(p.status, 'PENDENTE')}" class="acoes-row">
-                    <form th:action="@{/aceitar/{id}(id=${p.propostaId})}" method="post">
-                        <input type="hidden" name="projetoId" th:value="${projetoId}"/>
-                        <button type="submit" class="btn-acao btn-aceitar">Aceitar</button>
+
+                <div th:if="${!temPropostaAceita and #strings.equalsIgnoreCase(p.status,'PENDENTE')}"
+                     class="acoes-row">
+
+                    <form th:action="@{/aceitar/{id}(id=${p.propostaId})}"
+                          method="post">
+
+                        <input type="hidden"
+                               name="projetoId"
+                               th:value="${projetoId}"/>
+
+                        <button class="btn-acao btn-aceitar"
+                                type="submit">
+                            Aceitar
+                        </button>
+
                     </form>
-                    <form th:action="@{/recusar/{id}(id=${p.propostaId})}" method="post">
-                        <input type="hidden" name="projetoId" th:value="${projetoId}"/>
-                        <button type="submit" class="btn-acao btn-recusar">Recusar</button>
+
+                    <form th:action="@{/recusar/{id}(id=${p.propostaId})}"
+                          method="post">
+
+                        <input type="hidden"
+                               name="projetoId"
+                               th:value="${projetoId}"/>
+
+                        <button class="btn-acao btn-recusar"
+                                type="submit">
+                            Recusar
+                        </button>
+
                     </form>
+
                 </div>
-                <div th:if="${temPropostaAceita and #strings.equalsIgnoreCase(p.status, 'PENDENTE')}" class="aviso-aceito">
-    <i class="ti ti-circle-check"></i>
-    Este serviço já tem um profissional aceito.
-</div>
+
+                <div th:if="${temPropostaAceita and #strings.equalsIgnoreCase(p.status,'PENDENTE')}"
+                     class="aviso-aceito">
+
+                    <i class="ti ti-circle-check"></i>
+
+                    Este serviço já possui um profissional aceito.
+
+                </div>
+
             </div>
 
         </div>
-    </body>
+
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+
+</body>
 </html>
