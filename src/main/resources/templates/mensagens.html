@@ -21,20 +21,22 @@
                 width: 100%;
                 max-width: 900px;
                 margin: 0 auto;
-                padding: 110px 25px 40px;
+                padding: 30px 25px 40px;
             }
 
             .page-title {
                 color: white !important;
                 font-size: 28px;
                 font-weight: 700;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
                 text-align: left;
             }
 
             .texto-vazio {
-                color: rgba(255,255,255,.75);
+                color: rgba(255, 255, 255, 0.75);
             }
+
+            /* CARDS DAS MENSAGENS */
 
             .mensagem-card {
                 background: rgba(255, 255, 255, 0.07);
@@ -139,6 +141,8 @@
                 display: block;
             }
 
+            /* BOTÃO APAGAR */
+
             .btn-apagar {
                 background: #fff;
                 border: 1px solid #dc3545;
@@ -153,13 +157,15 @@
                 color: #fff;
             }
 
+            /* BOTÃO VOLTAR */
+
             .btn-voltar {
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
 
                 background: transparent;
-                border: 1px solid rgba(255,255,255,.5);
+                border: 1px solid rgba(255, 255, 255, 0.5);
                 color: white;
 
                 border-radius: 8px;
@@ -168,12 +174,16 @@
                 font-size: 13px;
                 text-decoration: none;
                 cursor: pointer;
+
+                transition: background 0.2s, color 0.2s;
             }
 
             .btn-voltar:hover {
                 background: white;
                 color: #1a1a2e;
             }
+
+            /* BOTÃO PROPOSTAS */
 
             .btn-propostas {
                 display: block;
@@ -198,10 +208,12 @@
                 color: white !important;
             }
 
+            /* RESPONSIVO */
+
             @media (max-width: 700px) {
 
                 .mensagens-container {
-                    padding: 100px 15px 30px;
+                    padding: 25px 15px 30px;
                 }
 
                 .page-title {

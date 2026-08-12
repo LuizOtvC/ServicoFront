@@ -14,7 +14,7 @@
                 z-index:1;
             }
 
-            body {    
+            body {
                 min-height: 100vh;
             }
             .page-title {
@@ -73,21 +73,22 @@
                 color: #2E5395;
             }
             .btn-voltar {
-                display: block;
-                width: fit-content;
-                margin: 0 auto 1.5rem;
-                background: #1a1a2e;
-                color: white;
-                border: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                color: #fff;
                 border-radius: 8px;
-                padding: 0.45rem 1.2rem;
+                padding: 8px 15px;
                 font-size: 13px;
                 text-decoration: none;
-                transition: background 0.2s;
+                cursor: pointer;
+                transition: background 0.2s, color 0.2s;
             }
             .btn-voltar:hover {
-                background: #2d2d50;
-                color: white;
+                background: #fff;
+                color: #1a1a2e;
             }
 
             .projeto-detalhes {
@@ -247,9 +248,7 @@
     <div th:replace="~{fragment/navbar :: custom-header}"></div>
     <div class="page-content">
 
-        <a th:href="@{/}" class="btn-voltar">
-            <i class="ti ti-arrow-left"></i> Voltar
-        </a>
+        <a th:href="@{/}" class="btn-voltar"> <i class="ti ti-arrow-left"></i> Voltar </a>
 
         <h2 class="page-title">Serviços disponíveis</h2>
 
@@ -349,7 +348,7 @@
 
             <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
                 <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
-                <p class="detalhe-row"><strong>Orçamento:</strong> R$ <span th:text="${p.orcamento}">—</span></p>
+                <p class="detalhe-row"> <strong>Orçamento:</strong> <span th:if="${p.orcamento == 0}"> A ser definido pelo profissional </span> <span th:if="${p.orcamento != 0}"> R$ <span th:text="${p.orcamento}">—</span> </span> </p>
                 <p class="detalhe-row">
                     <strong>Dias de trabalho:</strong>
 

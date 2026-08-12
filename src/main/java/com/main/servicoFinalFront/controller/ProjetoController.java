@@ -127,51 +127,108 @@ public String criarProjeto(@ModelAttribute ProjetoUserDto projeto,
     }
 
     @GetMapping("/projetoporId/{id}")
-    public String meusProjetosId(@PathVariable Long id, HttpSession session, Model model) {
-        String token = (String) session.getAttribute("token");
-        if (token == null) {
+public String meusProjetosId(@PathVariable Long id, HttpSession session, Model model) {
+
+    String token = (String) session.getAttribute("token");
+
+    if (token == null) {
+        return "redirect:/logar";
+    }
+
+    try {
+
+        ProjetoResposta projeto = service.listarprojetoPorId(id, token);
+
+        // Dono do projeto
+        UserPerfilDto usuario = service.VerPerfilId(
+                token,
+                projeto.getUsuarioId()
+        );
+
+        // Usuário logado
+        UserPerfilDto usuarioLogado = service.VerPerfil(token);
+
+        boolean jaEnviou = service.existeProposta(id, token);
+
+        boolean participou =
+                usuarioLogado.getId().equals(projeto.getUsuarioId())
+                ||
+                (
+                    projeto.getPropostaAceita() != null
+                    &&
+                    usuarioLogado.getId().equals(
+                            projeto.getPropostaAceita().getUsuarioId()
+                    )
+                );
+
+        // ==========================================
+        // BUSCA O PROFISSIONAL DA PROPOSTA ACEITA
+        // ==========================================
+
+        UserPerfilDto profissional = null;
+
+        if (projeto.getPropostaAceita() != null) {
+
+            Long profissionalId =
+                    projeto.getPropostaAceita().getUsuarioId();
+
+            profissional = service.VerPerfilId(
+                    token,
+                    profissionalId
+            );
+        }
+
+        boolean jaAvaliou = false;
+
+        if (participou && "CONCLUIDO".equals(projeto.getStatus())) {
+            jaAvaliou = service.jaAvaliei(id, token);
+        }
+
+        Double scoreProjeto = service.getScoreProjeto(token, id);
+
+        long naoLidas = service.contarNaoLidas(token);
+
+        // ==========================================
+        // ATRIBUTOS PARA O THYMELEAF
+        // ==========================================
+
+        model.addAttribute("naoLidas", naoLidas);
+        model.addAttribute("scoreProjeto", scoreProjeto);
+
+        model.addAttribute("projeto", projeto);
+
+        // Dono do projeto
+        model.addAttribute("usuario", usuario);
+
+        // Profissional que teve a proposta aceita
+        model.addAttribute("profissional", profissional);
+
+        // Usuário logado
+        model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
+
+        model.addAttribute("jaEnviouProposta", jaEnviou);
+
+        model.addAttribute("participou", participou);
+        model.addAttribute("jaAvaliou", jaAvaliou);
+
+    } catch (HttpClientErrorException e) {
+
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
             return "redirect:/logar";
         }
 
-        try {
-            ProjetoResposta projeto = service.listarprojetoPorId(id, token);
-            UserPerfilDto usuario = service.VerPerfilId(token, projeto.getUsuarioId());
-            UserPerfilDto usuarioLogado = service.VerPerfil(token);
-            boolean jaEnviou = service.existeProposta(id, token);
+        model.addAttribute("erro", "Erro ao carregar projeto.");
 
-            boolean participou
-                    = usuarioLogado.getId().equals(projeto.getUsuarioId())
-                    || (projeto.getPropostaAceita() != null
-                    && usuarioLogado.getId().equals(projeto.getPropostaAceita().getUsuarioId()));
+    } catch (Exception e) {
 
-            boolean jaAvaliou = false;
-            if (participou && "CONCLUIDO".equals(projeto.getStatus())) {
-                jaAvaliou = service.jaAvaliei(id, token);
-            }
-            Double scoreProjeto = service.getScoreProjeto(token, id);
-            long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-            model.addAttribute("scoreProjeto", scoreProjeto);
-            model.addAttribute("projeto", projeto);
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
-            model.addAttribute("jaEnviouProposta", jaEnviou);
+        e.printStackTrace();
 
-            model.addAttribute("participou", participou);
-            model.addAttribute("jaAvaliou", jaAvaliou);
-
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
-            model.addAttribute("erro", "Erro ao carregar projeto.");
-        } catch (Exception e) {
-            model.addAttribute("erro", "Erro ao carregar projeto.");
-        }
-
-        return "projetoId";
+        model.addAttribute("erro", "Erro ao carregar projeto.");
     }
+
+    return "projetoId";
+}
 
     @GetMapping("/projetoFiltroUser")
     public String listarProjetosUser(HttpSession session, Model model) {

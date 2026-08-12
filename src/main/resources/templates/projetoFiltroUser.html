@@ -61,20 +61,27 @@
             font-size: 11px;
             color: #2E5395;
         }
-        .btn-voltar {
-            display: block;
-            width: fit-content;
-            margin: 0 auto 1.5rem;
-            background: #1a1a2e;
-            color: white;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
-            padding: 0.45rem 1.2rem;
-            font-size: 13px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-voltar:hover { background: #2d2d50; color: white; }
+       .btn-voltar {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+
+                background: transparent;
+                border: 1px solid rgba(255,255,255,.5);
+                color: white;
+
+                border-radius: 8px;
+                padding: 8px 15px;
+
+                font-size: 13px;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .btn-voltar:hover {
+                background: white;
+                color: #1a1a2e;
+            }
         .projeto-detalhes {
             display: none;
             margin-top: 10px;
@@ -94,6 +101,27 @@
         }
         .btn-ver-mais:hover { text-decoration: underline; }
         .empty-state { color: rgba(255,255,255,0.75); }
+        a.btn-voltar {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,.5) !important;
+    color: white !important;
+
+    border-radius: 8px !important;
+    padding: 8px 15px !important;
+
+    font-size: 13px !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+a.btn-voltar:hover {
+    background: white !important;
+    color: #1a1a2e !important;
+}
     </style>
     <div th:replace="~{fragment/Background :: background-css}"></div>
 </head>

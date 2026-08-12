@@ -31,22 +31,23 @@
             margin-bottom:18px;
         }
 
-        .btn-voltar{
-            display:inline-block;
-            margin-bottom:18px;
-            background:white;
-            color:#0d1b3e;
-            text-decoration:none;
-            padding:8px 15px;
-            border-radius:8px;
-            font-size:14px;
-            font-weight:600;
-            transition:.2s;
+        .btn-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
         }
-
-        .btn-voltar:hover{
-            background:#dbeafe;
-            color:#0d1b3e;
+        .btn-voltar:hover {
+            background: #fff;
+            color: #1a1a2e;
         }
 
         .proposta-card{
@@ -268,13 +269,7 @@
                     Descrição
                 </p>
 
-                <p class="score-detalhe">
-                    <strong>Dias disponíveis:</strong>
-
-                    <span th:each="dia, stat : ${p.diasTrabalho}">
-                        <span th:text="${dia}"></span><span th:if="${!stat.last}">, </span>
-                    </span>
-                </p>
+                
 
                 <div class="proposta-footer">
 
@@ -286,28 +281,43 @@
                 </div>
 
                 <div class="score-box">
+    <p class="score-total">
+        Compatibilidade:
+        <span th:text="${#numbers.formatDecimal(p.scoreTotal * 100,1,1)}"></span>%
+    </p>
 
-                    <p class="score-total">
-                        Score:
-                        <span th:text="${#numbers.formatDecimal(p.scoreTotal * 100,1,1)}"></span>%
-                    </p>
+    <!-- Habilidades -->
+    <p class="score-detalhe" style="margin-top: 8px;">
+        <strong>Habilidades:</strong>
+        <span th:if="${p.scoreServicos >= 0.9}"
+              style="color: #2e9e5b; font-weight: 600;">
+            ✔ Possui todas as habilidades necessárias
+        </span>
+        <span th:if="${p.scoreServicos >= 0.5 and p.scoreServicos < 0.9}"
+              style="color: #d97706; font-weight: 600;">
+            ⚠ Possui parte das habilidades necessárias
+        </span>
+        <span th:if="${p.scoreServicos < 0.5}"
+              style="color: #dc2626; font-weight: 600;">
+            ✘ Poucas habilidades compatíveis
+        </span>
+    </p>
 
-                    <p class="score-detalhe">
-                        Habilidades:
-                        <span th:text="${#numbers.formatDecimal(p.scoreServicos * 100,1,1)}"></span>%
-                    </p>
-
-                    <p class="score-detalhe">
-                        Orçamento:
-                        <span th:text="${#numbers.formatDecimal(p.scoreOrcamento * 100,1,1)}"></span>%
-                    </p>
-
-                    <p class="score-detalhe">
-                        Histórico:
-                        <span th:text="${#numbers.formatDecimal(p.scoreHistorico * 100,1,1)}"></span>%
-                    </p>
-
-                </div>
+    <!-- Dias -->
+    <p class="score-detalhe">
+        <strong>Disponibilidade:</strong>
+        <span th:if="${p.scoreServicos == 0 and #lists.isEmpty(p.diasTrabalho)}"
+              style="color: #94a3b8;">
+            Não informada
+        </span>
+        <span th:if="${!#lists.isEmpty(p.diasTrabalho)}"
+              style="color: #93c5fd;">
+            <span th:each="dia, stat : ${p.diasTrabalho}">
+                <span th:text="${dia}"></span><span th:if="${!stat.last}">, </span>
+            </span>
+        </span>
+    </p>
+</div>
 
                 <div th:if="${p.temConflitoDias}"
                      class="alerta-conflito">
