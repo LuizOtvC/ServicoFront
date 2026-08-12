@@ -139,13 +139,13 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
 
         ProjetoResposta projeto = service.listarprojetoPorId(id, token);
 
-        // Dono do projeto
+
         UserPerfilDto usuario = service.VerPerfilId(
                 token,
                 projeto.getUsuarioId()
         );
 
-        // Usuário logado
+
         UserPerfilDto usuarioLogado = service.VerPerfil(token);
 
         boolean jaEnviou = service.existeProposta(id, token);
@@ -161,9 +161,6 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
                     )
                 );
 
-        // ==========================================
-        // BUSCA O PROFISSIONAL DA PROPOSTA ACEITA
-        // ==========================================
 
         UserPerfilDto profissional = null;
 
@@ -188,22 +185,18 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
 
         long naoLidas = service.contarNaoLidas(token);
 
-        // ==========================================
-        // ATRIBUTOS PARA O THYMELEAF
-        // ==========================================
-
         model.addAttribute("naoLidas", naoLidas);
         model.addAttribute("scoreProjeto", scoreProjeto);
 
         model.addAttribute("projeto", projeto);
 
-        // Dono do projeto
+        
         model.addAttribute("usuario", usuario);
 
-        // Profissional que teve a proposta aceita
+       
         model.addAttribute("profissional", profissional);
 
-        // Usuário logado
+        
         model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
 
         model.addAttribute("jaEnviouProposta", jaEnviou);

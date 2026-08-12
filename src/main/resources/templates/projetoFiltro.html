@@ -20,7 +20,7 @@
             .page-title {
                 color: #ffffff;
                 font-weight: 700;
-                font-size: 22px;
+                font-size: 25px;
                 margin-bottom: 1.5rem;
                 text-align: center;
             }
@@ -211,18 +211,32 @@
             }
             .btn-filtrar {
                 flex: 1;
-                background: #1a1a2e;
+                background: #2d2d50;
                 color: white;
-                border: none;
+                border: 1px solid rgba(255,255,255,.14);
                 border-radius: 8px;
-                padding: 0.5rem;
+                padding: 0.55rem 1.25rem;
                 font-size: 13px;
-                font-weight: 500;
-                cursor: pointer;
-                transition: background 0.2s;
+                font-weight: 600;
+                text-decoration: none;
+                transition: background 0.2s, border-color 0.2s, transform 0.15s;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                box-shadow: 0 2px 10px rgba(0,0,0,.18);
+
+
             }
             .btn-filtrar:hover {
                 background: #2d2d50;
+                border-color: rgba(255,255,255,.26);
+                color: white;
+                transform: translateY(-1px);
+
+            }
+            .btn-filtrar:active {
+                transform: translateY(0);
             }
             .btn-limpar {
                 flex: 1;
@@ -238,8 +252,9 @@
                 transition: background 0.2s, border-color 0.2s;
             }
             .btn-limpar:hover {
-                background: rgba(255,255,255,0.12);
-                border-color: rgba(255,255,255,0.5);
+                 background: #fff;
+                color: #1a1a2e;
+
             }
         </style>
     <div th:replace="~{fragment/Background :: background-css}"></div>

@@ -26,7 +26,7 @@
 
             .page-title {
                 color: white !important;
-                font-size: 28px;
+                font-size: 25px;
                 font-weight: 700;
                 margin-bottom: 20px;
                 text-align: left;
@@ -242,6 +242,18 @@
     <div th:replace="~{fragment/navbar :: custom-header}"></div>
 
     <div class="mensagens-container">
+        <div style="margin-top: 25px;">
+
+            <a th:href="@{/}"
+               class="btn-voltar">
+
+                <i class="ti ti-arrow-left"></i>
+
+                Voltar
+
+            </a>
+
+        </div>
 
         <h2 class="page-title">
             Minhas mensagens
@@ -320,18 +332,7 @@
 
         </div>
 
-        <div style="margin-top: 25px;">
-
-            <a th:href="@{/}"
-               class="btn-voltar">
-
-                <i class="ti ti-arrow-left"></i>
-
-                Voltar
-
-            </a>
-
-        </div>
+        
 
     </div>
 

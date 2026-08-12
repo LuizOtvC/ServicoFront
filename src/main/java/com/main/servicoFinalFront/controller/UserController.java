@@ -4,6 +4,9 @@
  */
 package com.main.servicoFinalFront.controller;
 
+import com.main.servicoFinalFront.model.ProjetoListarDto;
+import com.main.servicoFinalFront.model.ProjetoResposta;
+import com.main.servicoFinalFront.model.PropostaRespostaDto;
 import com.main.servicoFinalFront.model.Servico;
 import com.main.servicoFinalFront.model.ServicoListar;
 import com.main.servicoFinalFront.model.UsuarioServico;
@@ -56,17 +59,43 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String home(HttpSession session, Model model) {
-        Object token = (String) session.getAttribute("token");
+public String home(HttpSession session, Model model) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) {
+        return "redirect:/logar";
+    }
+    try {
+        UserPerfilDto usuario = authService.VerPerfil(token);
 
-        if (token == null) {
+        List<ProjetoListarDto> projetos = authService.listarProjetosFiltroUsuario(token);
+        if (projetos.size() > 4) {
+            projetos = projetos.subList(0, 4);
+        }
+
+        List<PropostaRespostaDto> propostas = authService.listarProjetoFiltro(token);
+        if (propostas.size() > 4) {
+            propostas = propostas.subList(0, 4);
+        }
+
+        long naoLidas = authService.contarNaoLidas(token);
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("projetos", projetos);
+        model.addAttribute("propostas", propostas);
+        model.addAttribute("naoLidas", naoLidas);
+
+    } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+            session.invalidate();
             return "redirect:/logar";
         }
-        long naoLidas = authService.contarNaoLidas((String) token);
-        model.addAttribute("naoLidas", naoLidas);
-        return "home";
+        model.addAttribute("erro", "Erro ao carregar a página inicial.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        model.addAttribute("erro", "Erro ao carregar a página inicial.");
     }
-
+    return "home";
+}
     @PostMapping("/logar")
     public String fazerLogin(@ModelAttribute UserLogarDto user, HttpSession session, Model model) {
         try {

@@ -67,17 +67,28 @@
                 margin-bottom: 1.1rem;
             }
 
-            .back-link {
-                color: #b7bbd4;
-                text-decoration: none;
-                font-size: 13px;
+            .btn-voltar {
                 display: inline-flex;
                 align-items: center;
-                gap: 5px;
+                gap: 6px;
+
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                color: white;
+
+                border-radius: 8px;
+                padding: 8px 15px;
+
+                font-size: 13px;
+                text-decoration: none;
+                cursor: pointer;
+
+                transition: background 0.2s, color 0.2s;
             }
 
-            .back-link:hover {
-                color: #fff;
+            .btn-voltar:hover {
+                background: white;
+                color: #1a1a2e;
             }
 
             .eyebrow-id {
@@ -609,7 +620,7 @@
 
                 <div class="header-top">
 
-                    <a th:href="@{/}" class="back-link">
+                    <a th:href="@{/}" class="btn-voltar">
                         <i class="ti ti-arrow-left"></i>
                         Voltar
                     </a>
@@ -766,17 +777,17 @@
             </ol>
 
 
-            <!-- LAYOUT PRINCIPAL -->
+           
 
             <div class="layout">
 
 
-                <!-- COLUNA PRINCIPAL -->
+                
 
                 <div class="main">
 
 
-                    <!-- DESCRIÇÃO -->
+                    
 
                     <div class="section">
 
@@ -793,7 +804,7 @@
                     </div>
 
 
-                    <!-- SERVIÇOS -->
+                    
 
                     <div class="section">
 
@@ -815,7 +826,7 @@
                     </div>
 
 
-                    <!-- DIAS DE TRABALHO -->
+                    
 
                     <div class="section">
 
@@ -1062,7 +1073,7 @@
                             </span>
 
 
-                            <!-- VER PROPOSTAS -->
+                           
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
                                   th:action="@{/propostas/{id}(id=${projeto.id})}"
