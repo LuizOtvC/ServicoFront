@@ -36,7 +36,6 @@
                 color: rgba(255, 255, 255, 0.75);
             }
 
-            /* CARDS DAS MENSAGENS */
 
             .mensagem-card {
                 background: rgba(255, 255, 255, 0.07);
@@ -111,12 +110,23 @@
             }
 
             .status-concluido {
-                background: #d1ecf1;
-                color: #0c5460;
+                background: #d4edda;
+                color: #155724;
+            }
+            
+            .status-arquivado {
+                background: #fff4dc;
+                color: #856404;
             }
 
-            .status-criado,
-            .status-enviada,
+            .status-criado{
+                 background: #d4edda;
+                color: #155724;
+            }
+            .status-enviada{
+                 background: #cce5ff;
+                color: #004085;
+            }
             .status-proposta {
                 background: #fff3cd;
                 color: #856404;
@@ -134,14 +144,20 @@
             }
 
             .mensagem-data {
-                font-size: 11px;
-                color: rgba(255, 255, 255, 0.55) !important;
-                border-top: 1px solid rgba(255, 255, 255, 0.14);
-                padding-top: 8px;
-                display: block;
-            }
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55) !important;
+}
 
-            /* BOTÃO APAGAR */
+.mensagem-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding-top: 8px;
+    margin-top: 4px;
+}
+
+            
 
             .btn-apagar {
                 background: #fff;
@@ -157,7 +173,7 @@
                 color: #fff;
             }
 
-            /* BOTÃO VOLTAR */
+            
 
             .btn-voltar {
                 display: inline-flex;
@@ -183,7 +199,7 @@
                 color: #1a1a2e;
             }
 
-            /* BOTÃO PROPOSTAS */
+            
 
             .btn-propostas {
                 display: block;
@@ -316,19 +332,27 @@
                th:text="${m.mensagem}">
                 Texto da mensagem
             </p>
-
-            <span class="mensagem-data"
-                  th:text="${#temporals.format(m.enviadoEm, 'dd/MM/yyyy HH:mm')}">
-                —
-            </span>
+            
 
             <a th:if="${#strings.equalsIgnoreCase(m.status, 'PROPOSTA')}"
-               th:href="@{/propostas/{id}(id=${m.projetoId})}"
-               class="btn-propostas">
+   th:href="@{/propostas/{id}(id=${m.projetoId})}"
+   class="btn-propostas">
 
-                Ver propostas do serviço
+    Ver propostas do serviço
 
-            </a>
+</a>
+
+            <div class="mensagem-footer">
+    <span class="mensagem-data" th:text="${#temporals.format(m.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
+
+    <form th:action="@{/deletar/{id}(id=${m.id})}" method="post" style="margin:0;">
+        <button type="submit" class="btn-apagar" title="Apagar mensagem">
+            <i class="ti ti-trash"></i>
+        </button>
+    </form>
+</div>
+
+
 
         </div>
 
