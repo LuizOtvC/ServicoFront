@@ -163,6 +163,7 @@ public String home(HttpSession session, Model model) {
                     .toList();
 
             atualizar.setDiasTrabalho(dias);
+            atualizar.setCidade(usuario.getCidade());
             model.addAttribute("atualizar", atualizar);
             return "atualizar";
         } catch (HttpClientErrorException e) {

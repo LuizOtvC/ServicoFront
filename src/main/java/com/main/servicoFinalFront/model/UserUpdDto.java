@@ -16,13 +16,17 @@ public class UserUpdDto {
     private String descricao;
     private String telefone;
     private List<String> diasTrabalho;
+    private String cidade;
 
-    public UserUpdDto(String nome, String descricao, String telefone, List<String> diasTrabalho) {
+    public UserUpdDto(String nome, String descricao, String telefone, List<String> diasTrabalho, String cidade) {
         this.nome = nome;
         this.descricao = descricao;
         this.telefone = telefone;
         this.diasTrabalho = diasTrabalho;
+        this.cidade = cidade;
     }
+
+    
 
     public UserUpdDto() {
     }
@@ -59,4 +63,13 @@ public class UserUpdDto {
         this.descricao = descricao;
     }
 
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    
 }

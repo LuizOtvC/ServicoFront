@@ -65,21 +65,18 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-
                 background: transparent;
-                border: 1px solid rgba(255,255,255,.5);
-                color: white;
-
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                color: #fff;
                 border-radius: 8px;
                 padding: 8px 15px;
-
                 font-size: 13px;
                 text-decoration: none;
                 cursor: pointer;
+                transition: background 0.2s, color 0.2s;
             }
-
             .btn-voltar:hover {
-                background: white;
+                background: #fff;
                 color: #1a1a2e;
             }
         .projeto-detalhes {
@@ -163,6 +160,7 @@ a.btn-voltar:hover {
                     <span th:if="${p.orcamento == 0}">A ser definido pelo profissional</span>
                     <span th:unless="${p.orcamento == 0}">R$ <span th:text="${p.orcamento}">—</span></span>
                 </p>
+                <p class="detalhe-row"><strong>Cidade:</strong> <span th:text="${p.cidade}">—</span></p>
                 <p class="detalhe-row">
                     <strong>Dias de trabalho:</strong>
                     <span th:each="dia, iter : ${p.diasTrabalho}">

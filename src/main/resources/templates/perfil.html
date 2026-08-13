@@ -313,6 +313,7 @@
                     width: 100%;
                     min-height: 0;
                 }
+                
             }
         </style>
     <div th:replace="~{fragment/Background :: background-css}"></div>
@@ -334,6 +335,7 @@
                 <div class="avatar" id="avatar-initials">?</div>
                 <p class="sidebar-nome" id="header-nome" th:text="${usuario.nome}">Nome</p>
                 <p class="sidebar-email" th:text="${usuario.email}">email</p>
+                
 
                 <div class="sidebar-info">
                     <i class="ti ti-phone"></i>
@@ -346,6 +348,11 @@
                           th:text="${usuario.descricao}">—</span>
                     <span th:if="${usuario.descricao == null or #strings.isEmpty(usuario.descricao)}"
                           style="color: #6c757d; font-style: italic;">Sem descrição</span>
+                </div>
+                
+                <div class="sidebar-info">
+                    <i class="ti ti-map-pin"></i>
+                    <span th:text="${usuario.cidade}">—</span>
                 </div>
 
                 <div class="rep-badge">

@@ -171,6 +171,16 @@
                                   th:field="*{descricao}"
                                   placeholder="Fale um pouco sobre você..."></textarea>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Cidade</label>
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{cidade}"
+                               placeholder="Londrina"
+                               required
+                               autofocus/>
+                    </div>
 
                     <div class="mb-4">
                         <label class="form-label">Dias de trabalho</label>

@@ -662,7 +662,6 @@
              ">
 
 
-            <!-- AVISO DE SERVIÇO ENCERRADO -->
 
             <div class="terminated-banner"
                  th:if="${terminado}">
@@ -682,7 +681,7 @@
             </div>
 
 
-            <!-- ETAPAS DO PROJETO -->
+            
 
             <ol class="stepper"
                 th:unless="${terminado}">
@@ -810,15 +809,34 @@
 
                         <div class="section-label">
                             <i class="ti ti-tools"></i>
-                            Serviços
+                            Requisitos
                         </div>
 
                         <div class="chip-row">
 
-                            <span class="chip chip-blue"
+                            <span class="chip chip-neutral"
                                   th:each="s : ${projeto.servicos}"
                                   th:text="${s}">
-                                Serviço
+                                Requisitos
+                            </span>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="section">
+
+                        <div class="section-label">
+                            <i class="ti ti-tools"></i>
+                            Cidade
+                        </div>
+
+                        <div class="chip-row">
+
+                            <span class="chip chip-neutral"
+                                  th:each="s : ${projeto.cidade}"
+                                  th:text="${s}">
+                                Cidade
                             </span>
 
                         </div>
@@ -924,7 +942,7 @@
                     </div>
 
 
-                    <!-- COMPATIBILIDADE -->
+                   
 
                     <div class="aside-block"
                          th:if="${usuarioLogadoId != projeto.usuarioId}">
@@ -964,7 +982,7 @@
                     </div>
 
 
-                    <!-- PROFISSIONAL SELECIONADO -->
+                
 
                     <div class="aside-block"
                          th:if="${profissional != null}">
@@ -1013,7 +1031,7 @@
                     </div>
 
 
-                    <!-- AÇÕES -->
+                  
 
                     <div class="aside-block">
 
@@ -1029,7 +1047,7 @@
                         <div class="action-list">
 
 
-                            <!-- AVALIAR (destaque) -->
+                        
 
                             <button type="button"
                                     class="btn-sys btn-sys-star"
@@ -1050,7 +1068,7 @@
                             </button>
 
 
-                            <!-- ENVIAR PROPOSTA -->
+                            
 
                             <a th:if="${usuarioLogadoId != projeto.usuarioId and !jaEnviouProposta}"
                                th:href="@{/proposta(projetoId=${projeto.id})}"
@@ -1063,7 +1081,7 @@
                             </a>
 
 
-                            <!-- JÁ ENVIOU PROPOSTA -->
+                           
 
                             <span class="toolbar-note"
                                   th:if="${usuarioLogadoId != projeto.usuarioId and jaEnviouProposta}">
@@ -1091,7 +1109,7 @@
                             </form>
 
 
-                            <!-- MARCAR EM ANDAMENTO -->
+                          
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and projeto.status == 'ABERTO'
@@ -1111,7 +1129,7 @@
                             </form>
 
 
-                            <!-- MARCAR CONCLUÍDO -->
+                         
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and projeto.status == 'EM_ANDAMENTO'}"
@@ -1130,7 +1148,7 @@
                             </form>
 
 
-                            <!-- CANCELAR SERVIÇO -->
+                        
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and projeto.status == 'ABERTO'}"
@@ -1149,7 +1167,7 @@
                             </form>
 
 
-                            <!-- ARQUIVAR SERVIÇO -->
+                     
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and (projeto.status == 'CANCELADO'
@@ -1179,7 +1197,7 @@
             </div>
 
 
-            <!-- MODAL DE AVALIAÇÃO -->
+       
 
             <div class="modal fade"
                  id="modalAvaliacao"

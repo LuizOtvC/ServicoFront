@@ -11,6 +11,7 @@ public class ProjetoListarDto {
     private String status;
     private List<String> servicos;
     private List<String> diasTrabalho;
+    private String cidade;
 
     public Long getId() {
         return id;
@@ -67,4 +68,14 @@ public class ProjetoListarDto {
     public void setDiasTrabalho(List<String> diasTrabalho) {
         this.diasTrabalho = diasTrabalho;
     }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+    
+    
 }

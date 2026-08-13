@@ -16,6 +16,7 @@ public class ProjetoResposta {
     private LocalDateTime criadoEm;
     private List<String> diasTrabalho;
     private PropostaRespostaDto propostaAceita;
+    private String cidade;
 
     public ProjetoResposta() {
     }
@@ -107,4 +108,14 @@ public class ProjetoResposta {
     public void setPropostaAceita(PropostaRespostaDto propostaAceita) {
         this.propostaAceita = propostaAceita;
     }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+    
+    
 }
