@@ -256,6 +256,17 @@
                 color: #1a1a2e;
 
             }
+            .projeto-detalhes .btn-outline-dark {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    background: transparent !important;
+}
+
+.projeto-detalhes .btn-outline-dark:hover {
+    color: #1a1a2e !important;
+    background: #ffffff !important;
+    border-color: #ffffff !important;
+}
         </style>
     <div th:replace="~{fragment/Background :: background-css}"></div>
 </head>
@@ -387,11 +398,12 @@
                     </span>
                 </p>
 
-                <a th:href="@{/projetoporId/{id}(id=${p.id})}"
-                   class="btn-ver-mais"
-                   onclick="event.stopPropagation()">
-                    Ver informações <i class="ti ti-arrow-right"></i>
-                </a>
+               <a th:href="@{/projetoporId/{id}(id=${p.id})}"
+   class="btn btn-sm btn-outline-dark"
+   style="font-size: 12px; border-radius: 6px;"
+   onclick="event.stopPropagation()">
+    Ver informações
+</a>
             </div>
         </div>
     </div>

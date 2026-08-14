@@ -1049,23 +1049,35 @@
 
                         
 
-                            <button type="button"
-                                    class="btn-sys btn-sys-star"
-                                    th:if="${podeAvaliar}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalAvaliacao">
 
-                                <i class="ti ti-star"></i>
+<button type="button"
+        class="btn-sys btn-sys-star"
+        th:if="${podeAvaliar}"
+        data-bs-toggle="modal"
+        data-bs-target="#modalAvaliacao">
 
-                                Avaliar
-                                <span th:if="${usuarioLogadoId == projeto.usuarioId and profissional != null}"
-                                      th:text="${profissional.nome}">
-                                </span>
-                                <span th:if="${usuarioLogadoId != projeto.usuarioId and usuario != null}"
-                                      th:text="${usuario.nome}">
-                                </span>
+    <i class="ti ti-star"></i>
 
-                            </button>
+    Avaliar
+    <span th:if="${usuarioLogadoId == projeto.usuarioId and profissional != null}"
+          th:text="${profissional.nome}">
+    </span>
+
+    <span th:if="${usuarioLogadoId != projeto.usuarioId and usuario != null}"
+          th:text="${usuario.nome}">
+    </span>
+
+</button>
+
+
+<span class="btn-sys btn-sys-outline"
+      th:if="${participou and projeto.status == 'CONCLUIDO' and jaAvaliou}">
+
+    <i class="ti ti-check"></i>
+
+    Você já avaliou este usuário
+
+</span>
 
 
                             
