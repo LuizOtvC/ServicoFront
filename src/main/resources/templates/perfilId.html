@@ -1,179 +1,919 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Perfil</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
-    <style>
-        body {
-            background: #f0f2f5;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 420px;
-            overflow: hidden;
-            border: none;
-        }
-        .card-header {
-            background: #1a1a2e;
-            padding: 1.4rem 1.5rem;
-            text-align: center;
-        }
-        .avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: #3a3a6e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-            margin: 0 auto 10px;
-        }
-        .card-header h4 { color: white; font-weight: 600; margin: 0 0 2px; font-size: 18px; }
-        .card-header p  { color: #adb5bd; font-size: 12px; margin: 0; }
-        .card-body { padding: 1.25rem 1.5rem; }
-        .info-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .info-row:last-of-type { border-bottom: none; }
-        .info-row i { font-size: 17px; color: #888; width: 20px; flex-shrink: 0; }
-        .info-label { font-size: 11px; color: #aaa; display: block; margin-bottom: 1px; }
-        .info-value { font-size: 13px; color: #1a1a2e; font-weight: 500; }
-        .rep-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f0f4ff;
-            border: 1px solid #d0d9f5;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-top: 1rem;
-        }
-        .rep-badge i  { font-size: 20px; color: #f5a623; }
-        .rep-label { font-size: 11px; color: #666; margin: 0; }
-        .rep-value { font-size: 16px; font-weight: 600; color: #1a1a2e; margin: 0; line-height: 1; }
-        .btn-voltar {
-            display: block;
-            width: 100%;
-            background: #1a1a2e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.55rem;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 1rem;
-            text-align: center;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-voltar:hover { background: #2d2d50; color: white; }
-    </style>
+
+    <head>
+
+        <meta charset="UTF-8"/>
+
+        <title>Perfil</title>
+
+        <link rel="stylesheet"
+              th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+
+        <style>
+
+
+
+            .perfil-page {
+                max-width: 1120px;
+                margin: 0 auto;
+                padding: 8px 30px 48px;
+            }
+
+            .page-title {
+                color: #ffffff;
+                font-size: 26px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 0 0 24px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid rgba(255,255,255,.12);
+            }
+
+            .page-title i {
+                font-size: 24px;
+                color: #f5a623;
+            }
+
+            .page-content {
+                width: 100%;
+                padding: 0 0 2rem;
+                position: relative;
+                z-index: 1;
+            }
+
+            body {
+                min-height: 100vh;
+                margin: 0;
+            }
+
+
+
+
+            .perfil-container {
+                display: flex;
+                align-items: flex-start;
+                gap: 32px;
+            }
+
+
+
+
+            .perfil-sidebar {
+                position: sticky;
+                top: 125px;
+
+                width: 340px;
+                min-height: 560px;
+
+                background: #1a1a2e;
+                color: white;
+
+                padding: 32px;
+                border-radius: 16px;
+
+                box-shadow: 0 8px 30px rgba(0,0,0,.15);
+
+                flex-shrink: 0;
+            }
+
+
+
+
+            .avatar {
+                width: 72px;
+                height: 72px;
+
+                border-radius: 50%;
+
+                background: #3a3a6e;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                font-size: 24px;
+                font-weight: 700;
+
+                color: white;
+
+                margin: 0 auto 1rem;
+
+                border: 3px solid rgba(255,255,255,.12);
+            }
+
+
+
+
+            .sidebar-nome {
+                font-size: 16px;
+                font-weight: 600;
+
+                text-align: center;
+
+                margin-bottom: 4px;
+
+                color: white;
+            }
+
+            .sidebar-email {
+                font-size: 12px;
+
+                color: #adb5bd;
+
+                text-align: center;
+
+                margin-bottom: 1.5rem;
+            }
+
+
+
+
+            .sidebar-info {
+                font-size: 12px;
+                color: white;
+
+                display: flex;
+                align-items: flex-start;
+
+                gap: 8px;
+
+                padding: 10px 0;
+
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+            }
+
+            .sidebar-info i {
+                font-size: 15px;
+                color: #6c7aad;
+
+                margin-top: 2px;
+
+                flex-shrink: 0;
+            }
+
+            .sidebar-info-content {
+                min-width: 0;
+                flex: 1;
+            }
+
+            .sidebar-info-label {
+                display: block;
+
+                font-size: 11px;
+
+                color: #adb5bd;
+
+                margin-bottom: 2px;
+            }
+
+            .sidebar-info span {
+                color: white;
+
+                font-size: 13px;
+
+                line-height: 1.5;
+
+                word-break: break-word;
+            }
+
+
+
+
+            .rep-badge {
+                background: rgba(255,255,255,0.08);
+
+                border-radius: 10px;
+
+                padding: 12px;
+
+                margin-top: 1.5rem;
+
+                display: flex;
+
+                align-items: center;
+
+                gap: 10px;
+            }
+
+            .rep-badge i {
+                font-size: 22px;
+                color: #f5a623;
+            }
+
+            .rep-label {
+                font-size: 11px;
+
+                color: #adb5bd;
+
+                margin: 0;
+            }
+
+            .rep-value {
+                font-size: 20px;
+
+                font-weight: 700;
+
+                margin: 0;
+
+                color: white;
+            }
+
+
+
+
+            .status-badge {
+                display: inline-flex;
+
+                align-items: center;
+
+                gap: 5px;
+
+                font-size: 11px;
+
+                font-weight: 600;
+
+                border-radius: 20px;
+
+                padding: 4px 14px;
+
+                letter-spacing: .2px;
+            }
+
+            .status-ativo {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .status-inativo {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .status-arquivado {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+
+
+
+            .perfil-main {
+                flex: 1;
+                min-width: 0;
+            }
+
+
+
+
+            .section-title {
+                font-size: 15px;
+
+                font-weight: 700;
+
+                color: white;
+
+                text-transform: uppercase;
+
+                letter-spacing: 0.5px;
+
+                margin-bottom: 1rem;
+
+                margin-top: 1.5rem;
+            }
+
+            .section-title:first-child {
+                margin-top: 0;
+            }
+
+            .section-title i {
+                margin-right: 6px;
+                color: #8fc0ff;
+            }
+
+
+
+
+            .dias-container {
+                display: flex;
+
+                flex-wrap: wrap;
+
+                gap: 6px;
+
+                margin-bottom: 2rem;
+            }
+
+            .dia-badge {
+                display: inline-block;
+
+                background: #e8eaf6;
+
+                color: #3949ab;
+
+                border-radius: 6px;
+
+                padding: 5px 11px;
+
+                font-size: 12px;
+
+                font-weight: 500;
+            }
+
+
+
+
+            .habilidades-container {
+                display: flex;
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+            .habilidade-row {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.07);
+                backdrop-filter: blur(18px) saturate(140%);
+                -webkit-backdrop-filter: blur(18px) saturate(140%);
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                border-radius: 12px;
+                padding: 16px 20px;
+                box-shadow: 0 8px 24px rgba(3, 8, 20, 0.28);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+            }
+            .habilidade-row:hover {
+                background: rgba(255, 255, 255, 0.11);
+                border-color: rgba(255, 255, 255, 0.24);
+                box-shadow: 0 10px 28px rgba(3, 8, 20, 0.34);
+            }
+
+            .habilidade-info {
+                display: flex;
+
+                align-items: center;
+
+                gap: 12px;
+
+                min-width: 0;
+            }
+
+            .habilidade-icon {
+                width: 34px;
+                height: 34px;
+
+                border-radius: 8px;
+
+                background: #f0f4ff;
+
+                color: #2E5395;
+
+                display: flex;
+
+                align-items: center;
+                justify-content: center;
+
+                flex-shrink: 0;
+            }
+
+            .habilidade-icon i {
+                font-size: 17px;
+            }
+
+            .habilidade-texto {
+                min-width: 0;
+            }
+
+            .habilidade-nome {
+                display: block;
+                font-size: 14px;
+                font-weight: 500;
+                color: #ffffff;
+                margin-bottom: 3px;
+            }
+
+            .habilidade-nivel {
+                display: inline-block;
+
+                font-size: 11px;
+
+                font-weight: 600;
+
+                border-radius: 20px;
+
+                padding: 2px 10px;
+
+                background: #f0f4ff;
+
+                color: #2E5395;
+            }
+
+
+
+
+            .vazio-card {
+                background: rgba(255,255,255,.05);
+
+                border: 1px solid rgba(255,255,255,.10);
+
+                border-radius: 10px;
+
+                padding: 18px;
+
+                display: flex;
+
+                align-items: center;
+
+                gap: 10px;
+            }
+
+            .vazio-card i {
+                color: #8fc0ff;
+
+                font-size: 18px;
+            }
+
+            .vazio-msg {
+                color: #aaa;
+
+                font-size: 13px;
+
+                font-style: italic;
+
+                margin: 0;
+            }
+
+
+
+
+            .btn-outline-dark-custom {
+                background: none;
+
+                color: white;
+
+                border: 1px solid rgba(255,255,255,.35);
+
+                border-radius: 8px;
+
+                padding: .55rem 1.2rem;
+
+                font-size: 13px;
+
+                font-weight: 600;
+
+                text-decoration: none;
+
+                display: inline-flex;
+
+                justify-content: center;
+
+                align-items: center;
+
+                gap: 6px;
+
+                transition:
+                    background .2s,
+                    color .2s,
+                    border-color .2s;
+            }
+
+            .btn-outline-dark-custom:hover {
+                background: white;
+
+                color: #1a1a2e;
+
+                border-color: white;
+            }
+
+
+
+
+            .alert-container {
+                max-width: 1120px;
+
+                margin: 0 auto;
+
+                padding: 0 30px;
+            }
+
+
+
+
+            @media (max-width: 860px) {
+
+                .perfil-page {
+                    padding: 8px 18px 40px;
+                }
+
+                .perfil-container {
+                    flex-direction: column;
+                }
+
+                .perfil-sidebar {
+                    position: static;
+
+                    width: 100%;
+
+                    min-height: 0;
+                }
+
+                .perfil-main {
+                    width: 100%;
+                }
+
+            }
+
+        </style>
+
+    <div th:replace="~{fragment/Background :: background-css}"></div>
+
 </head>
-<body>
-    <div class="card">
-        <div th:if="${erro}" class="card-body">
-            <div class="alert alert-danger" th:text="${erro}"></div>
+
+
+<body class="background-padrao">
+
+
+
+
+    <div th:replace="~{fragment/navbar :: custom-header}"></div>
+
+
+
+
+    <div th:if="${erro}"
+         class="alert-container">
+
+        <div class="alert alert-danger">
+            <span th:text="${erro}"></span>
         </div>
 
-        <div th:if="${usuario}">
-            <div class="card-header">
-                <div class="avatar" id="avatar-initials">?</div>
-                <h4 id="header-nome" th:text="${usuario.nome}">Nome do usuário</h4>
-                <p th:text="${usuario.email}">email@exemplo.com</p>
-            </div>
-            <div class="card-body">
-                <div class="info-row">
-                    <i class="ti ti-user" aria-hidden="true"></i>
-                    <div>
-                        <span class="info-label">Nome</span>
-                        <span class="info-value" th:text="${usuario.nome}">—</span>
-                    </div>
-                </div>
-                <div class="info-row">
-                    <i class="ti ti-phone" aria-hidden="true"></i>
-                    <div>
-                        <span class="info-label">Telefone</span>
-                        <span class="info-value" th:text="${usuario.telefone}">—</span>
-                    </div>
-                </div>
-                <div class="info-row">
-    <i class="ti ti-calendar-week" aria-hidden="true"></i>
-    <div>
-        <span class="info-label">Dias de trabalho</span>
-
-        <span class="info-value"
-              th:if="${usuario.diasTrabalho != null and !#lists.isEmpty(usuario.diasTrabalho)}">
-
-            <span th:each="dia, stat : ${usuario.diasTrabalho}">
-                <span th:text="${dia}"></span>
-                <span th:if="${!stat.last}">, </span>
-            </span>
-
-        </span>
-
-        <span class="info-value"
-              th:if="${usuario.diasTrabalho == null or #lists.isEmpty(usuario.diasTrabalho)}">
-            Nenhum dia informado
-        </span>
     </div>
-</div>
+
+
+
+
+    <div th:if="${usuario}"
+         class="perfil-page">
+
+
+
+
+        <h1 class="page-title">
+
+            <i class="ti ti-user-circle"></i>
+
+            Perfil
+
+        </h1>
+
+
+        <div class="perfil-container">
+
+
+
+
+            <div class="perfil-sidebar">
+
+
+
+
+                <div class="avatar"
+                     id="avatar-initials">
+
+                    ?
+
+                </div>
+
+
+
+
+                <p class="sidebar-nome"
+                   id="header-nome"
+                   th:text="${usuario.nome}">
+
+                    Nome do usuário
+
+                </p>
+
+
+
+
+                <p class="sidebar-email"
+                   th:text="${usuario.email}">
+
+                    email@exemplo.com
+
+                </p>
+
+
+
+
+                <div class="sidebar-info">
+
+                    <i class="ti ti-phone"></i>
+
+                    <div class="sidebar-info-content">
+
+                        <span class="sidebar-info-label">
+                            Telefone
+                        </span>
+
+                        <span th:text="${usuario.telefone}">
+                            —
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="sidebar-info">
+
+                    <i class="ti ti-calendar-week"></i>
+
+                    <div class="sidebar-info-content">
+
+                        <span class="sidebar-info-label">
+                            Dias de trabalho
+                        </span>
+
+                        <span th:if="${usuario.diasTrabalho != null and !#lists.isEmpty(usuario.diasTrabalho)}">
+
+                            <span th:each="dia, stat : ${usuario.diasTrabalho}">
+
+                                <span th:text="${dia}">
+                                    Segunda
+                                </span>
+
+                                <span th:if="${!stat.last}">
+                                    ,
+                                </span>
+
+                            </span>
+
+                        </span>
+
+                        <span th:if="${usuario.diasTrabalho == null or #lists.isEmpty(usuario.diasTrabalho)}">
+
+                            Nenhum dia informado
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
 
                 <div class="rep-badge">
-    <i class="ti ti-star" aria-hidden="true"></i>
-    <div>
-        <p class="rep-label">Reputação</p>
-        <p class="rep-value" th:text="${usuario.reputacao}">0</p>
-    </div>
-</div>
 
-<div th:if="${#lists.isEmpty(habilidades)}" class="info-row">
-    <i class="ti ti-info-circle" aria-hidden="true"></i>
-    <div>
-        <span class="info-value" style="color: #888; font-weight: 400;">
-            Este profissional ainda não cadastrou nenhuma habilidade.
-        </span>
-    </div>
-</div>
-<div th:each="h : ${habilidades}">
-    <div class="info-row">
-        <i class="ti ti-tool" aria-hidden="true"></i>
-        <div>
-            <span class="info-label" th:text="${h.nomeServico}">Serviço</span>
-            <span class="info-value" th:text="${h.nivel}">Nível</span>
-        </div>
-    </div>
-</div>
+                    <i class="ti ti-star"></i>
 
-<a href="#" onclick="history.back(); return false;" class="btn-voltar">
-    <i class="ti ti-arrow-left"></i> Voltar
-</a>
+                    <div>
+
+                        <p class="rep-label">
+                            Reputação
+                        </p>
+
+                        <p class="rep-value"
+                           th:text="${usuario.reputacao}">
+
+                            0
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div style="margin-top: 1rem; text-align: center;">
+
+                    <span class="status-badge status-ativo"
+                          th:if="${usuario.status == 'ATIVO'}">
+
+                        ● Ativo
+
+                    </span>
+
+                    <span class="status-badge status-inativo"
+                          th:if="${usuario.status == 'INATIVO'}">
+
+                        ● Inativo
+
+                    </span>
+
+                    <span class="status-badge status-arquivado"
+                          th:if="${usuario.status == 'ARQUIVADO'}">
+
+                        ● Arquivado
+
+                    </span>
+
+                </div>
+
+
+
+
+                <div style="
+                     margin-top: 2rem;
+                     display: flex;
+                     flex-direction: column;
+                     gap: 10px;
+                     ">
+
+                    <a href="#"
+                       onclick="history.back(); return false;"
+                       class="btn-outline-dark-custom">
+
+                        <i class="ti ti-arrow-left"></i>
+
+                        Voltar
+
+                    </a>
+
+                </div>
+
+
             </div>
+
+
+
+
+            <div class="perfil-main">
+
+
+                <div class="page-content">
+
+
+
+
+                    <div class="section-title">
+
+                        <i class="ti ti-calendar-week"></i>
+
+                        Dias de trabalho
+
+                    </div>
+
+
+                    <div class="dias-container"
+                         th:if="${usuario.diasTrabalho != null and !#lists.isEmpty(usuario.diasTrabalho)}">
+
+                        <span th:each="dia : ${usuario.diasTrabalho}"
+                              class="dia-badge"
+                              th:text="${dia}">
+
+                            Segunda
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="vazio-card"
+                         th:if="${usuario.diasTrabalho == null or #lists.isEmpty(usuario.diasTrabalho)}">
+
+                        <i class="ti ti-calendar-off"></i>
+
+                        <p class="vazio-msg">
+                            Nenhum dia informado
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="section-title">
+
+                        <i class="ti ti-tool"></i>
+
+                        Habilidades
+
+                    </div>
+
+
+
+
+                    <div class="vazio-card"
+                         th:if="${#lists.isEmpty(habilidades)}">
+
+                        <i class="ti ti-info-circle"></i>
+
+                        <p class="vazio-msg">
+
+                            Este profissional ainda não cadastrou nenhuma habilidade.
+
+                        </p>
+
+                    </div>
+
+
+
+
+                    <div class="habilidades-container"
+                         th:if="${!#lists.isEmpty(habilidades)}">
+
+
+                        <div th:each="h : ${habilidades}"
+                             class="habilidade-row">
+
+
+                            <div class="habilidade-info">
+
+
+                                <div class="habilidade-icon">
+
+                                    <i class="ti ti-tool"></i>
+
+                                </div>
+
+
+                                <div class="habilidade-texto">
+
+                                    <span class="habilidade-nome"
+                                          th:text="${h.nomeServico}">
+
+                                        Serviço
+
+                                    </span>
+
+                                    <span class="habilidade-nivel"
+                                          th:text="${h.nivel}">
+
+                                        Nível
+
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
         </div>
+
+
     </div>
+
+
+
+
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}">
+    </script>
+
+
 
     <script>
-        const nome = document.getElementById('header-nome')?.textContent?.trim() || '';
-        const initials = nome.split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
-        const av = document.getElementById('avatar-initials');
-        if (av && initials) av.textContent = initials;
+
+        const nome =
+        document.getElementById('header-nome')
+        ?.textContent
+        ?.trim() || '';
+
+        const initials =
+        nome
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(w => w[0].toUpperCase())
+        .join('');
+
+        const av =
+        document.getElementById('avatar-initials');
+
+        if (av && initials) {
+        av.textContent = initials;
+        }
+
     </script>
+
+
 </body>
+
 </html>

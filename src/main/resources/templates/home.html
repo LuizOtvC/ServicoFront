@@ -3,7 +3,10 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Início - ServiçoFinal</title>
+
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+
         <style>
             body {
                 background: linear-gradient(135deg, #0d1b3e 0%, #12305e 45%, #1957a6 100%);
@@ -16,7 +19,6 @@
                 padding: 2rem 2rem 3rem;
             }
 
-           
             .boas-vindas {
                 background: rgba(255, 255, 255, 0.1);
                 backdrop-filter: blur(18px);
@@ -40,7 +42,6 @@
                 margin: 0;
             }
 
-            
             .card-acao {
                 border: none;
                 border-radius: 12px;
@@ -73,7 +74,6 @@
                 margin: 0;
             }
 
-            
             .secao-titulo {
                 font-size: 15px;
                 font-weight: 600;
@@ -109,21 +109,144 @@
                 cursor: pointer;
                 transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
             }
+
             .projeto-card:hover {
                 background: rgba(255, 255, 255, 0.11);
                 border-color: rgba(255, 255, 255, 0.24);
                 box-shadow: 0 10px 28px rgba(3, 8, 20, 0.34);
             }
 
-            .projeto-card .btn-outline-dark {
+            .projeto-titulo {
+                font-size: 15px;
+                font-weight: 600;
                 color: #ffffff;
-                border-color: rgba(255, 255, 255, 0.4);
+                margin: 0 0 4px;
             }
 
-            .projeto-card .btn-outline-dark:hover {
-                color: #0d1b3e;
-                background: #ffffff;
-                border-color: #ffffff;
+            .projeto-desc {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.65);
+                margin: 0 0 0.6rem;
+            }
+
+            .projeto-status {
+                display: inline-block;
+                font-size: 10px;
+                font-weight: 600;
+                border-radius: 20px;
+                padding: 2px 10px;
+                margin-bottom: 8px;
+            }
+
+            .status-aberto {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .status-em_andamento {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .status-concluido {
+                background: #d1ecf1;
+                color: #0c5460;
+            }
+
+            .status-cancelado {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .status-arquivado {
+                background: #e2e3e5;
+                color: #383d41;
+            }
+
+            .projeto-orcamento {
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.65);
+            }
+
+            .projeto-detalhes {
+                display: none;
+                margin-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.14);
+                padding-top: 10px;
+            }
+
+            .projeto-detalhes.aberto {
+                display: block;
+            }
+
+            .detalhe-row {
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.75);
+                margin-bottom: 4px;
+            }
+
+            .detalhe-row strong {
+                color: #ffffff;
+            }
+
+            .btn-ver-mais {
+                display: inline-block;
+                margin-top: 8px;
+                font-size: 12px;
+                color: #9ec5ff;
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+            .btn-ver-mais:hover {
+                text-decoration: underline;
+            }
+
+            .badge-status {
+                font-size: 11px;
+                padding: 3px 10px;
+                border-radius: 20px;
+                font-weight: 500;
+            }
+
+            .badge-projeto-aberto {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .badge-projeto-em_andamento {
+                background: #cce5ff;
+                color: #004085;
+            }
+
+            .badge-projeto-concluido {
+                background: #d1ecf1;
+                color: #0c5460;
+            }
+
+            .badge-projeto-cancelado {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .badge-projeto-arquivado {
+                background: #e2e3e5;
+                color: #383d41;
+            }
+
+            .badge-pendente {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .badge-aceita {
+                background: #d1e7dd;
+                color: #0a5235;
+            }
+
+            .badge-recusada {
+                background: #f8d7da;
+                color: #842029;
             }
 
             .proposta-titulo {
@@ -137,31 +260,6 @@
                 font-size: 13px;
                 color: rgba(255, 255, 255, 0.65);
                 margin-bottom: 0.6rem;
-            }
-
-            .badge-status {
-                font-size: 11px;
-                padding: 3px 10px;
-                border-radius: 20px;
-                font-weight: 500;
-            }
-            .badge-projeto-aberto { background: #d4edda; color: #155724; }
-            .badge-projeto-em_andamento { background: #cce5ff; color: #004085; }
-            .badge-projeto-concluido { background: #d1ecf1; color: #0c5460; }
-            .badge-projeto-cancelado { background: #f8d7da; color: #721c24; }
-            .badge-projeto-arquivado { background: #e2e3e5; color: #383d41; }
-
-            .badge-pendente  {
-                background: #fff3cd;
-                color: #856404;
-            }
-            .badge-aceita    {
-                background: #d1e7dd;
-                color: #0a5235;
-            }
-            .badge-recusada  {
-                background: #f8d7da;
-                color: #842029;
             }
 
             .proposta-info {
@@ -178,21 +276,22 @@
                 padding: 2.5rem;
                 text-align: center;
                 color: #cbd5e1;
+                margin-bottom: 1.5rem;
             }
 
             .vazio .icone-vazio {
                 font-size: 36px;
                 margin-bottom: 0.5rem;
             }
+
             .vazio p {
                 font-size: 14px;
                 margin: 0;
             }
+
             .vazio a {
                 color: #93c5fd !important;
             }
-
-            
 
             .btn-sair {
                 color: #495057;
@@ -212,102 +311,366 @@
             .navbar-toggler {
                 border-color: rgba(13, 27, 62, 0.2);
             }
+
+            .projeto-servicos {
+                font-size: 12px;
+                color: rgba(255,255,255,0.7);
+                margin: 0;
+            }
+
+            .projeto-servicos span {
+                display: inline-block;
+                background: #f0f4ff;
+                border: 1px solid #d0d9f5;
+                border-radius: 20px;
+                padding: 2px 8px;
+                margin: 2px;
+                font-size: 11px;
+                color: #2E5395;
+            }
         </style>
     </head>
+
     <body>
 
         <div th:replace="~{fragment/navbar :: custom-header}"></div>
 
         <div class="pagina-conteudo">
+
+            <!-- BOAS-VINDAS -->
             <div class="boas-vindas shadow-sm mb-4">
-                <h5 th:text="'Olá, ' + ${usuario.nome}">Olá</h5>
-                <p>Veja abaixo os seus projetos e propostas recebidas.</p>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <span class="secao-titulo">Meus serviços</span><br>
-        <span class="secao-subtitulo">Serviços que você publicou</span>
-    </div>
-</div>
+                <h5 th:text="'Olá, ' + ${usuario.nome}">
+                    Olá
+                </h5>
 
-<div th:if="${projetos != null and !#lists.isEmpty(projetos)}">
-    <div class="projeto-card"
-         th:each="projeto : ${projetos}">
-        <div class="d-flex justify-content-between align-items-start">
-            <div>
-                <div class="proposta-titulo" th:text="${projeto.titulo}">Título</div>
-                <div class="proposta-desc" th:text="${projeto.descricao}">Descrição</div>
-                <span class="badge-status"
-                      th:classappend="'badge-projeto-' + ${#strings.toLowerCase(projeto.status)}"
-                      th:text="${projeto.status}">ABERTO</span>
+                <p>
+                    Veja abaixo os seus serviços e propostas recebidas.
+                </p>
             </div>
-            <div class="text-end">
-                <span class="proposta-info" th:if="${projeto.orcamento > 0}">
-                    R$ <span th:text="${projeto.orcamento}"></span>
-                </span>
-                <span class="proposta-info" th:if="${projeto.orcamento == 0}">
-                    A combinar
-                </span>
-                <br>
-                <a th:href="@{/projetoporId/{id}(id=${projeto.id})}"
-                   class="btn btn-sm btn-outline-dark mt-2"
-                   style="font-size: 12px; border-radius: 6px;">
-                    Ver detalhes
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="vazio mb-4" th:if="${projetos == null or #lists.isEmpty(projetos)}">
-    <p>Você ainda não publicou nenhum serviço.<br>
-        <a href="/projeto/criar" style="color: #93c5fd; font-weight: 500;">Crie um Serviço</a>
-        para começar.
-    </p>
-</div>
-            
 
+            <!-- ========================= -->
+            <!-- MEUS SERVIÇOS -->
+            <!-- ========================= -->
 
             <div class="d-flex justify-content-between align-items-center mb-3">
+
                 <div>
-                    <span class="secao-titulo">Propostas nos seus serviços</span><br>
-                    <span class="secao-subtitulo">Profissionais que se candidataram aos seus serviços</span>
+                    <span class="secao-titulo">
+                        Meus serviços
+                    </span>
+
+                    <br>
+
+                    <span class="secao-subtitulo">
+                        Serviços que você publicou
+                    </span>
                 </div>
+
+            </div>
+
+
+            <!-- TEM PROJETOS -->
+            <div th:if="${projetos != null and !#lists.isEmpty(projetos)}">
+
+                <div class="projeto-card"
+                     th:each="projeto : ${projetos}"
+                     th:onclick="|toggleDetalhes('detalhes-${projeto.id}')|">
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <div>
+
+                            <p class="projeto-titulo"
+                               th:text="${projeto.titulo}">
+                                Título
+                            </p>
+
+                            <p class="projeto-desc"
+                               th:text="${projeto.descricao}">
+                                Descrição
+                            </p>
+
+                            <span class="projeto-status"
+                                  th:classappend="${#strings.equalsIgnoreCase(projeto.status, 'ABERTO')} ? 'status-aberto' :
+                                  (${#strings.equalsIgnoreCase(projeto.status, 'EM_ANDAMENTO')} ? 'status-em_andamento' :
+                                  (${#strings.equalsIgnoreCase(projeto.status, 'CONCLUIDO')} ? 'status-concluido' :
+                                  (${#strings.equalsIgnoreCase(projeto.status, 'CANCELADO')} ? 'status-cancelado' : 'status-arquivado'))) "
+                                  th:text="${projeto.status}">
+                                ABERTO
+                            </span>
+
+                            <p class="projeto-servicos">
+
+                                <span th:each="s : ${projeto.servicos}"
+                                      th:text="${s}">
+                                    Serviço
+                                </span>
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DETALHES -->
+                    <div class="projeto-detalhes"
+                         th:id="|detalhes-${projeto.id}|">
+
+                        <p class="detalhe-row">
+
+                            <strong>Descrição:</strong>
+
+                            <span th:text="${projeto.descricao}">
+                                —
+                            </span>
+
+                        </p>
+
+
+                        <p class="detalhe-row">
+
+                            <strong>Orçamento:</strong>
+
+                            <span th:if="${projeto.orcamento == 0}">
+                                A ser definido pelo profissional
+                            </span>
+
+                            <span th:unless="${projeto.orcamento == 0}">
+                                R$
+                                <span th:text="${projeto.orcamento}">
+                                    —
+                                </span>
+                            </span>
+
+                        </p>
+
+
+                        <p class="detalhe-row">
+
+                            <strong>Cidade:</strong>
+
+                            <span th:text="${projeto.cidade}">
+                                —
+                            </span>
+
+                        </p>
+
+
+                        <p class="detalhe-row">
+
+                            <strong>Dias de trabalho:</strong>
+
+                            <span th:if="${projeto.diasTrabalho != null}">
+
+                                <span th:each="dia, iter : ${projeto.diasTrabalho}">
+
+                                    <span th:text="${dia}"></span>
+
+                                    <span th:if="${!iter.last}">
+                                        ,
+                                    </span>
+
+                                </span>
+
+                            </span>
+
+                        </p>
+
+
+                        <div class="d-flex gap-2 mt-2">
+
+                            <a th:href="@{/projetoporId/{id}(id=${projeto.id})}"
+                               class="btn btn-sm btn-outline-dark"
+                               style="font-size: 12px; border-radius: 6px;"
+                               onclick="event.stopPropagation()">
+
+                                Ver informações
+
+                            </a>
+
+
+                            <form th:if="${projeto.status == 'ABERTO'}"
+                                  th:action="@{/propostas/{id}(id=${projeto.id})}"
+                                  method="get"
+                                  onclick="event.stopPropagation()">
+
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-dark"
+                                        style="font-size: 12px; border-radius: 6px;">
+
+                                    Ver propostas recebidas
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- NÃO TEM PROJETOS -->
+            <div class="vazio"
+                 th:if="${projetos == null or #lists.isEmpty(projetos)}">
+
+                <div class="icone-vazio">
+
+                    <i class="ti ti-briefcase-off"></i>
+
+                </div>
+
+                <p>
+
+                    Você ainda não publicou nenhum serviço.
+
+                    <br>
+
+                    <a th:href="@{/projeto/criar}">
+                        Crie um Serviço
+                    </a>
+
+                    para começar.
+
+                </p>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- PROPOSTAS -->
+            <!-- ========================= -->
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div>
+
+                    <span class="secao-titulo">
+                        Propostas nos seus serviços
+                    </span>
+
+                    <br>
+
+                    <span class="secao-subtitulo">
+                        Profissionais que se candidataram aos seus serviços
+                    </span>
+
+                </div>
+
             </div>
 
 
             <div th:if="${propostas != null and !#lists.isEmpty(propostas)}">
+
                 <div class="projeto-card"
                      th:each="proposta : ${propostas}">
+
                     <div class="d-flex justify-content-between align-items-start">
+
                         <div>
-                            <div class="proposta-titulo" th:text="${proposta.nomeProjeto}">Nome do Serviço</div>
-                            <div class="proposta-desc" th:text="${proposta.nomeProfissional}">Nome do Profissional</div>
+
+                            <div class="proposta-titulo"
+                                 th:text="${proposta.nomeProjeto}">
+                                Nome do Serviço
+                            </div>
+
+
+                            <div class="proposta-desc"
+                                 th:text="${proposta.nomeUsuario}">
+                                Nome do Profissional
+                            </div>
+
+
                             <span class="badge-status"
-                                  th:classappend="${proposta.status == 'ACEITA'} ? 'badge-aceita' : (${proposta.status == 'RECUSADA'} ? 'badge-recusada' : 'badge-pendente')"
-                                  th:text="${proposta.status}">PENDENTE</span>
+                                  th:classappend="${proposta.status == 'ACEITA'} ? 'badge-aceita' :
+                                  (${proposta.status == 'RECUSADA'} ? 'badge-recusada' : 'badge-pendente')"
+                                  th:text="${proposta.status}">
+                                PENDENTE
+                            </span>
+
                         </div>
+
+
                         <div class="text-end">
-                            <div class="proposta-info" th:text="'R$ ' + ${proposta.valorProposto}">R$ 0,00</div>
-                            <a th:href="@{/propostas/{id}(id=${proposta.id})}"
+
+                            <div class="proposta-info">
+
+                                <span th:if="${proposta.valorProposto == 0}">
+                                    A ser definido pelo profissional
+                                </span>
+
+                                <span th:unless="${proposta.valorProposto == 0}">
+                                    R$
+                                    <span th:text="${proposta.valorProposto}">
+                                        0,00
+                                    </span>
+                                </span>
+
+                            </div>
+
+
+                            <br>
+
+
+                            <a th:href="@{/propostas/{id}(id=${proposta.projetoId})}"
                                class="btn btn-sm btn-outline-dark mt-2"
                                style="font-size: 12px; border-radius: 6px;">
+
                                 Ver detalhes
+
                             </a>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
 
-            <!-- Estado vazio -->
-            <div class="vazio" th:if="${propostas == null or #lists.isEmpty(propostas)}">
-                <p>Nenhuma proposta recebida ainda.<br>
+
+            <div class="vazio"
+                 th:if="${propostas == null or #lists.isEmpty(propostas)}">
+
+                <div class="icone-vazio">
+
+                    <i class="ti ti-file-off"></i>
+
+                </div>
+
+                <p>
+                    Nenhuma proposta recebida ainda.
                 </p>
+
             </div>
 
         </div>
 
-        <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+
+        <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}">
+        </script>
+
+
+        <script>
+
+            function toggleDetalhes(id) {
+
+                const el = document.getElementById(id);
+
+                if (el) {
+
+                    el.classList.toggle('aberto');
+
+                }
+
+            }
+
+        </script>
+
     </body>
 </html>

@@ -273,12 +273,18 @@
 
                 <div class="proposta-footer">
 
-                    <span class="proposta-valor">
-                        R$
-                        <span th:text="${p.valorProposto}">0,00</span>
-                    </span>
+    <span class="proposta-valor"
+          th:if="${p.valorProposto == 0}">
+        A ser definido pelo profissional
+    </span>
 
-                </div>
+    <span class="proposta-valor"
+          th:unless="${p.valorProposto == 0}">
+        R$
+        <span th:text="${p.valorProposto}">0,00</span>
+    </span>
+
+</div>
 
                 <div class="score-box">
     <p class="score-total">
@@ -286,28 +292,26 @@
         <span th:text="${#numbers.formatDecimal(p.scoreTotal * 100,1,1)}"></span>%
     </p>
 
-    <!-- Habilidades -->
     <p class="score-detalhe" style="margin-top: 8px;">
         <strong>Habilidades:</strong>
         <span th:if="${p.scoreServicos >= 0.9}"
               style="color: #2e9e5b; font-weight: 600;">
-            ✔ Possui todas as habilidades necessárias
+            ✓ Possui todas as habilidades necessárias
         </span>
         <span th:if="${p.scoreServicos >= 0.5 and p.scoreServicos < 0.9}"
               style="color: #d97706; font-weight: 600;">
             ⚠ Possui parte das habilidades necessárias
         </span>
         <span th:if="${p.scoreServicos < 0.5}"
-              style="color: #dc2626; font-weight: 600;">
-            ✘ Poucas habilidades compatíveis
+              style="color: #FF6347; font-weight: 600;">
+            ✕ Poucas habilidades compatíveis
         </span>
     </p>
 
-    <!-- Dias -->
     <p class="score-detalhe">
         <strong>Disponibilidade:</strong>
         <span th:if="${p.scoreServicos == 0 and #lists.isEmpty(p.diasTrabalho)}"
-              style="color: #94a3b8;">
+              style="color: #FFFFFF;">
             Não informada
         </span>
         <span th:if="${!#lists.isEmpty(p.diasTrabalho)}"

@@ -119,6 +119,17 @@ a.btn-voltar:hover {
     background: white !important;
     color: #1a1a2e !important;
 }
+.projeto-detalhes .btn-outline-dark {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    background: transparent !important;
+}
+
+.projeto-detalhes .btn-outline-dark:hover {
+    color: #1a1a2e !important;
+    background: #fff !important;
+    border-color: #fff !important;
+}
     </style>
     <div th:replace="~{fragment/Background :: background-css}"></div>
 </head>
@@ -168,11 +179,29 @@ a.btn-voltar:hover {
                     </span>
                 </p>
 
-                <a th:href="@{/projetoporId/{id}(id=${p.id})}"
-                   class="btn-ver-mais"
-                   onclick="event.stopPropagation()">
-                    Ver informações <i class="ti ti-arrow-right"></i>
-                </a>
+                <div class="d-flex gap-2 mt-2">
+
+    <a th:href="@{/projetoporId/{id}(id=${p.id})}"
+       class="btn btn-sm btn-outline-dark"
+       style="font-size: 12px; border-radius: 6px;"
+       onclick="event.stopPropagation()">
+        Ver informações
+    </a>
+
+    <form th:if="${p.status == 'ABERTO'}"
+          th:action="@{/propostas/{id}(id=${p.id})}"
+          method="get"
+          onclick="event.stopPropagation()">
+
+        <button type="submit"
+                class="btn btn-sm btn-outline-dark"
+                style="font-size: 12px; border-radius: 6px;">
+            Ver propostas recebidas
+        </button>
+
+    </form>
+
+</div>
             </div>
         </div>
 

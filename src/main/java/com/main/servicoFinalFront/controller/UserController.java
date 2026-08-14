@@ -17,6 +17,7 @@ import com.main.servicoFinalFront.model.UserRegistroDto;
 import com.main.servicoFinalFront.model.UserUpdDto;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -61,18 +62,29 @@ public class UserController {
     @GetMapping("/")
 public String home(HttpSession session, Model model) {
     String token = (String) session.getAttribute("token");
+
     if (token == null) {
         return "redirect:/logar";
     }
+
     try {
         UserPerfilDto usuario = authService.VerPerfil(token);
 
         List<ProjetoListarDto> projetos = authService.listarProjetosFiltroUsuario(token);
+        List<PropostaRespostaDto> propostas = authService.listarProjetoFiltro(token);
+
+        if (projetos == null) {
+            projetos = new ArrayList<>();
+        }
+
+        if (propostas == null) {
+            propostas = new ArrayList<>();
+        }
+
         if (projetos.size() > 4) {
             projetos = projetos.subList(0, 4);
         }
 
-        List<PropostaRespostaDto> propostas = authService.listarProjetoFiltro(token);
         if (propostas.size() > 4) {
             propostas = propostas.subList(0, 4);
         }
@@ -89,11 +101,22 @@ public String home(HttpSession session, Model model) {
             session.invalidate();
             return "redirect:/logar";
         }
+
         model.addAttribute("erro", "Erro ao carregar a página inicial.");
+
+
+        model.addAttribute("projetos", new ArrayList<>());
+        model.addAttribute("propostas", new ArrayList<>());
+
     } catch (Exception e) {
         e.printStackTrace();
+
         model.addAttribute("erro", "Erro ao carregar a página inicial.");
+
+        model.addAttribute("projetos", new ArrayList<>());
+        model.addAttribute("propostas", new ArrayList<>());
     }
+
     return "home";
 }
     @PostMapping("/logar")

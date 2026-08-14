@@ -213,9 +213,21 @@
             <p class="proposta-descricao" th:text="${p.descricao}">Descrição do serviço</p>
 
             <div class="proposta-footer">
-                <span class="proposta-valor">R$ <span th:text="${p.valorProposto}">0,00</span></span>
-                <span class="proposta-data" th:text="${#temporals.format(p.enviadoEm, 'dd/MM/yyyy HH:mm')}">—</span>
-            </div>
+    <span class="proposta-valor">
+        <span th:if="${p.valorProposto == 0}">
+            A ser definido pelo profissional
+        </span>
+
+        <span th:unless="${p.valorProposto == 0}">
+            R$ <span th:text="${p.valorProposto}">0,00</span>
+        </span>
+    </span>
+
+    <span class="proposta-data"
+          th:text="${#temporals.format(p.enviadoEm, 'dd/MM/yyyy HH:mm')}">
+        —
+    </span>
+</div>
 
             <form th:if="${#strings.equalsIgnoreCase(p.status, 'PENDENTE')}"
                   th:action="@{/cancelar/{id}(id=${p.id})}" method="post">
