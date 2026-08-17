@@ -137,23 +137,17 @@
             .sidebar-info {
                 font-size: 12px;
                 color: white;
-
                 display: flex;
                 align-items: flex-start;
-
                 gap: 8px;
-
                 padding: 10px 0;
-
                 border-bottom: 1px solid rgba(255,255,255,0.08);
             }
 
             .sidebar-info i {
                 font-size: 15px;
                 color: #6c7aad;
-
                 margin-top: 2px;
-
                 flex-shrink: 0;
             }
 
@@ -174,11 +168,8 @@
 
             .sidebar-info span {
                 color: white;
-
                 font-size: 13px;
-
                 line-height: 1.5;
-
                 word-break: break-word;
             }
 
@@ -617,60 +608,24 @@
 
 
                 <div class="sidebar-info">
-
                     <i class="ti ti-phone"></i>
-
-                    <div class="sidebar-info-content">
-
-                        <span class="sidebar-info-label">
-                            Telefone
-                        </span>
-
-                        <span th:text="${usuario.telefone}">
-                            —
-                        </span>
-
-                    </div>
-
+                    <span th:text="${usuario.telefone}">—</span>
                 </div>
 
-
-
+                <div class="sidebar-info">
+                    <i class="ti ti-file-description"></i>
+                    <span th:if="${usuario.descricao != null and !#strings.isEmpty(usuario.descricao)}"
+                          th:text="${usuario.descricao}">—</span>
+                    <span th:if="${usuario.descricao == null or #strings.isEmpty(usuario.descricao)}"
+                          style="color: #6c757d; font-style: italic;">Sem descrição</span>
+                </div>
 
                 <div class="sidebar-info">
-
-                    <i class="ti ti-calendar-week"></i>
-
-                    <div class="sidebar-info-content">
-
-                        <span class="sidebar-info-label">
-                            Dias de trabalho
-                        </span>
-
-                        <span th:if="${usuario.diasTrabalho != null and !#lists.isEmpty(usuario.diasTrabalho)}">
-
-                            <span th:each="dia, stat : ${usuario.diasTrabalho}">
-
-                                <span th:text="${dia}">
-                                    Segunda
-                                </span>
-
-                                <span th:if="${!stat.last}">
-                                    ,
-                                </span>
-
-                            </span>
-
-                        </span>
-
-                        <span th:if="${usuario.diasTrabalho == null or #lists.isEmpty(usuario.diasTrabalho)}">
-
-                            Nenhum dia informado
-
-                        </span>
-
-                    </div>
-
+                    <i class="ti ti-map-pin"></i>
+                    <span th:if="${usuario.cidade != null and !#strings.isEmpty(usuario.cidade)}"
+                     th:text="${usuario.cidade}">—</span>
+                    <span th:if="${usuario.cidade == null or #strings.isEmpty(usuario.cidade)}"
+                          style="color: #6c757d; font-style: italic;">Sem cidade</span>
                 </div>
 
 
@@ -810,15 +765,10 @@
 
                     <div class="vazio-card"
                          th:if="${#lists.isEmpty(habilidades)}">
-
                         <i class="ti ti-info-circle"></i>
-
                         <p class="vazio-msg">
-
                             Este profissional ainda não cadastrou nenhuma habilidade.
-
                         </p>
-
                     </div>
 
 

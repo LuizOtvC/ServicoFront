@@ -357,7 +357,10 @@
 
                 <div class="sidebar-info">
                     <i class="ti ti-map-pin"></i>
-                    <span th:text="${usuario.cidade}">—</span>
+                    <span th:if="${usuario.cidade != null and !#strings.isEmpty(usuario.cidade)}"
+                     th:text="${usuario.cidade}">—</span>
+                    <span th:if="${usuario.cidade == null or #strings.isEmpty(usuario.cidade)}"
+                          style="color: #6c757d; font-style: italic;">Sem cidade</span>
                 </div>
 
                 <div class="rep-badge">
@@ -384,12 +387,10 @@
                 </div>
             </div>
 
-            <!-- Main -->
             <div class="perfil-main">
 
                 <div class="page-content">
 
-                    <!-- Dias de trabalho -->
                     <div class="section-title">
                         <i class="ti ti-calendar-week"></i> Dias de trabalho
                     </div>
@@ -400,7 +401,6 @@
                         Nenhum dia informado
                     </p>
 
-                    <!-- Habilidades -->
                     <div class="section-title">
                         <i class="ti ti-tool"></i> Habilidades
                     </div>
