@@ -165,6 +165,7 @@ a.btn-voltar:hover {
             </p>
 
             <div class="projeto-detalhes" th:id="|detalhes-${p.id}|">
+                <p class="detalhe-row"><strong>Cidade:</strong> <span th:text="${p.cidade}">—</span></p>
                 <p class="detalhe-row"><strong>Descrição:</strong> <span th:text="${p.descricao}">—</span></p>
                 <p class="detalhe-row">
                     <strong>Orçamento:</strong>
