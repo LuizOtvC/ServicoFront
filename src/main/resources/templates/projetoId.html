@@ -681,7 +681,7 @@
             </div>
 
 
-            
+
 
             <ol class="stepper"
                 th:unless="${terminado}">
@@ -776,17 +776,17 @@
             </ol>
 
 
-           
+
 
             <div class="layout">
 
 
-                
+
 
                 <div class="main">
 
 
-                    
+
 
                     <div class="section">
 
@@ -803,7 +803,7 @@
                     </div>
 
 
-                    
+
 
                     <div class="section">
 
@@ -823,7 +823,7 @@
                         </div>
 
                     </div>
-                    
+
                     <div class="section">
 
                         <div class="section-label">
@@ -844,7 +844,7 @@
                     </div>
 
 
-                    
+
 
                     <div class="section">
 
@@ -869,12 +869,12 @@
                 </div>
 
 
-                
+
 
                 <div class="aside">
 
 
-                   
+
 
                     <div class="aside-block">
 
@@ -942,21 +942,15 @@
                     </div>
 
 
-                   
 
                     <div class="aside-block"
-                         th:if="${usuarioLogadoId != projeto.usuarioId}">
-
+                         th:if="${usuarioLogadoId != projeto.usuarioId and projeto.status == 'ABERTO'}">
                         <div class="aside-label">
                             <i class="ti ti-target-arrow"></i>
                             Sua compatibilidade
                         </div>
-
-
                         <div class="meter-row">
-
                             <div class="meter-track">
-
                                 <div class="meter-fill"
                                      th:style="'width:' + ${scoreProjeto * 100} + '%'"
                                      th:classappend="${scoreProjeto >= 0.7}
@@ -965,27 +959,18 @@
                                      ? 'meter-fill-mid'
                                      : 'meter-fill-low')">
                                 </div>
-
                             </div>
-
-
                             <span class="meter-value">
-
                                 <span th:text="${#numbers.formatDecimal(scoreProjeto * 100, 1, 1)}">
                                     0
                                 </span>%
-
                             </span>
-
                         </div>
-
                     </div>
 
 
-                
 
-                    <div class="aside-block"
-                         th:if="${profissional != null}">
+                    <div class="aside-block" th:if="${profissional != null and (usuarioLogadoId == projeto.usuarioId or usuarioLogadoId == profissional.id)}">
 
                         <div class="aside-label">
 
@@ -1031,7 +1016,7 @@
                     </div>
 
 
-                  
+
 
                     <div class="aside-block">
 
@@ -1047,40 +1032,40 @@
                         <div class="action-list">
 
 
-                        
 
 
-<button type="button"
-        class="btn-sys btn-sys-star"
-        th:if="${podeAvaliar}"
-        data-bs-toggle="modal"
-        data-bs-target="#modalAvaliacao">
 
-    <i class="ti ti-star"></i>
+                            <button type="button"
+                                    class="btn-sys btn-sys-star"
+                                    th:if="${podeAvaliar}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalAvaliacao">
 
-    Avaliar
-    <span th:if="${usuarioLogadoId == projeto.usuarioId and profissional != null}"
-          th:text="${profissional.nome}">
-    </span>
+                                <i class="ti ti-star"></i>
 
-    <span th:if="${usuarioLogadoId != projeto.usuarioId and usuario != null}"
-          th:text="${usuario.nome}">
-    </span>
+                                Avaliar
+                                <span th:if="${usuarioLogadoId == projeto.usuarioId and profissional != null}"
+                                      th:text="${profissional.nome}">
+                                </span>
 
-</button>
+                                <span th:if="${usuarioLogadoId != projeto.usuarioId and usuario != null}"
+                                      th:text="${usuario.nome}">
+                                </span>
 
-
-<span class="btn-sys btn-sys-outline"
-      th:if="${participou and projeto.status == 'CONCLUIDO' and jaAvaliou}">
-
-    <i class="ti ti-check"></i>
-
-    Você já avaliou este usuário
-
-</span>
+                            </button>
 
 
-                            
+                            <span class="btn-sys btn-sys-outline"
+                                  th:if="${participou and projeto.status == 'CONCLUIDO' and jaAvaliou}">
+
+                                <i class="ti ti-check"></i>
+
+                                Você já avaliou este usuário
+
+                            </span>
+
+
+
 
                             <a th:if="${usuarioLogadoId != projeto.usuarioId and !jaEnviouProposta}"
                                th:href="@{/proposta(projetoId=${projeto.id})}"
@@ -1093,7 +1078,7 @@
                             </a>
 
 
-                           
+
 
                             <span class="toolbar-note"
                                   th:if="${usuarioLogadoId != projeto.usuarioId and jaEnviouProposta}">
@@ -1103,7 +1088,7 @@
                             </span>
 
 
-                           
+
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId and projeto.status == 'ABERTO'}"
                                   th:action="@{/propostas/{id}(id=${projeto.id})}"
@@ -1121,7 +1106,7 @@
                             </form>
 
 
-                          
+
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and projeto.status == 'ABERTO'
@@ -1141,7 +1126,7 @@
                             </form>
 
 
-                         
+
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and projeto.status == 'EM_ANDAMENTO'}"
@@ -1160,7 +1145,7 @@
                             </form>
 
 
-                        
+
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and projeto.status == 'ABERTO'}"
@@ -1179,7 +1164,7 @@
                             </form>
 
 
-                     
+
 
                             <form th:if="${usuarioLogadoId == projeto.usuarioId
                                   and (projeto.status == 'CANCELADO'
@@ -1209,7 +1194,7 @@
             </div>
 
 
-       
+
 
             <div class="modal fade"
                  id="modalAvaliacao"

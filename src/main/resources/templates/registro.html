@@ -219,7 +219,7 @@
     </head>
     <body class="d-flex align-items-center justify-content-center py-4">
 
-        
+
         <svg width="0" height="0" style="position:absolute">
         <defs>
         <linearGradient id="degradeAzul" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -302,7 +302,9 @@
                         <input type="tel"
                                class="form-control"
                                th:field="*{telefone}"
-                               placeholder="(11) 99999-9999"/>
+                               id="telefone"
+                               placeholder="(11) 99999-9999"
+                               maxlength="15"/>
 
                         <small class="text-muted" style="font-size:10px; color: white !important;">
                             Informe um telefone válido no formato (11) 99999-9999.
@@ -365,6 +367,21 @@
             inputConfirmar.classList.remove("erro-campo");
             }
             });
+            
+            document.getElementById("telefone").addEventListener("input", function () {
+    let valor = this.value.replace(/\D/g, "");
+    valor = valor.slice(0, 11);
+
+    if (valor.length > 6) {
+        valor = valor.replace(/^(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+    } else if (valor.length > 2) {
+        valor = valor.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+    } else if (valor.length > 0) {
+        valor = valor.replace(/^(\d{0,2})/, "($1");
+    }
+
+    this.value = valor;
+});
         </script>
 
     </body>
