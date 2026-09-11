@@ -4,24 +4,15 @@
  */
 package com.main.servicoFinalFront.service;
 
-import com.main.servicoFinalFront.model.MensagemRespostaDto;
-import com.main.servicoFinalFront.model.ProjetoListarDto;
-import com.main.servicoFinalFront.model.ProjetoResposta;
-import com.main.servicoFinalFront.model.ProjetoUserDto;
-import com.main.servicoFinalFront.model.PropostaEnvioDto;
-import com.main.servicoFinalFront.model.PropostaRespostaDto;
-import com.main.servicoFinalFront.model.PropostaScoreDto;
-import com.main.servicoFinalFront.model.Servico;
-import com.main.servicoFinalFront.model.ServicoAtualizar;
-import com.main.servicoFinalFront.model.ServicoListar;
-import com.main.servicoFinalFront.model.UsuarioServico;
-import com.main.servicoFinalFront.model.UserLogarDto;
-import com.main.servicoFinalFront.model.UserPerfilDto;
-import com.main.servicoFinalFront.model.UserRegistroDto;
-import com.main.servicoFinalFront.model.UserUpdDto;
+import com.main.servicoFinalFront.model.*;
+
 import java.util.List;
+import java.util.Map;
+
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.HttpClientErrorException;
@@ -40,12 +31,20 @@ public class AuthService {
                 .build();
     }
 
-    public String logar(UserLogarDto user) {
+    public TokenResponseDto logar(UserLogarDto user) {
         return restclient.post()
                 .uri("/user/logar")
                 .body(user)
                 .retrieve()
-                .body(String.class);
+                .body(TokenResponseDto.class);
+    }
+
+    public TokenResponseDto refresh(String refreshToken) {
+        return restclient.post()
+                .uri("/user/refresh")
+                .body(Map.of("refreshToken", refreshToken))
+                .retrieve()
+                .body(TokenResponseDto.class);
     }
 
     public String Registrar(UserRegistroDto user) {
@@ -140,9 +139,10 @@ public class AuthService {
                 });
     }
 
-    public List<ProjetoResposta> listarProjetosComFiltro(
+    public PageResponseDto<ProjetoResposta> listarProjetosComFiltro(
             String token, Double orcamentoMin,
-            List<Long> servicosIds, List<String> diasSemana) {
+            List<Long> servicosIds, List<String> diasSemana,
+            int page, int size) {
 
         UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/projeto/listarFiltro");
         if (orcamentoMin != null) {
@@ -154,12 +154,14 @@ public class AuthService {
         if (diasSemana != null) {
             diasSemana.forEach(d -> uri.queryParam("diasSemana", d));
         }
+        uri.queryParam("page", page);
+        uri.queryParam("size", size);
 
         return restclient.get()
                 .uri(uri.toUriString())
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<ProjetoResposta>>() {
+                .body(new ParameterizedTypeReference<PageResponseDto<ProjetoResposta>>() {
                 });
     }
 
@@ -360,6 +362,29 @@ public class AuthService {
             .retrieve()
             .body(Long.class);
 }
+
+    public <T> T executarComRefresh(HttpSession session, java.util.function.Function<String, T> chamada) {
+        String token = (String) session.getAttribute("token");
+
+        try {
+            return chamada.apply(token);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                String refreshToken = (String) session.getAttribute("refreshToken");
+
+                try {
+                    TokenResponseDto novosTokens = this.refresh(refreshToken);
+                    session.setAttribute("token", novosTokens.getAccessToken());
+                    session.setAttribute("refreshToken", novosTokens.getRefreshToken());
+                    return chamada.apply(novosTokens.getAccessToken());
+                } catch (HttpClientErrorException refreshErro) {
+                    session.invalidate();
+                    throw refreshErro;
+                }
+            }
+            throw e;
+        }
+    }
 
     
 }

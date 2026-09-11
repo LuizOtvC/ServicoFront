@@ -4,14 +4,12 @@
  */
 package com.main.servicoFinalFront.controller;
 
-import com.main.servicoFinalFront.model.ProjetoListarDto;
-import com.main.servicoFinalFront.model.ProjetoResposta;
-import com.main.servicoFinalFront.model.ProjetoUserDto;
-import com.main.servicoFinalFront.model.Servico;
-import com.main.servicoFinalFront.model.UserPerfilDto;
+import com.main.servicoFinalFront.model.*;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
@@ -34,7 +32,7 @@ import tools.jackson.databind.ObjectMapper;
 public class ProjetoController {
 
     @Autowired
-    private AuthService service;
+    private AuthService authService;
 
     private String extrairMensagemDeErro(HttpClientErrorException e) {
         try {
@@ -54,174 +52,129 @@ public class ProjetoController {
         if (token == null) {
             return "redirect:/logar";
         }
-        List<Servico> servicos = service.listarServicos(token);
-        long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-        model.addAttribute("servicos", servicos);
+        try {
+            authService.executarComRefresh(session, tk -> {
+                List<Servico> servicos = authService.listarServicos(tk);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("servicos", servicos);
+                return null;
+            });
+        } catch (HttpClientErrorException e) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
         model.addAttribute("projeto", new ProjetoUserDto());
         return "criarProjeto";
     }
 
     @PostMapping("/projeto/criar")
-public String criarProjeto(@ModelAttribute ProjetoUserDto projeto,
-                           HttpSession session,
-                           Model model) {
+    public String criarProjeto(@ModelAttribute ProjetoUserDto projeto, HttpSession session, Model model) {
 
-    String token = (String) session.getAttribute("token");
-    if (token == null) {
-        return "redirect:/logar";
-    }
-
-    try {
-        service.adicionarProjeto(projeto, token);
-        return "redirect:/projetoFiltroUser";
-
-    } catch (HttpClientErrorException e) {
-
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
         }
 
-        model.addAttribute("errorMessage", extrairMensagemDeErro(e));
-        model.addAttribute("projeto", projeto);
-        model.addAttribute("servicos", service.listarServicos(token));
-        model.addAttribute("naoLidas", service.contarNaoLidas(token));
+        try {
+            authService.executarComRefresh(session, tk -> {
+                authService.adicionarProjeto(projeto, tk);
+                return null;
+            });
+            return "redirect:/projetoFiltroUser";
 
-        return "criarProjeto";
+        } catch (HttpClientErrorException e) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
     }
-}
 
     @GetMapping("/projetoFiltro")
-    public String projetoFiltro(
-            @RequestParam(required = false) Double orcamentoMin,
-            @RequestParam(required = false) List<Long> servicosIds,
-            @RequestParam(required = false) List<String> diasSemana,
-            HttpSession session, Model model) {
+    public String projetoFiltro(@RequestParam(required = false) Double orcamentoMin, @RequestParam(required = false) List<Long> servicosIds, @RequestParam(required = false) List<String> diasSemana, @RequestParam(defaultValue = "0") int page, HttpSession session, Model model) {
         String token = (String) session.getAttribute("token");
         if (token == null) {
             return "redirect:/logar";
         }
         try {
-            UserPerfilDto usuario = service.VerPerfil(token);
-            List<Servico> todosServicos = service.listarServicos(token);
+            authService.executarComRefresh(session, tk -> {
+                UserPerfilDto usuario = authService.VerPerfil(tk);
+                List<Servico> todosServicos = authService.listarServicos(tk);
 
-            List<ProjetoResposta> projetos = service
-                    .listarProjetosComFiltro(token, orcamentoMin, servicosIds, diasSemana);
-            
-            long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
+                PageResponseDto<ProjetoResposta> pagina = authService.listarProjetosComFiltro(tk, orcamentoMin, servicosIds, diasSemana, page, 20);
 
-            model.addAttribute("projetos", projetos);
-            model.addAttribute("todosServicos", todosServicos);
-            model.addAttribute("orcamentoMin", orcamentoMin);
-            model.addAttribute("servicosSelecionados", servicosIds);
-            model.addAttribute("diasSelecionados", diasSemana);
+                long naoLidas = authService.contarNaoLidas(tk);
+
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("projetos", pagina.getContent());
+                model.addAttribute("paginaAtual", pagina.getNumber());
+                model.addAttribute("totalPaginas", pagina.getTotalPages());
+                model.addAttribute("temProxima", !pagina.isLast());
+                model.addAttribute("orcamentoMin", orcamentoMin);
+                model.addAttribute("servicosSelecionados", servicosIds);
+                model.addAttribute("diasSelecionados", diasSemana);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
         return "projetoFiltro";
     }
 
     @GetMapping("/projetoporId/{id}")
-public String meusProjetosId(@PathVariable Long id, HttpSession session, Model model) {
+    public String meusProjetosId(@PathVariable Long id, HttpSession session, Model model) {
 
-    String token = (String) session.getAttribute("token");
-
-    if (token == null) {
-        return "redirect:/logar";
-    }
-
-    try {
-
-        ProjetoResposta projeto = service.listarprojetoPorId(id, token);
-
-
-        UserPerfilDto usuario = service.VerPerfilId(
-                token,
-                projeto.getUsuarioId()
-        );
-
-
-        UserPerfilDto usuarioLogado = service.VerPerfil(token);
-
-        boolean jaEnviou = service.existeProposta(id, token);
-
-        boolean participou =
-                usuarioLogado.getId().equals(projeto.getUsuarioId())
-                ||
-                (
-                    projeto.getPropostaAceita() != null
-                    &&
-                    usuarioLogado.getId().equals(
-                            projeto.getPropostaAceita().getUsuarioId()
-                    )
-                );
-
-
-        UserPerfilDto profissional = null;
-
-        if (projeto.getPropostaAceita() != null) {
-
-            Long profissionalId =
-                    projeto.getPropostaAceita().getUsuarioId();
-
-            profissional = service.VerPerfilId(
-                    token,
-                    profissionalId
-            );
-        }
-
-        boolean jaAvaliou = false;
-
-        if (participou && "CONCLUIDO".equals(projeto.getStatus())) {
-            jaAvaliou = service.jaAvaliei(id, token);
-        }
-
-        Double scoreProjeto = service.getScoreProjeto(token, id);
-
-        long naoLidas = service.contarNaoLidas(token);
-
-        model.addAttribute("naoLidas", naoLidas);
-        model.addAttribute("scoreProjeto", scoreProjeto);
-
-        model.addAttribute("projeto", projeto);
-
-        
-        model.addAttribute("usuario", usuario);
-
-       
-        model.addAttribute("profissional", profissional);
-
-        
-        model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
-
-        model.addAttribute("jaEnviouProposta", jaEnviou);
-
-        model.addAttribute("participou", participou);
-        model.addAttribute("jaAvaliou", jaAvaliou);
-
-    } catch (HttpClientErrorException e) {
-
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
             return "redirect:/logar";
         }
 
-        model.addAttribute("erro", "Erro ao carregar projeto.");
+        try {
+            authService.executarComRefresh(session, tk -> {
+                ProjetoResposta projeto = authService.listarprojetoPorId(id, tk);
+                UserPerfilDto usuario = authService.VerPerfilId(tk, projeto.getUsuarioId());
+                UserPerfilDto usuarioLogado = authService.VerPerfil(tk);
+                boolean jaEnviou = authService.existeProposta(id, tk);
 
-    } catch (Exception e) {
+                boolean participou = usuarioLogado.getId().equals(projeto.getUsuarioId())
+                        || (projeto.getPropostaAceita() != null
+                        && usuarioLogado.getId().equals(projeto.getPropostaAceita().getUsuarioId()));
 
-        e.printStackTrace();
+                UserPerfilDto profissional = null;
+                if (projeto.getPropostaAceita() != null) {
+                    Long profissionalId = projeto.getPropostaAceita().getUsuarioId();
+                    profissional = authService.VerPerfilId(tk, profissionalId);
+                }
 
-        model.addAttribute("erro", "Erro ao carregar projeto.");
+                boolean jaAvaliou = false;
+                if (participou && "CONCLUIDO".equals(projeto.getStatus())) {
+                    jaAvaliou = authService.jaAvaliei(id, tk);
+                }
+
+                Double scoreProjeto = authService.getScoreProjeto(tk, id);
+                long naoLidas = authService.contarNaoLidas(tk);
+
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("scoreProjeto", scoreProjeto);
+                model.addAttribute("projeto", projeto);
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("profissional", profissional);
+                model.addAttribute("usuarioLogadoId", usuarioLogado.getId());
+                model.addAttribute("jaEnviouProposta", jaEnviou);
+                model.addAttribute("participou", participou);
+                model.addAttribute("jaAvaliou", jaAvaliou);
+                return null;
+            });
+        } catch (HttpClientErrorException e) {
+            session.invalidate();
+            return "redirect:/logar";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("erro", "Erro ao carregar projeto.");
+        }
+
+        return "projetoId";
     }
-
-    return "projetoId";
-}
 
     @GetMapping("/projetoFiltroUser")
     public String listarProjetosUser(HttpSession session, Model model) {
@@ -230,16 +183,16 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
             return "redirect:/logar";
         }
         try {
-            List<ProjetoListarDto> projetos = service.listarProjetosFiltroUsuario(token);
-            long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-            model.addAttribute("projetos", projetos);
+            authService.executarComRefresh(session, tk -> {
+                List<ProjetoListarDto> projetos = authService.listarProjetosFiltroUsuario(tk);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("projetos", projetos);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
-            model.addAttribute("erro", "Erro ao carregar projetos.");
+            session.invalidate();
+            return "redirect:/logar";
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao carregar projetos.");
         }
@@ -253,15 +206,15 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
             return "redirect:/logar";
         }
         try {
-            service.ProjetoEmAndamento(id, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.ProjetoEmAndamento(id, tk);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
         return "redirect:/projetoFiltroUser";
-
     }
 
     @PostMapping("/concluido/{id}")
@@ -271,12 +224,13 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
             return "redirect:/logar";
         }
         try {
-            service.ProjetoConcluido(id, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.ProjetoConcluido(id, token);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
         return "redirect:/projetoFiltroUser";
 
@@ -289,17 +243,18 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
             return "redirect:/logar";
         }
         try {
-            service.ProjetoCancelado(id, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.ProjetoCancelado(id, token);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
         return "redirect:/projetoFiltroUser";
 
     }
-    
+
     @PostMapping("/arquivar/{id}")
     public String ArquivarProjeto(@PathVariable Long id, HttpSession session) {
         String token = (String) session.getAttribute("token");
@@ -307,12 +262,13 @@ public String meusProjetosId(@PathVariable Long id, HttpSession session, Model m
             return "redirect:/logar";
         }
         try {
-            service.ProjetoArquivado(id, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.ProjetoArquivado(id, token);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
         return "redirect:/projetoFiltroUser";
 

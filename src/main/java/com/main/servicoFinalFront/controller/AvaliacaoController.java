@@ -22,24 +22,24 @@ import org.springframework.web.client.HttpClientErrorException;
 public class AvaliacaoController {
 
     @Autowired
-    private AuthService service;
+    private AuthService authService;
 
     @PostMapping("/criar/{id}")
     public String avaliar(@PathVariable Long id, @RequestParam Double nota, @RequestParam(required = false) String comentario, HttpSession session) {
 
         String token = (String) session.getAttribute("token");
-
         if (token == null) {
             return "redirect:/logar";
         }
 
         try {
-            service.Avaliar(id, nota, comentario, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.Avaliar(id, nota, comentario, tk);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
 
         return "redirect:/projetoporId/" + id;

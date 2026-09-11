@@ -31,7 +31,7 @@ import org.springframework.web.client.HttpClientErrorException;
 public class PropostaController {
 
     @Autowired
-    private AuthService service;
+    private AuthService authService;
 
     @GetMapping("/proposta")
     public String paginaProposta(@RequestParam Long projetoId, HttpSession session, Model model) {
@@ -40,12 +40,16 @@ public class PropostaController {
             return "redirect:/logar";
         }
         try {
-            ProjetoResposta projeto = service.listarprojetoPorId(projetoId, token);
-            long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-            model.addAttribute("projeto", projeto);
-            model.addAttribute("dto", new PropostaEnvioDto());
+            authService.executarComRefresh(session, tk -> {
+                ProjetoResposta projeto = authService.listarprojetoPorId(projetoId, tk);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("projeto", projeto);
+                model.addAttribute("dto", new PropostaEnvioDto());
+                return null;
+            });
         } catch (HttpClientErrorException e) {
+            session.invalidate();
             return "redirect:/projetoFiltro";
         }
         return "proposta";
@@ -57,12 +61,11 @@ public class PropostaController {
         if (token == null) {
             return "redirect:/logar";
         }
-
-        System.out.println("Projeto: " + dto.getProjetoId());
-    System.out.println("Valor: " + dto.getValorProposto());
-    System.out.println("Descrição: " + dto.getDescricao());
         try {
-            service.adicionarProposta(token, dto);
+            authService.executarComRefresh(session, tk -> {
+                authService.adicionarProposta(tk, dto);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
             model.addAttribute("errorMessage", "Erro ao enviar proposta");
             return "perfil";
@@ -77,10 +80,14 @@ public class PropostaController {
             return "redirect:/logar";
         }
         try {
-            List<PropostaRespostaDto> propostas = service.listarProjetoFiltro(token);
-            long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-            model.addAttribute("propostas", propostas);
+            authService.executarComRefresh(session, tk -> {
+                List<PropostaRespostaDto> propostas = authService.listarProjetoFiltro(tk);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("propostas", propostas);
+                return null;
+            });
+
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
                 session.invalidate();
@@ -100,12 +107,14 @@ public class PropostaController {
             return "redirect:/logar";
         }
         try {
-            service.aceitarProposta(id, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.aceitarProposta(id, tk);
+                return null;
+            });
+
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
                 session.invalidate();
                 return "redirect:/logar";
-            }
         }
         return "redirect:/propostas/" + projetoId;
     }
@@ -117,16 +126,17 @@ public class PropostaController {
             return "redirect:/logar";
         }
         try {
-            List<PropostaRespostaDto> propostas = service.listarPropostas(token);
-            long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-            model.addAttribute("propostas", propostas);
+            authService.executarComRefresh(session, tk -> {
+                List<PropostaRespostaDto> propostas = authService.listarPropostas(tk);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("propostas", propostas);
+                return null;
+            });
+
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
                 session.invalidate();
                 return "redirect:/logar";
-            }
-            model.addAttribute("erro", "Erro ao carregar propostas.");
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao carregar propostas.");
         }
@@ -140,12 +150,13 @@ public class PropostaController {
             return "redirect:/logar";
         }
         try {
-            service.cancelarProposta(id, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.cancelarProposta(id, tk);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
                 session.invalidate();
                 return "redirect:/logar";
-            }
         }
         return "redirect:/propostasUsuario";
 
@@ -158,12 +169,13 @@ public class PropostaController {
             return "redirect:/logar";
         }
         try {
-            service.recusarProposta(id, token);
+            authService.executarComRefresh(session, tk -> {
+                authService.recusarProposta(id, tk);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
                 session.invalidate();
                 return "redirect:/logar";
-            }
         }
         return "redirect:/projetoporId/" + projetoId;
 
@@ -174,21 +186,21 @@ public String propostasDoProjetoComScore(@PathVariable Long id, HttpSession sess
     String token = (String) session.getAttribute("token");
     if (token == null) return "redirect:/logar";
     try {
-        List<PropostaScoreDto> propostas = service.listarPropostasComScore(token, id);
-        
-        boolean temPropostaAceita = propostas.stream()
-            .anyMatch(p -> "ACEITA".equals(p.getStatus()));
-        long naoLidas = service.contarNaoLidas((String) token);
+        authService.executarComRefresh(session, tk -> {
+            List<PropostaScoreDto> propostas = authService.listarPropostasComScore(tk, id);
+            boolean temPropostaAceita = propostas.stream()
+                    .anyMatch(p -> "ACEITA".equals(p.getStatus()));
+            long naoLidas = authService.contarNaoLidas(tk);
             model.addAttribute("naoLidas", naoLidas);
-        
-        model.addAttribute("propostas", propostas);
-        model.addAttribute("projetoId", id);
-        model.addAttribute("temPropostaAceita", temPropostaAceita);
+            model.addAttribute("propostas", propostas);
+            model.addAttribute("projetoId", id);
+            model.addAttribute("temPropostaAceita", temPropostaAceita);
+            return null;
+        });
+
     } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
             session.invalidate();
             return "redirect:/logar";
-        }
     }
     return "propostaScore";
 }

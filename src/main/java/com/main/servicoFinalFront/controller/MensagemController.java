@@ -25,7 +25,7 @@ import org.springframework.web.client.HttpClientErrorException;
 public class MensagemController {
 
     @Autowired
-    private AuthService service;
+    private AuthService authService;
 
     @GetMapping("/listarMensagens")
     public String listarMensagens(HttpSession session, Model model) {
@@ -34,19 +34,18 @@ public class MensagemController {
             return "redirect:/logar";
         }
         try {
-             service.marcarMensagensComoLidas(token);
-            List<MensagemRespostaDto> mensagem = service.listarMensagens(token);
-            long naoLidas = service.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-            model.addAttribute("mensagem", mensagem);
+            authService.executarComRefresh(session, tk -> {
+                authService.marcarMensagensComoLidas(tk);
+                List<MensagemRespostaDto> mensagem = authService.listarMensagens(tk);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("mensagem", mensagem);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
-            e.printStackTrace();
-            model.addAttribute("erro", "Erro ao carregar mensagens.");
+            session.invalidate();
+            return "redirect:/logar";
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("erro", "Erro ao carregar mensagens.");
@@ -62,7 +61,10 @@ public class MensagemController {
         }
 
         try {
-            service.apagarMensagem(token, id);
+            authService.executarComRefresh(session, tk -> {
+                authService.apagarMensagem(tk, id);
+                return null;
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,12 +79,13 @@ public class MensagemController {
             return "redirect:/logar";
         }
         try {
-            service.marcarMensagensComoLidas(token);
+            authService.executarComRefresh(session, tk -> {
+                authService.marcarMensagensComoLidas(tk);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
         return "redirect:/";
     }

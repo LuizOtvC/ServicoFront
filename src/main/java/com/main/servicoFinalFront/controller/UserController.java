@@ -4,17 +4,7 @@
  */
 package com.main.servicoFinalFront.controller;
 
-import com.main.servicoFinalFront.model.ProjetoListarDto;
-import com.main.servicoFinalFront.model.ProjetoResposta;
-import com.main.servicoFinalFront.model.PropostaRespostaDto;
-import com.main.servicoFinalFront.model.Servico;
-import com.main.servicoFinalFront.model.ServicoListar;
-import com.main.servicoFinalFront.model.UsuarioServico;
-import com.main.servicoFinalFront.model.UserDto;
-import com.main.servicoFinalFront.model.UserLogarDto;
-import com.main.servicoFinalFront.model.UserPerfilDto;
-import com.main.servicoFinalFront.model.UserRegistroDto;
-import com.main.servicoFinalFront.model.UserUpdDto;
+import com.main.servicoFinalFront.model.*;
 import com.main.servicoFinalFront.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -60,70 +50,51 @@ public class UserController {
     }
 
     @GetMapping("/")
-public String home(HttpSession session, Model model) {
-    String token = (String) session.getAttribute("token");
+    public String home(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("token");
 
-    if (token == null) {
-        return "redirect:/logar";
-    }
-
-    try {
-        UserPerfilDto usuario = authService.VerPerfil(token);
-
-        List<ProjetoListarDto> projetos = authService.listarProjetosFiltroUsuario(token);
-        List<PropostaRespostaDto> propostas = authService.listarProjetoFiltro(token);
-
-        if (projetos == null) {
-            projetos = new ArrayList<>();
-        }
-
-        if (propostas == null) {
-            propostas = new ArrayList<>();
-        }
-
-        if (projetos.size() > 4) {
-            projetos = projetos.subList(0, 4);
-        }
-
-        if (propostas.size() > 4) {
-            propostas = propostas.subList(0, 4);
-        }
-
-        long naoLidas = authService.contarNaoLidas(token);
-
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("projetos", projetos);
-        model.addAttribute("propostas", propostas);
-        model.addAttribute("naoLidas", naoLidas);
-
-    } catch (HttpClientErrorException e) {
-        if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-            session.invalidate();
+        if (token == null) {
             return "redirect:/logar";
         }
 
-        model.addAttribute("erro", "Erro ao carregar a página inicial.");
+        try {
+            authService.executarComRefresh(session, tk -> {
+                UserPerfilDto usuario = authService.VerPerfil(tk);
+                List<ProjetoListarDto> projetos = authService.listarProjetosFiltroUsuario(tk);
+                List<PropostaRespostaDto> propostas = authService.listarProjetoFiltro(tk);
 
+                List<ProjetoListarDto> projetosFinal = projetos == null ? new ArrayList<>() : projetos;
+                List<PropostaRespostaDto> propostasFinal = propostas == null ? new ArrayList<>() : propostas;
 
-        model.addAttribute("projetos", new ArrayList<>());
-        model.addAttribute("propostas", new ArrayList<>());
+                if (projetosFinal.size() > 4) projetosFinal = projetosFinal.subList(0, 4);
+                if (propostasFinal.size() > 4) propostasFinal = propostasFinal.subList(0, 4);
 
-    } catch (Exception e) {
-        e.printStackTrace();
+                long naoLidas = authService.contarNaoLidas(tk);
 
-        model.addAttribute("erro", "Erro ao carregar a página inicial.");
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("projetos", projetosFinal);
+                model.addAttribute("propostas", propostasFinal);
+                model.addAttribute("naoLidas", naoLidas);
+                return null;
+            });
+        } catch (HttpClientErrorException e) {
+            session.invalidate();
+            return "redirect:/logar";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("erro", "Erro ao carregar a página inicial.");
+            model.addAttribute("projetos", new ArrayList<>());
+            model.addAttribute("propostas", new ArrayList<>());
+        }
 
-        model.addAttribute("projetos", new ArrayList<>());
-        model.addAttribute("propostas", new ArrayList<>());
+        return "home";
     }
-
-    return "home";
-}
     @PostMapping("/logar")
     public String fazerLogin(@ModelAttribute UserLogarDto user, HttpSession session, Model model) {
         try {
-            String token = authService.logar(user);
-            session.setAttribute("token", token);
+            TokenResponseDto tokens = authService.logar(user);
+            session.setAttribute("token", tokens.getAccessToken());
+            session.setAttribute("refreshToken", tokens.getRefreshToken());
             return "redirect:/";
         } catch (HttpClientErrorException e) {
             String msg = extrairMensagemDeErro(e);
@@ -134,8 +105,8 @@ public String home(HttpSession session, Model model) {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session, Model model) {
-        session.setAttribute("token", "");
+    public String logout(HttpSession session) {
+        session.invalidate();
         return "redirect:/logar";
     }
 
@@ -168,34 +139,29 @@ public String home(HttpSession session, Model model) {
         }
 
         try {
-            UserPerfilDto usuario = authService.VerPerfil(token);
-            List<Servico> servicos = authService.listarServicos(token);
-            List<ServicoListar> habilidades = authService.listarServicosId(token);
+            authService.executarComRefresh(session, tk -> {
+                UserPerfilDto usuario = authService.VerPerfil(tk);
+                List<Servico> servicos = authService.listarServicos(tk);
+                List<ServicoListar> habilidades = authService.listarServicosId(tk);
 
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("servicos", servicos);
-            model.addAttribute("habilidades", habilidades);
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("servicos", servicos);
+                model.addAttribute("habilidades", habilidades);
 
-            UserUpdDto atualizar = new UserUpdDto();
-            atualizar.setNome(usuario.getNome());
-            atualizar.setTelefone(usuario.getTelefone());
-            atualizar.setDescricao(usuario.getDescricao());
-            List<String> dias = usuario.getDiasTrabalho()
-                    .stream()
-                    .map(String::toUpperCase)
-                    .toList();
-
-            atualizar.setDiasTrabalho(dias);
-            atualizar.setCidade(usuario.getCidade());
-            model.addAttribute("atualizar", atualizar);
+                UserUpdDto atualizar = new UserUpdDto();
+                atualizar.setNome(usuario.getNome());
+                atualizar.setTelefone(usuario.getTelefone());
+                atualizar.setDescricao(usuario.getDescricao());
+                List<String> dias = usuario.getDiasTrabalho().stream().map(String::toUpperCase).toList();
+                atualizar.setDiasTrabalho(dias);
+                atualizar.setCidade(usuario.getCidade());
+                model.addAttribute("atualizar", atualizar);
+                return null;
+            });
             return "atualizar";
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
-            model.addAttribute("erro", "Erro ao carregar perfil.");
-            return "perfil";
+            session.invalidate();
+            return "redirect:/logar";
         }
     }
 
@@ -215,7 +181,6 @@ public String home(HttpSession session, Model model) {
             model.addAttribute("atualizar", user);
             return "atualizar";
         }
-
     }
 
     @GetMapping("/perfil")
@@ -226,22 +191,21 @@ public String home(HttpSession session, Model model) {
         }
 
         try {
-            UserPerfilDto usuario = authService.VerPerfil(token);
-            List<Servico> servicos = authService.listarServicos(token);
-            List<ServicoListar> habilidades = authService.listarServicosId(token);
-            long naoLidas = authService.contarNaoLidas((String) token);
+            authService.executarComRefresh(session, tk -> {
+                UserPerfilDto usuario = authService.VerPerfil(tk);
+                List<Servico> servicos = authService.listarServicos(tk);
+                List<ServicoListar> habilidades = authService.listarServicosId(tk);
+                long naoLidas = authService.contarNaoLidas(tk);
 
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("servicos", servicos);
-            model.addAttribute("habilidades", habilidades);
-            model.addAttribute("naoLidas", naoLidas);
-
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("servicos", servicos);
+                model.addAttribute("habilidades", habilidades);
+                model.addAttribute("naoLidas", naoLidas);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
-            model.addAttribute("erro", "Erro ao carregar o perfil.");
+            session.invalidate();
+            return "redirect:/logar";
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("erro", "Erro ao carregar o perfil.");
@@ -257,22 +221,24 @@ public String home(HttpSession session, Model model) {
             return "redirect:/logar";
         }
         try {
-            UserPerfilDto usuario = authService.VerPerfilId(token, id);
-            List<ServicoListar> habilidades = authService.listarServicosIdPorUsuario(token, id);
-            long naoLidas = authService.contarNaoLidas((String) token);
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("habilidades", habilidades);
-            model.addAttribute("naoLidas", naoLidas);
+            authService.executarComRefresh(session, tk -> {
+                UserPerfilDto usuario = authService.VerPerfilId(tk, id);
+                List<ServicoListar> habilidades = authService.listarServicosIdPorUsuario(tk, id);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("habilidades", habilidades);
+                model.addAttribute("naoLidas", naoLidas);
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
-            model.addAttribute("erro", "Erro ao carregar perfil.");
+            session.invalidate();
+            return "redirect:/logar";
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao carregar perfil.");
         }
         return "perfilId";
     }
+
+
 
 }

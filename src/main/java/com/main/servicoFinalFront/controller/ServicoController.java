@@ -44,8 +44,8 @@ public class ServicoController {
         }
         return "Ocorreu um erro inesperado na comunicação.";
     }
-    
-    
+
+
     @GetMapping("/habilidades")
     public String telaAdicionarServico(Model model, HttpSession session) {
         String token = (String) session.getAttribute("token");
@@ -53,16 +53,17 @@ public class ServicoController {
             return "redirect:/logar";
         }
         try {
-            List<Servico> servicos = authService.listarServicos(token);
-            long naoLidas = authService.contarNaoLidas((String) token);
-            model.addAttribute("naoLidas", naoLidas);
-            model.addAttribute("servicos", servicos);
-            model.addAttribute("dto", new UsuarioServico());
+            authService.executarComRefresh(session, tk -> {
+                List<Servico> servicos = authService.listarServicos(tk);
+                long naoLidas = authService.contarNaoLidas(tk);
+                model.addAttribute("naoLidas", naoLidas);
+                model.addAttribute("servicos", servicos);
+                model.addAttribute("dto", new UsuarioServico());
+                return null;
+            });
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-                session.invalidate();
-                return "redirect:/logar";
-            }
+            session.invalidate();
+            return "redirect:/logar";
         }
         return "servicos";
     }
@@ -76,31 +77,35 @@ public class ServicoController {
         }
 
         try {
-            authService.adicionarServico(dto, token);
-            
+            authService.executarComRefresh(session, tk -> {
+                authService.adicionarServico(dto, tk);
+                return null;
+            });
+            return "redirect:/perfil";
+
         } catch (HttpClientErrorException e) {
 
-    if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
-        session.invalidate();
-        return "redirect:/logar";
-    }
+            if (e.getStatusCode() == HttpStatusCode.valueOf(401)) {
+                session.invalidate();
+                return "redirect:/logar";
+            }
 
-    String msg = extrairMensagemDeErro(e);
+            String msg = extrairMensagemDeErro(e);
+            String tokenAtual = (String) session.getAttribute("token");
 
-    UserPerfilDto usuario = authService.VerPerfil(token);
-    List<Servico> servicos = authService.listarServicos(token);
-    List<ServicoListar> habilidades = authService.listarServicosId(token);
-    long naoLidas = authService.contarNaoLidas(token);
+            UserPerfilDto usuario = authService.VerPerfil(tokenAtual);
+            List<Servico> servicos = authService.listarServicos(tokenAtual);
+            List<ServicoListar> habilidades = authService.listarServicosId(tokenAtual);
+            long naoLidas = authService.contarNaoLidas(tokenAtual);
 
-    model.addAttribute("errorMessage", msg);
-    model.addAttribute("usuario", usuario);
-    model.addAttribute("servicos", servicos);
-    model.addAttribute("habilidades", habilidades);
-    model.addAttribute("naoLidas", naoLidas);
+            model.addAttribute("errorMessage", msg);
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("servicos", servicos);
+            model.addAttribute("habilidades", habilidades);
+            model.addAttribute("naoLidas", naoLidas);
 
-    return "perfil";
-}
-        return "redirect:/perfil";
+            return "perfil";
+        }
     }
 
     @PostMapping("/servico/editar")
@@ -109,9 +114,17 @@ public class ServicoController {
         if (token == null) {
             return "redirect:/logar";
         }
-        List<Servico> servicos = authService.listarServicos(token);
-        model.addAttribute("servicos", servicos);
-        model.addAttribute("atualizar", atualizar);
+        try {
+            authService.executarComRefresh(session, tk -> {
+                List<Servico> servicos = authService.listarServicos(tk);
+                model.addAttribute("servicos", servicos);
+                model.addAttribute("atualizar", atualizar);
+                return null;
+            });
+        } catch (HttpClientErrorException e) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
         return "editarServico";
     }
 
@@ -121,7 +134,15 @@ public class ServicoController {
         if (token == null) {
             return "redirect:/logar";
         }
-        authService.atualizarServico(atualizar, token);
+        try {
+            authService.executarComRefresh(session, tk -> {
+                authService.atualizarServico(atualizar, tk);
+                return null;
+            });
+        } catch (HttpClientErrorException e) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
         return "redirect:/perfil";
     }
 
@@ -131,7 +152,15 @@ public class ServicoController {
         if (token == null) {
             return "redirect:/logar";
         }
-        authService.apagarServico(atualizar, token);
+        try {
+            authService.executarComRefresh(session, tk -> {
+                authService.apagarServico(atualizar, tk);
+                return null;
+            });
+        } catch (HttpClientErrorException e) {
+            session.invalidate();
+            return "redirect:/logar";
+        }
         return "redirect:/perfil";
     }
 }
